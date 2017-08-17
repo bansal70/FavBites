@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/slide_bg1"
+    android:orientation="vertical"
+    tools:ignore="MissingPrefix">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_50sdp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sign_in"
+            android:textAllCaps="true"
+            android:textColor="#fff"
+            android:gravity="center"
+            fontPath="Mark Simonson - Proxima Nova Semibold_0.ttf"
+            android:padding="@dimen/_10sdp"
+            android:layout_gravity="center"
+            android:textSize="@dimen/_20ssp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="#fff"/>
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/_130sdp"
+                android:layout_height="@dimen/_130sdp"
+                android:src="@drawable/splash_logo"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:contentDescription="@string/app_logo"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_20sdp"
+                android:hint="@string/email"
+                android:gravity="center"
+                android:textColor="#fff"
+                android:padding="@dimen/_12sdp"
+                android:inputType="textEmailAddress"
+                android:background="@drawable/round_shape_edittext"
+                android:textColorHint="#fff"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_20sdp"
+                android:layout_marginRight="@dimen/_20sdp"
+                android:hint="@string/password"
+                android:gravity="center"
+                android:textColor="#fff"
+                android:inputType="textPassword"
+                android:padding="@dimen/_12sdp"
+                android:background="@drawable/round_shape_edittext"
+                android:textColorHint="#fff"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/_15sdp">
+
+                <CheckBox
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:button="@drawable/checkbox_selector" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#fff"
+                    android:textSize="@dimen/_12sdp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:text="@string/terms_conditions" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvSignIn"
+                android:layout_width="@dimen/_180sdp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_shape_yellow"
+                android:text="@string/sign_in"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:textSize="@dimen/_15ssp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:padding="@dimen/_12sdp"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:textColor="#2A2737" />
+
+            <TextView
+                android:id="@+id/tvForgotPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/forgot_password"
+                android:textSize="@dimen/_14ssp"
+                android:layout_gravity="center"
+                android:textColor="@color/colorAccent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/or"
+                android:textSize="@dimen/_30ssp"
+                fontPath="Mark Simonson - Proxima Nova Semibold_0.ttf"
+                android:layout_gravity="center"
+                android:textColor="#fff" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="@dimen/_70sdp"
+                    android:layout_height="@dimen/_70sdp"
+                    android:src="@drawable/fb"
+                    android:padding="@dimen/_5sdp"
+                    android:contentDescription="@string/facebook"/>
+
+                <ImageView
+                    android:layout_width="@dimen/_70sdp"
+                    android:layout_height="@dimen/_70sdp"
+                    android:src="@drawable/google_plus"
+                    android:padding="@dimen/_5sdp"
+                    android:contentDescription="@string/google"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

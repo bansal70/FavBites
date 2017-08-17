@@ -1,3 +1,27 @@
 <resources>
     <string name="app_name">FavBites</string>
+    <string name="app_logo">App logo</string>
+
+    <string name="slide_1_title">BENEFITS OF REGISTERING TO SELL</string>
+    <string name="slide_1_desc">The easiest way to order food from your favourite restaurant!</string>
+
+    <string name="slide_2_title">BASIC COMPANY INFORMATION</string>
+    <string name="slide_2_desc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s</string>
+
+    <string name="slide_3_title">ONLINE DUMMY OPTION</string>
+    <string name="slide_3_desc">Best discounts on every single service we offer!</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="login">LOGIN</string>
+    <string name="sign_in">Sign In</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="terms_conditions">I hereby accept all the Terms and Conditions</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="or">- Or -</string>
+    <string name="facebook">facebook</string>
+    <string name="google">google</string>
+    <string name="registration">Registration</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="enter_password">Enter Password</string>
+
 </resources>
