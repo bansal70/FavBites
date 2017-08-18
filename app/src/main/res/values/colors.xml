@@ -3,6 +3,7 @@
     <color name="colorPrimary">#FABF2E</color>
     <color name="colorPrimaryDark">#FABF2E</color>
     <color name="colorAccent">#F9BE2E</color>
+    <color name="colorWhite">#ffffff</color>
 
     <!-- dots inactive colors -->
     <color name="dot_dark_screen1">#ffffff</color>

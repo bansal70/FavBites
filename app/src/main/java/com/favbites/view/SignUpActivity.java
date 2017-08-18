@@ -1,11 +1,10 @@
 package com.favbites.view;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.favbites.R;
 
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

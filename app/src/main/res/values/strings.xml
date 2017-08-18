@@ -23,5 +23,17 @@
     <string name="registration">Registration</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="enter_password">Enter Password</string>
+    <string name="skip_sign_in">Skip Sign In</string>
+    <string name="home">Home</string>
+    <string name="location">Location</string>
+    <string name="search_restaurant">Search restaurants by name, street address, zip code or city..</string>
+    <string name="filter">Filters</string>
+    <string name="restaurant">Restaurant</string>
+    <string name="favbites">FavBites</string>
+    <string name="check_in">Check-in</string>
+    <string name="restaurant_image">Restaurant Image</string>
+    <string name="menu">Menu</string>
+    <string name="upload">Upload</string>
+    <string name="restaurant_profile">Restaurant Profile</string>
 
 </resources>

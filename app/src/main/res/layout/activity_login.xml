@@ -12,17 +12,39 @@
         android:layout_height="@dimen/_50sdp"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/sign_in"
-            android:textAllCaps="true"
-            android:textColor="#fff"
-            android:gravity="center"
-            fontPath="Mark Simonson - Proxima Nova Semibold_0.ttf"
-            android:padding="@dimen/_10sdp"
-            android:layout_gravity="center"
-            android:textSize="@dimen/_20ssp"/>
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sign_in"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:textColor="#fff"
+                android:layout_centerInParent="true"
+                android:padding="@dimen/_10sdp"
+                android:layout_gravity="center"
+                android:textSize="@dimen/_20ssp"/>
+
+            <TextView
+                android:id="@+id/tvSkipLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/skip_sign_in"
+                android:textColor="@color/colorPrimary"
+                android:gravity="end"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/_5sdp"
+                android:layout_gravity="center"
+                android:textSize="@dimen/_14ssp"/>
+
+        </RelativeLayout>
 
         <View
             android:layout_width="match_parent"
@@ -90,7 +112,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#fff"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/_15sdp"
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_10sdp"
                     android:layout_marginStart="@dimen/_10sdp"
@@ -143,6 +165,7 @@
                     android:contentDescription="@string/facebook"/>
 
                 <ImageView
+                    android:id="@+id/imgGoogleLogin"
                     android:layout_width="@dimen/_70sdp"
                     android:layout_height="@dimen/_70sdp"
                     android:src="@drawable/google_plus"

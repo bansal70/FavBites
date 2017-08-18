@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "643855060429",
+    "project_id": "favbites-53f9c"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:643855060429:android:cf69babf233b6bc9",
+        "android_client_info": {
+          "package_name": "com.favbites"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "643855060429-h46ouredhln59jkeb9rp762jngkm5frp.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "643855060429-6gl39dvvk0k9e4gdhtf56epanrvv91r8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.favbites",
+            "certificate_hash": "60c590f8c47fa0d5252c27f60defd0caecb3924b"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRYwG-jeV4tlVZs25lwc04Q5vMzTnP4Xs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

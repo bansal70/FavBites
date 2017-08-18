@@ -41,6 +41,6 @@
         android:layout_marginLeft="@dimen/_10sdp"
         android:layout_marginRight="@dimen/_10sdp"
         android:layout_marginTop="@dimen/_10sdp"
-        android:textSize="@dimen/_13ssp"/>
+        android:textSize="@dimen/_15ssp"/>
 
 </LinearLayout>
