@@ -6,58 +6,92 @@ package com.favbites.view.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.favbites.R;
+import com.favbites.controller.RestaurantsManager;
+import com.favbites.model.beans.RestaurantData;
 import com.favbites.view.RestaurantDetailActivity;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantsAdapter.ViewHolder>{
+public class RestaurantsAdapter extends RecyclerView.Adapter {
     private Context context;
-    private ArrayList<String> list;
 
-    public RestaurantsAdapter(Context context, ArrayList<String> list) {
+    public RestaurantsAdapter(Context context) {
         this.context = context;
-        this.list = list;
     }
 
     @Override
-    public RestaurantsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.view_restaurants_list, parent, false);
-        return new ViewHolder(view);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        RecyclerView.ViewHolder vh;
+            View view = LayoutInflater.from(context).inflate(R.layout.view_restaurants_list, parent, false);
+            vh = new ItemsViewHolder(view);
+        return vh;
     }
 
     @Override
-    public void onBindViewHolder(RestaurantsAdapter.ViewHolder holder, int position) {
-        Glide.with(context)
-                .load("https://eatstreet-static.s3.amazonaws.com/assets/images/restaurant_logos/capriottis-sandwich-shop-regent-st-6186_1414086898208.png")
-                .into(holder.imgRestaurant);
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+            RestaurantData.Datum datum = RestaurantsManager.datumList.get(position);
+            RestaurantData.Restaurant restaurant = datum.restaurant;
+
+            String name = restaurant.name;
+            String streetAddress = restaurant.streetAddress + ", "
+                    + restaurant.city + ", "
+                    + restaurant.state + " "
+                    + restaurant.zip;
+            String logoUrl = restaurant.logoUrl;
+
+            ((ItemsViewHolder)holder).tvName.setText(name);
+            ((ItemsViewHolder)holder).tvAddress.setText(String.format("Address: %s", streetAddress));
+            Glide.with(context)
+                    .load(logoUrl)
+                    .into(((ItemsViewHolder)holder).imgRestaurant);
+
+            List<RestaurantData.Subitem> subItemList = datum.subitem;
+            ItemsAdapter itemsAdapter = new ItemsAdapter(context, subItemList);
+            ((ItemsViewHolder) holder).recyclerItems.setAdapter(itemsAdapter);
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return RestaurantsManager.datumList.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ItemsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private ImageView imgRestaurant;
+        private TextView tvName, tvAddress, tvOpenToday;
+        private RecyclerView recyclerItems;
 
-        ViewHolder(View itemView) {
+       public ItemsViewHolder(View itemView) {
             super(itemView);
 
             imgRestaurant = itemView.findViewById(R.id.imgRestaurant);
+            tvName = itemView.findViewById(R.id.tvName);
+            tvAddress = itemView.findViewById(R.id.tvAddress);
+            tvOpenToday = itemView.findViewById(R.id.tvOpenToday);
+
+           recyclerItems = itemView.findViewById(R.id.recyclerItems);
+           recyclerItems.setHasFixedSize(true);
+           recyclerItems.setLayoutManager(new LinearLayoutManager(context));
+           recyclerItems.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
+
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            context.startActivity(new Intent(context, RestaurantDetailActivity.class));
+            context.startActivity(new Intent(context, RestaurantDetailActivity.class)
+            .putExtra("position", String.valueOf(getAdapterPosition())));
         }
     }
 }

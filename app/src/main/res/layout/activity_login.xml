@@ -42,7 +42,7 @@
                 android:layout_centerVertical="true"
                 android:padding="@dimen/_5sdp"
                 android:layout_gravity="center"
-                android:textSize="@dimen/_14ssp"/>
+                android:textSize="@dimen/_18ssp"/>
 
         </RelativeLayout>
 
@@ -63,35 +63,37 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="@dimen/_130sdp"
-                android:layout_height="@dimen/_130sdp"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_100sdp"
                 android:src="@drawable/splash_logo"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:contentDescription="@string/app_logo"/>
 
             <EditText
+                android:id="@+id/editEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_20sdp"
+                android:layout_margin="@dimen/_15sdp"
                 android:hint="@string/email"
                 android:gravity="center"
                 android:textColor="#fff"
-                android:padding="@dimen/_12sdp"
+                android:padding="@dimen/_10sdp"
                 android:inputType="textEmailAddress"
                 android:background="@drawable/round_shape_edittext"
                 android:textColorHint="#fff"/>
 
             <EditText
+                android:id="@+id/editPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_20sdp"
-                android:layout_marginRight="@dimen/_20sdp"
+                android:layout_marginLeft="@dimen/_15sdp"
+                android:layout_marginRight="@dimen/_15sdp"
                 android:hint="@string/password"
                 android:gravity="center"
                 android:textColor="#fff"
                 android:inputType="textPassword"
-                android:padding="@dimen/_12sdp"
+                android:padding="@dimen/_10sdp"
                 android:background="@drawable/round_shape_edittext"
                 android:textColorHint="#fff"/>
 
@@ -101,9 +103,11 @@
                 android:orientation="horizontal"
                 android:gravity="center"
                 android:layout_gravity="center"
+                android:visibility="gone"
                 android:layout_margin="@dimen/_15sdp">
 
                 <CheckBox
+                    android:id="@+id/cbTerms"
                     android:layout_width="@dimen/_20sdp"
                     android:layout_height="@dimen/_20sdp"
                     android:button="@drawable/checkbox_selector" />
@@ -128,27 +132,58 @@
                 android:textStyle="bold"
                 android:layout_gravity="center"
                 android:textSize="@dimen/_15ssp"
-                android:layout_marginBottom="@dimen/_10sdp"
-                android:padding="@dimen/_12sdp"
+                android:layout_margin="@dimen/_15sdp"
+                android:padding="@dimen/_10sdp"
                 style="@style/Base.Widget.AppCompat.Button.Borderless"
                 android:textColor="#2A2737" />
 
-            <TextView
-                android:id="@+id/tvForgotPassword"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/forgot_password"
-                android:textSize="@dimen/_14ssp"
-                android:layout_gravity="center"
-                android:textColor="@color/colorAccent" />
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_5sdp">
+
+                <TextView
+                    android:id="@+id/tvNewUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="New User? Register here."
+                    android:textSize="@dimen/_18ssp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:shadowColor="#000"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+                    android:shadowRadius="5"
+                    android:textColor="@color/colorAccent"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+
+                <TextView
+                    android:id="@+id/tvForgotPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/forgot_password"
+                    android:textSize="@dimen/_18ssp"
+                    android:textStyle="bold"
+                    android:shadowColor="#000"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+                    android:shadowRadius="5"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:textColor="@color/colorAccent" />
+
+            </RelativeLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/or"
-                android:textSize="@dimen/_30ssp"
-                fontPath="Mark Simonson - Proxima Nova Semibold_0.ttf"
+                android:textSize="@dimen/_25ssp"
                 android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:textColor="#fff" />
 
             <LinearLayout
@@ -158,16 +193,16 @@
                 android:gravity="center">
 
                 <ImageView
-                    android:layout_width="@dimen/_70sdp"
-                    android:layout_height="@dimen/_70sdp"
+                    android:layout_width="@dimen/_60sdp"
+                    android:layout_height="@dimen/_60sdp"
                     android:src="@drawable/fb"
                     android:padding="@dimen/_5sdp"
                     android:contentDescription="@string/facebook"/>
 
                 <ImageView
                     android:id="@+id/imgGoogleLogin"
-                    android:layout_width="@dimen/_70sdp"
-                    android:layout_height="@dimen/_70sdp"
+                    android:layout_width="@dimen/_60sdp"
+                    android:layout_height="@dimen/_60sdp"
                     android:src="@drawable/google_plus"
                     android:padding="@dimen/_5sdp"
                     android:contentDescription="@string/google"/>

@@ -5,25 +5,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginLeft="@dimen/_5sdp"
     android:layout_marginRight="@dimen/_5sdp"
-    android:layout_marginTop="@dimen/_10sdp"
-    app:cardUseCompatPadding="true">
+    android:layout_marginTop="@dimen/_5sdp"
+    app:cardUseCompatPadding="true"
+    app:cardElevation="@dimen/_3sdp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/card_background"
+        android:background="?selectableItemBackground"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="@dimen/_10sdp">
+            android:paddingLeft="@dimen/_8sdp"
+            android:paddingRight="@dimen/_8sdp">
 
             <ImageView
                 android:id="@+id/imgRestaurant"
-                android:layout_width="@dimen/_100sdp"
-                android:layout_height="@dimen/_120sdp"
+                android:layout_width="@dimen/_70sdp"
+                android:layout_height="@dimen/_70sdp"
+                android:layout_gravity="center"
                 android:background="@drawable/round_custom_views"
                 android:contentDescription="@string/restaurant_image"
                 android:src="@drawable/splash_logo" />
@@ -35,34 +38,37 @@
                 android:padding="@dimen/_5sdp">
 
                 <TextView
+                    android:id="@+id/tvName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Capriotti's Sandwich Shop - Regent St."
                     android:textColor="#000"
-                    android:textSize="@dimen/_18ssp"
+                    android:textSize="@dimen/_15ssp"
                     android:textStyle="bold" />
 
                 <RatingBar
-                    style="@style/RatingBar"
+                    style="@style/Base.Widget.AppCompat.RatingBar.Indicator"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:isIndicator="true"
                     android:numStars="5"
-                    android:rating="3.5" />
+                    android:rating="0" />
 
                 <TextView
+                    android:id="@+id/tvAddress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Address"
                     android:textColor="#000"
-                    android:textSize="@dimen/_15ssp" />
+                    android:textSize="@dimen/_13ssp" />
 
                 <TextView
+                    android:id="@+id/tvOpenToday"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Open today - "
                     android:textColor="#000"
-                    android:textSize="@dimen/_15ssp" />
+                    android:textSize="@dimen/_13ssp" />
 
             </LinearLayout>
 
@@ -73,9 +79,14 @@
             android:layout_height="1dp"
             android:background="#90000000" />
 
-        <RelativeLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerItems"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_height="wrap_content" />
+
+        <!--<RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_35sdp"
             android:paddingLeft="@dimen/_10sdp"
             android:paddingRight="@dimen/_10sdp">
 
@@ -85,7 +96,7 @@
                 android:layout_centerVertical="true"
                 android:text="Cheesecake"
                 android:textColor="#000"
-                android:textSize="@dimen/_15ssp" />
+                android:textSize="@dimen/_13ssp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -93,13 +104,13 @@
                 android:layout_centerInParent="true"
                 android:layout_centerVertical="true"
                 android:background="@drawable/round_custom_views"
-                android:paddingBottom="@dimen/_5sdp"
+                android:paddingBottom="@dimen/_3sdp"
                 android:paddingLeft="@dimen/_15sdp"
                 android:paddingRight="@dimen/_15sdp"
-                android:paddingTop="@dimen/_5sdp"
+                android:paddingTop="@dimen/_3sdp"
                 android:text="$11"
                 android:textColor="#000"
-                android:textSize="@dimen/_15ssp"
+                android:textSize="@dimen/_12ssp"
                 android:textStyle="bold" />
 
             <RatingBar
@@ -122,7 +133,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_height="@dimen/_35sdp"
             android:paddingLeft="@dimen/_10sdp"
             android:paddingRight="@dimen/_10sdp">
 
@@ -133,7 +144,7 @@
                 android:layout_centerVertical="true"
                 android:text="Choco lava"
                 android:textColor="#000"
-                android:textSize="@dimen/_15ssp" />
+                android:textSize="@dimen/_13ssp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -142,13 +153,13 @@
                 android:layout_alignBottom="@+id/textView2"
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/round_custom_views"
-                android:paddingBottom="@dimen/_5sdp"
+                android:paddingBottom="@dimen/_3sdp"
                 android:paddingLeft="@dimen/_15sdp"
                 android:paddingRight="@dimen/_15sdp"
-                android:paddingTop="@dimen/_5sdp"
+                android:paddingTop="@dimen/_3sdp"
                 android:text="$15"
                 android:textColor="#000"
-                android:textSize="@dimen/_15ssp"
+                android:textSize="@dimen/_12ssp"
                 android:textStyle="bold" />
 
             <RatingBar
@@ -171,7 +182,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_height="@dimen/_35sdp"
             android:paddingLeft="@dimen/_10sdp"
             android:paddingRight="@dimen/_10sdp">
 
@@ -181,7 +192,7 @@
                 android:layout_centerVertical="true"
                 android:text="Butter Scotch"
                 android:textColor="#000"
-                android:textSize="@dimen/_15ssp" />
+                android:textSize="@dimen/_13ssp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -189,13 +200,13 @@
                 android:layout_centerInParent="true"
                 android:layout_centerVertical="true"
                 android:background="@drawable/round_custom_views"
-                android:paddingBottom="@dimen/_5sdp"
+                android:paddingBottom="@dimen/_3sdp"
                 android:paddingLeft="@dimen/_15sdp"
                 android:paddingRight="@dimen/_15sdp"
-                android:paddingTop="@dimen/_5sdp"
+                android:paddingTop="@dimen/_3sdp"
                 android:text="$20"
                 android:textColor="#000"
-                android:textSize="@dimen/_15ssp"
+                android:textSize="@dimen/_12ssp"
                 android:textStyle="bold" />
 
             <RatingBar
@@ -216,7 +227,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#90000000" />
+            android:background="#90000000" />-->
 
         <TextView
             android:layout_width="wrap_content"
@@ -224,12 +235,14 @@
             android:layout_gravity="center"
             android:layout_margin="@dimen/_7sdp"
             android:background="@drawable/round_custom_views"
-            android:paddingBottom="@dimen/_5sdp"
+            android:paddingBottom="@dimen/_3sdp"
             android:paddingLeft="@dimen/_15sdp"
             android:paddingRight="@dimen/_15sdp"
-            android:paddingTop="@dimen/_5sdp"
+            android:paddingTop="@dimen/_3sdp"
             android:text="Read More"
-            android:textSize="@dimen/_15ssp" />
+            android:textColor="#000"
+            android:textSize="@dimen/_13ssp"
+            android:visibility="gone" />
 
     </LinearLayout>
 

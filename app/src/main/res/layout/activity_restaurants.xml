@@ -8,41 +8,40 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_50sdp"
-        android:orientation="horizontal"
-        android:background="#2A2736">
+        android:layout_height="@dimen/_40sdp"
+        android:background="#2A2736"
+        android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="@dimen/_40sdp"
+            android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_30sdp"
-            android:src="@drawable/menu"
-            android:padding="@dimen/_5sdp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:contentDescription="@string/location"/>
+            android:contentDescription="@string/location"
+            android:padding="@dimen/_5sdp"
+            android:src="@drawable/menu" />
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
             android:text="@string/home"
             android:textAllCaps="true"
             android:textColor="#fff"
-            android:layout_centerInParent="true"
-            android:padding="@dimen/_10sdp"
-            android:layout_gravity="center"
             android:textSize="@dimen/_20ssp" />
 
         <ImageView
-            android:layout_width="@dimen/_40sdp"
-            android:layout_height="@dimen/_40sdp"
-            android:src="@drawable/location"
-            android:padding="@dimen/_5sdp"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:contentDescription="@string/location"/>
+            android:contentDescription="@string/location"
+            android:padding="@dimen/_5sdp"
+            android:src="@drawable/location" />
 
     </RelativeLayout>
 
@@ -62,6 +61,7 @@
             android:maxLines="1"
             android:ellipsize="end"
             android:padding="@dimen/_5sdp"
+            android:inputType="text"
             android:layout_toLeftOf="@+id/tvFilter"
             android:layout_toStartOf="@+id/tvFilter"
             android:layout_marginRight="@dimen/_10sdp"
@@ -93,7 +93,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_40sdp"
+        android:layout_height="@dimen/_30sdp"
         android:orientation="horizontal">
 
         <TextView
@@ -130,6 +130,32 @@
             android:textSize="@dimen/_15ssp"
             android:layout_gravity="center"
             android:gravity="center"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/resultLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:paddingTop="@dimen/_10sdp"
+        android:paddingLeft="@dimen/_10sdp"
+        android:paddingRight="@dimen/_10sdp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Showing results for: "
+            android:textSize="@dimen/_15ssp"/>
+
+        <TextView
+            android:id="@+id/tvResults"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#000"
+            android:textSize="@dimen/_15ssp"/>
 
     </LinearLayout>
 

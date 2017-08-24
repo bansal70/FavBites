@@ -10,6 +10,12 @@
 
     <style name="RatingBar" parent="@android:style/Widget.DeviceDefault.Light.RatingBar.Small">
         <item name="android:progressDrawable">@drawable/rating_custom_bar</item>
+        <item name="android:minHeight">25dip</item>
+        <item name="android:maxHeight">25dip</item>
+    </style>
+
+    <style name="RatingBar2" parent="@android:style/Widget.DeviceDefault.Light.RatingBar.Small">
+        <item name="android:progressDrawable">@drawable/rating_custom_bar</item>
         <item name="android:minHeight">40dip</item>
         <item name="android:maxHeight">40dip</item>
     </style>

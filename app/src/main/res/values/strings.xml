@@ -28,12 +28,22 @@
     <string name="location">Location</string>
     <string name="search_restaurant">Search restaurants by name, street address, zip code or city..</string>
     <string name="filter">Filters</string>
-    <string name="restaurant">Restaurant</string>
+    <string name="restaurant">Restaurants</string>
     <string name="favbites">FavBites</string>
     <string name="check_in">Check-in</string>
     <string name="restaurant_image">Restaurant Image</string>
     <string name="menu">Menu</string>
-    <string name="upload">Upload</string>
+    <string name="upload">Upload Photo</string>
     <string name="restaurant_profile">Restaurant Profile</string>
+    <string name="reviews">Reviews</string>
+    <string name="back">Back</string>
+    <string name="add">Add</string>
+    <string name="item_name">Item name</string>
+    <string name="bookmark">Bookmark</string>
+    <string name="ratings">Ratings</string>
+    <string name="posts">Posts</string>
+    <string name="submit">Submit</string>
+    <string name="forgot_pass">Forgot Password</string>
+    <string name="call">Call</string>
 
 </resources>

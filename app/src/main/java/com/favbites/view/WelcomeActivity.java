@@ -112,7 +112,7 @@ public class WelcomeActivity extends BaseActivity implements View.OnClickListene
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tvSignUp:
-                startActivity(new Intent(this, SignUpActivity.class));
+                startActivity(new Intent(this, RegistrationActivity.class));
                 break;
 
             case R.id.tvLogin:

@@ -7,11 +7,16 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.favbites.R;
+import com.favbites.controller.ModelManager;
+import com.favbites.model.Constants;
+import com.favbites.model.Event;
+import com.favbites.model.Operations;
 import com.favbites.model.Utils;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -21,11 +26,15 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 public class LoginActivity extends BaseActivity implements View.OnClickListener,
         GoogleApiClient.OnConnectionFailedListener{
 
     private final String TAG = LoginActivity.class.getSimpleName();
-    TextView tvSignIn, tvForgotPassword, tvSkipLogin;
+    TextView tvSignIn, tvForgotPassword, tvSkipLogin, tvNewUser;
+    EditText editEmail, editPassword;
     ImageView imgGoogleLogin;
     GoogleApiClient mGoogleApiClient;
     GoogleSignInOptions gso;
@@ -57,26 +66,103 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         dialog = Utils.showDialog(this);
         tvSignIn = (TextView) findViewById(R.id.tvSignIn);
         tvForgotPassword = (TextView) findViewById(R.id.tvForgotPassword);
+        tvNewUser = (TextView) findViewById(R.id.tvNewUser);
         tvSkipLogin = (TextView) findViewById(R.id.tvSkipLogin);
         imgGoogleLogin = (ImageView) findViewById(R.id.imgGoogleLogin);
+        editEmail = (EditText) findViewById(R.id.editEmail);
+        editPassword = (EditText) findViewById(R.id.editPassword);
 
         tvForgotPassword.setPaintFlags(tvForgotPassword.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         tvSkipLogin.setPaintFlags(tvSkipLogin.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
+        tvSignIn.setOnClickListener(this);
         tvSkipLogin.setOnClickListener(this);
         imgGoogleLogin.setOnClickListener(this);
+        tvForgotPassword.setOnClickListener(this);
+        tvNewUser.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+
+            case R.id.tvSignIn:
+                loginUser();
+                break;
+
             case R.id.tvSkipLogin:
-                startActivity(new Intent(activity, RestaurantsActivity.class));
+                dialog.show();
+                ModelManager.getInstance().getGuestLoginManager()
+                        .loginUser(Operations.getGuestUserParams("token", "A"));
                 break;
 
             case R.id.imgGoogleLogin:
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
                 startActivityForResult(signInIntent, RC_SIGN_IN);
+                break;
+
+            case R.id.tvForgotPassword:
+                startActivity(new Intent(this, ForgotPasswordActivity.class));
+                break;
+
+            case R.id.tvNewUser:
+                startActivity(new Intent(this, RegistrationActivity.class));
+                break;
+        }
+    }
+
+    public void loginUser() {
+        String email = editEmail.getText().toString().trim();
+        String password = editPassword.getText().toString().trim();
+
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Please fill all the details", Toast.LENGTH_SHORT).show();
+        } else if(!Utils.emailValidator(email)){
+            Toast.makeText(this, "Please enter the valid email address.", Toast.LENGTH_SHORT).show();
+        } else {
+            dialog.show();
+            ModelManager.getInstance().getLoginManager()
+                    .loginUser(this, Operations.getLoginParams(email, password, "token", "A"));
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onEvent(Event event) {
+        switch (event.getKey()) {
+            case Constants.LOGIN_SUCCESS:
+                dialog.dismiss();
+                Toast.makeText(this, "" + event.getValue(), Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, RestaurantsActivity.class));
+                finish();
+                break;
+
+            case Constants.LOGIN_FAILED:
+                dialog.dismiss();
+                Toast.makeText(this, "" + event.getValue(), Toast.LENGTH_SHORT).show();
+                break;
+
+            case Constants.GUEST_LOGIN_SUCCESS:
+                dialog.dismiss();
+                startActivity(new Intent(activity, RestaurantsActivity.class));
+                break;
+
+            case Constants.GUEST_LOGIN_FAILED:
+                dialog.dismiss();
+                Toast.makeText(activity, ""+event.getValue(), Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -105,7 +191,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 startActivity(new Intent(activity, RestaurantsActivity.class));
                 finish();
             }
-
         } else {
             Toast.makeText(this, "Google sign-in failed. Please try again.", Toast.LENGTH_SHORT).show();
         }
