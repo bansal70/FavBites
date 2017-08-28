@@ -14,5 +14,6 @@ public class Config {
     public static final String search_restaurant_url = "search";
     public static final String restaurant_details_url = "getRestaurantData";
     public static final String dish_reviews_url = "fetchReview";
+    public static final String add_dish_reviews_url = "addReview";
     public static final String bookmark_url = "bookmark";
 }

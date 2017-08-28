@@ -15,18 +15,20 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.favbites.R;
 import com.favbites.controller.ModelManager;
+import com.favbites.controller.RestaurantDetailsManager;
 import com.favbites.model.Constants;
 import com.favbites.model.Event;
 import com.favbites.model.FBPreferences;
 import com.favbites.model.Operations;
 import com.favbites.model.Utils;
-import com.favbites.model.beans.RestaurantData;
+import com.favbites.model.beans.RestaurantDetailsData;
 import com.favbites.view.adapters.RestaurantDetailAdapter;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RestaurantDetailActivity extends BaseActivity implements View.OnClickListener {
@@ -35,16 +37,15 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
     ImageView imgBack, imgRestaurant, imgBookmark;
     TextView tvRestaurant, tvAddress, tvPhone, tvOpen;
     RatingBar rbRatings;
-    int position;
     String isOpen;
     String restaurant_id, user_id, bookmark_status;
     TextView tvShowMore;
     int totalItems = 6;
     private RecyclerView recyclerView;
     private RestaurantDetailAdapter restaurantDetailAdapter;
-    private List<RestaurantData.Subitem> subItemList;
+    private List<RestaurantDetailsData.Subitem> subItemList;
     KProgressHUD pd;
-    List<Object> bookmark;
+    String bookmark;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +58,11 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
     public void initViews() {
         pd = Utils.showMessageDialog(this, "Please wait...");
         user_id = FBPreferences.readString(this, "user_id");
+        pd.show();
 
+        restaurant_id = getIntent().getStringExtra("restaurant_id");
+
+        subItemList = new ArrayList<>();
         imgBack = (ImageView) findViewById(R.id.imgBack);
         imgRestaurant = (ImageView) findViewById(R.id.imgRestaurant);
         imgBookmark = (ImageView) findViewById(R.id.imgBookmark);
@@ -73,29 +78,20 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
         tvShowMore.setOnClickListener(this);
         imgBookmark.setOnClickListener(this);
 
-        String p = getIntent().getStringExtra("position");
-        position = Integer.parseInt(p);
+        ModelManager.getInstance().getRestaurantDetailsManager()
+                .getRestaurantDetails(Operations.getRestaurantDetailsParams(restaurant_id, user_id));
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerMenus);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-        RestaurantData.Datum datum = Utils.restaurantsList.get(position);
-
-        subItemList = datum.subitem;
-
         restaurantDetailAdapter = new RestaurantDetailAdapter(this, subItemList, totalItems);
         recyclerView.setAdapter(restaurantDetailAdapter);
-
-        if (subItemList.size() > 6)
-            tvShowMore.setVisibility(View.VISIBLE);
-
-        setData();
     }
 
     public void setData() {
-        RestaurantData.Datum datum = Utils.restaurantsList.get(position);
-        RestaurantData.Restaurant restaurant = datum.restaurant;
+        RestaurantDetailsData.Data data = RestaurantDetailsManager.data;
+        RestaurantDetailsData.Restaurant restaurant = data.restaurant;
 
         String name = restaurant.name;
         String streetAddress = "Address: " + restaurant.streetAddress + ", "
@@ -123,8 +119,8 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
             tvOpen.setTextColor(ContextCompat.getColor(context, R.color.green_color));
         }
 
-        bookmark = datum.bookmark;
-        if (bookmark.isEmpty()) {
+        bookmark = restaurant.bookmark;
+        if (bookmark.isEmpty() || bookmark.equals("0")) {
             bookmark_status = "0";
             imgBookmark.setImageResource(R.drawable.unbookmark);
         }
@@ -155,7 +151,7 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
                     return;
                 }
                 pd.show();
-                if (bookmark_status.equals("0"))
+                if (bookmark_status.equals("0") || bookmark_status.isEmpty())
                     ModelManager.getInstance().getBookmarkManager().bookmarkRestaurant(
                             Operations.bookmarkRestaurant(user_id, restaurant_id, "1"));
                 else
@@ -193,7 +189,7 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
                 }
                 else {
                     bookmark_status = "0";
-                    Toast.makeText(context, "Bookmark has been removed.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Restaurant has been removed from your bookmarks.", Toast.LENGTH_SHORT).show();
                     imgBookmark.setImageResource(R.drawable.unbookmark);
                 }
                 break;
@@ -201,6 +197,19 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
             case Constants.NO_RESPONSE:
                 pd.dismiss();
                 Toast.makeText(context, ""+event.getValue(), Toast.LENGTH_SHORT).show();
+                break;
+
+            case Constants.RESTAURANT_DETAILS_SUCCESS:
+                pd.dismiss();
+                if (subItemList.size() > 6)
+                    tvShowMore.setVisibility(View.VISIBLE);
+
+                setData();
+
+                RestaurantDetailsData.Data data = RestaurantDetailsManager.data;
+                subItemList.addAll(data.subitem);
+                restaurantDetailAdapter.notifyDataSetChanged();
+
                 break;
         }
     }

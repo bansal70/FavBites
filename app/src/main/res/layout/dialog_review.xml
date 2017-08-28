@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardUseCompatPadding="true"
-    app:cardCornerRadius="@dimen/_10sdp"
+    app:cardCornerRadius="@dimen/_2sdp"
     android:gravity="center"
     android:layout_margin="@dimen/_20sdp">
 
@@ -59,7 +59,7 @@
                 android:layout_weight="1"
                 android:text="Not now"
                 android:textSize="@dimen/_15ssp"
-                android:padding="@dimen/_15sdp"
+                android:padding="@dimen/_10sdp"
                 android:textAllCaps="false"
                 android:layout_margin="@dimen/_1sdp"
                 style="?borderlessButtonStyle"/>
@@ -74,7 +74,7 @@
                 android:layout_margin="@dimen/_1sdp"
                 android:text="Submit"
                 android:textAllCaps="false"
-                android:padding="@dimen/_15sdp"
+                android:padding="@dimen/_10sdp"
                 android:textSize="@dimen/_15ssp"
                 style="?borderlessButtonStyle"/>
 

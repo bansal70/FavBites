@@ -41,7 +41,7 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
     EditText editComment;
     RatingBar rbItemRating;
     int dish_key, restaurant_id;
-    String dish_name;
+    String dish_name, user_id;
     KProgressHUD pd;
     RecyclerView recyclerView;
     ReviewsAdapter reviewsAdapter;
@@ -58,13 +58,14 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
     }
 
     public void initViews() {
-        pd = Utils.showMessageDialog(this, "Fetching reviews...");
+        pd = Utils.showMessageDialog(this, "Please wait...");
         pd.show();
 
         String key = getIntent().getStringExtra("dish_key");
         dish_key = Integer.parseInt(key);
-        restaurant_id = Integer.parseInt(FBPreferences.readString(this, "restaurant_id"));
         dish_name = getIntent().getStringExtra("dish_name");
+        restaurant_id = Integer.parseInt(FBPreferences.readString(this, "restaurant_id"));
+        user_id = FBPreferences.readString(this, "user_id");
 
         ModelManager.getInstance().getReviewsManager().dishReviews(this,
                 Operations.getItemReviews(restaurant_id, dish_key));
@@ -117,8 +118,13 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
                     Toast.makeText(activity, "Please give the rating...", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Toast.makeText(activity, "Review Submitted successfully.", Toast.LENGTH_SHORT).show();
-                dialogReview.dismiss();
+                pd.show();
+                String rating = String.valueOf(rbItemRating.getRating());
+                String comment = editComment.getText().toString();
+
+                ModelManager.getInstance().getReviewsManager().addItemReview(this,
+                        Operations.addItemReview(user_id, restaurant_id, dish_key, rating, comment));
+
                 break;
 
             case R.id.tvCancel:
@@ -159,6 +165,22 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
                 rbRatings.setRating(0);
                 tvNoReview.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.GONE);
+                break;
+
+            case Constants.ADD_REVIEWS_SUCCESS:
+                dialogReview.dismiss();
+                reviewsList.clear();
+                ModelManager.getInstance().getReviewsManager().dishReviews(this,
+                        Operations.getItemReviews(restaurant_id, dish_key));
+                Toast.makeText(activity, ""+event.getValue(), Toast.LENGTH_SHORT).show();
+                break;
+
+            case Constants.ADD_REVIEWS_FAILED:
+                Toast.makeText(activity, ""+event.getValue(), Toast.LENGTH_SHORT).show();
+                break;
+
+            case Constants.NO_RESPONSE:
+                Toast.makeText(activity, ""+event.getValue(), Toast.LENGTH_SHORT).show();
                 break;
         }
     }

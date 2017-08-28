@@ -1,6 +1,7 @@
 package com.favbites.model;
 
 import com.favbites.model.beans.RestaurantData;
+import com.favbites.model.beans.RestaurantDetailsData;
 import com.favbites.model.beans.ReviewsData;
 
 import okhttp3.ResponseBody;
@@ -19,6 +20,9 @@ public interface APIInterface {
 
     @GET
     Call<RestaurantData> restaurantData(@Url String string);
+
+    @GET
+    Call<RestaurantDetailsData> restaurantDetailsData(@Url String string);
 
     @GET
     Call<ReviewsData> reviewsData(@Url String string);

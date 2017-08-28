@@ -51,6 +51,7 @@ public class RestaurantsManager {
 
             @Override
             public void onFailure(Call<RestaurantData> call, Throwable t) {
+                Log.e(TAG, "Error in operation");
                 EventBus.getDefault().post(new Event(Constants.RESTAURANTS_SEARCH_FAILED, Constants.SERVER_ERROR));
             }
         });

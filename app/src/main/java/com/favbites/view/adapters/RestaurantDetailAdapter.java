@@ -10,7 +10,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.favbites.R;
-import com.favbites.model.beans.RestaurantData;
+import com.favbites.model.beans.RestaurantDetailsData;
 import com.favbites.view.ReviewsActivity;
 
 import java.util.List;
@@ -22,10 +22,10 @@ import java.util.List;
 public class RestaurantDetailAdapter extends RecyclerView.Adapter<RestaurantDetailAdapter.ViewHolder> {
 
     private Context context;
-    private List<RestaurantData.Subitem> subItemList;
+    private List<RestaurantDetailsData.Subitem> subItemList;
     private int totalItems;
 
-    public RestaurantDetailAdapter(Context context, List<RestaurantData.Subitem> subItemList, int totalItems) {
+    public RestaurantDetailAdapter(Context context, List<RestaurantDetailsData.Subitem> subItemList, int totalItems) {
         this.context = context;
         this.subItemList = subItemList;
         this.totalItems = totalItems;
@@ -39,7 +39,7 @@ public class RestaurantDetailAdapter extends RecyclerView.Adapter<RestaurantDeta
 
     @Override
     public void onBindViewHolder(RestaurantDetailAdapter.ViewHolder holder, int position) {
-        RestaurantData.Subitem subItems = subItemList.get(position);
+        RestaurantDetailsData.Subitem subItems = subItemList.get(position);
 
         holder.tvItemName.setText(subItems.name);
         holder.tvItemPrice.setText(String.format("$%s", subItems.basePrice));

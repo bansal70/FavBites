@@ -73,6 +73,18 @@ public class Operations {
         return params;
     }
 
+    public static String addItemReview(String user_id, int restaurant_id, int dish_id, String rating, String comment) {
+        String params = Config.add_dish_reviews_url + "?user_id=" + user_id
+                +"&restaurant_id=" + restaurant_id
+                +"&dish_id=" + dish_id
+                +"&rating=" + rating
+                +"&comment=" + comment;
+
+        Log.e(TAG, "add dish_review params-- "+params);
+
+        return params;
+    }
+
     public static String bookmarkRestaurant(String user_id, String restaurant_id, String status) {
         String params = Config.bookmark_url + "?user_id=" + user_id
                 +"&restaurant_id=" + restaurant_id

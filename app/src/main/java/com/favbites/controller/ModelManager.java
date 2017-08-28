@@ -13,6 +13,7 @@ public class ModelManager {
     private LocationManager locationManager;
     private GuestLoginManager guestLoginManager;
     private RestaurantsManager restaurantsManager;
+    private RestaurantDetailsManager restaurantDetailsManager;
     private ReviewsManager reviewsManager;
     private BookmarkManager bookmarkManager;
 
@@ -32,6 +33,7 @@ public class ModelManager {
         restaurantsManager = new RestaurantsManager();
         reviewsManager = new ReviewsManager();
         bookmarkManager = new BookmarkManager();
+        restaurantDetailsManager = new RestaurantDetailsManager();
     }
 
     public RegistrationManager getRegistrationManager() {
@@ -64,5 +66,9 @@ public class ModelManager {
 
     public BookmarkManager getBookmarkManager() {
         return bookmarkManager;
+    }
+
+    public RestaurantDetailsManager getRestaurantDetailsManager() {
+        return restaurantDetailsManager;
     }
 }

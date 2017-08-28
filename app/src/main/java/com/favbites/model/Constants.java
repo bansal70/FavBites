@@ -30,5 +30,9 @@ public class Constants {
     public static final int REVIEWS_EMPTY = 1012;
 
     public static final int BOOKMARK_ADDED = 1013;
-    public static final int BOOKMARK_REMOVED = 1014;
+
+    public static final int RESTAURANT_DETAILS_SUCCESS = 1014;
+
+    public static final int ADD_REVIEWS_SUCCESS = 1015;
+    public static final int ADD_REVIEWS_FAILED = 1016;
 }

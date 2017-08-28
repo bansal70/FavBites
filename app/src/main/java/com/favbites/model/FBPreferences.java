@@ -10,7 +10,7 @@ import android.content.SharedPreferences;
 public class FBPreferences {
 
     private static SharedPreferences getPreferences(Context context) {
-        return context.getSharedPreferences("CS_PREF", Context.MODE_PRIVATE);
+        return context.getSharedPreferences("FB_PREF", Context.MODE_PRIVATE);
     }
 
     public static String readString(Context context, String key) {
