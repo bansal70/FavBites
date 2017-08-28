@@ -32,7 +32,7 @@ public class RestaurantsManager {
             @Override
             public void onResponse(Call<RestaurantData> call, Response<RestaurantData> response) {
                 try {
-                    Log.i(TAG, "response code: "+response.code());
+                    Log.e(TAG, "response code: "+response.code());
                     RestaurantData restaurantData = response.body();
                     //String status = restaurantData.response;
 

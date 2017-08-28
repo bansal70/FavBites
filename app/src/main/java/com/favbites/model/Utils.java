@@ -11,14 +11,18 @@ import android.util.Log;
 import android.view.Window;
 import android.widget.LinearLayout;
 
+import com.favbites.model.beans.RestaurantData;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Utils {
 
     private static final String TAG = Utils.class.getSimpleName();
+    public static List<RestaurantData.Datum> restaurantsList = new ArrayList<>();
 
     public static KProgressHUD showDialog(Context context) {
         KProgressHUD hud = KProgressHUD.create(context)

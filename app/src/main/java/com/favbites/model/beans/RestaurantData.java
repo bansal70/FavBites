@@ -202,6 +202,12 @@ public class RestaurantData {
         @SerializedName("modified")
         @Expose
         public String modified;
+        @SerializedName("isOpen")
+        @Expose
+        public String isOpen;
+        @SerializedName("bookmark")
+        @Expose
+        public String bookmark;
     }
 
     public class Review {
@@ -227,6 +233,12 @@ public class RestaurantData {
 
     }
 
+    public class Bookmark {
+        @SerializedName("restaurant_id")
+        @Expose
+        public Restaurant restaurant_id;
+    }
+
     public class Datum {
         @SerializedName("Restaurant")
         @Expose
@@ -249,6 +261,9 @@ public class RestaurantData {
         @SerializedName("Subitem")
         @Expose
         public List<Subitem> subitem = null;
+        @SerializedName("Bookmark")
+        @Expose
+        public List<Object> bookmark = null;
     }
 
 }

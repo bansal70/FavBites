@@ -15,10 +15,13 @@ public class ReviewsData {
     public String mesg;
     @SerializedName("responce")
     @Expose
-    public String response;
+    public String responce;
     @SerializedName("data")
     @Expose
     public List<Datum> data = null;
+    @SerializedName("rating")
+    @Expose
+    public String rating;
 
     public class Datum {
         @SerializedName("Review")
@@ -27,6 +30,9 @@ public class ReviewsData {
         @SerializedName("User")
         @Expose
         public User user;
+        @SerializedName("Subitem")
+        @Expose
+        public Subitem subitem;
     }
 
     public class Review {
@@ -108,5 +114,38 @@ public class ReviewsData {
         @SerializedName("social_id")
         @Expose
         public String socialId;
+    }
+
+
+    public class Subitem {
+
+        @SerializedName("id")
+        @Expose
+        public String id;
+        @SerializedName("key")
+        @Expose
+        public String key;
+        @SerializedName("name")
+        @Expose
+        public String name;
+        @SerializedName("description")
+        @Expose
+        public String description;
+        @SerializedName("basePrice")
+        @Expose
+        public String basePrice;
+        @SerializedName("created")
+        @Expose
+        public String created;
+        @SerializedName("modified")
+        @Expose
+        public String modified;
+        @SerializedName("item_id")
+        @Expose
+        public String itemId;
+        @SerializedName("restaurant_id")
+        @Expose
+        public String restaurantId;
+
     }
 }

@@ -13,17 +13,19 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.favbites.R;
+import com.favbites.model.beans.ReviewsData;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHolder> {
     private Context context;
-    private ArrayList<String> list;
+    private List<ReviewsData.Datum> reviewsList;
 
-    public ReviewsAdapter(Context context, ArrayList<String> list) {
+    public ReviewsAdapter(Context context, List<ReviewsData.Datum> reviewsList) {
         this.context = context;
-        this.list = list;
+        this.reviewsList = reviewsList;
     }
 
     @Override
@@ -34,16 +36,30 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ReviewsAdapter.ViewHolder holder, int position) {
-        holder.tvCustomer.setText("Johoney Scandy");
-        holder.tvDate.setText("Aug 21, 2017");
-        holder.tvDescription.setText("Amazing taste and would love to recommend this to everyone. " +
-                "It's delicious and at affordable price");
-        holder.rbRatings.setRating(5.0f);
+        ReviewsData.Datum reviews = reviewsList.get(position);
+
+        ReviewsData.Review dish = reviews.review;
+        float ratings = Float.parseFloat(dish.rating);
+        holder.rbRatings.setRating(ratings);
+        holder.tvDescription.setText(dish.message);
+        holder.tvDate.setText(dish.created);
+
+        ReviewsData.User user = reviews.user;
+
+        if (user.image == null)
+            holder.imgCustomer.setImageResource(R.drawable.demo_img);
+        else
+            Glide.with(context).load(user.image).into(holder.imgCustomer);
+
+        if (user.fname.isEmpty())
+            holder.tvCustomer.setText(R.string.anonymous);
+        else
+            holder.tvCustomer.setText(user.fname + " " + user.lname);
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return reviewsList.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{

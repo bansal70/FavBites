@@ -9,6 +9,7 @@ public class Constants {
     public static final int SPLASH_TIMEOUT = 3000;
 
     public static final String SERVER_ERROR = "Some error occurred! Please try again.";
+    public static final int NO_RESPONSE = 1000;
 
     public static final int REGISTRATION_SUCCESS = 1001;
     public static final int REGISTRATION_FAILED = 1002;
@@ -27,4 +28,7 @@ public class Constants {
 
     public static final int REVIEWS_SUCCESS = 1011;
     public static final int REVIEWS_EMPTY = 1012;
+
+    public static final int BOOKMARK_ADDED = 1013;
+    public static final int BOOKMARK_REMOVED = 1014;
 }

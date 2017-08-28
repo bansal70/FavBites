@@ -5,6 +5,10 @@
     <color name="colorAccent">#F9BE2E</color>
     <color name="colorWhite">#ffffff</color>
 
+
+    <color name="green_color">#0bba5a</color>
+    <color name="red_color">#ff0000</color>
+
     <!-- dots inactive colors -->
     <color name="dot_dark_screen1">#ffffff</color>
     <color name="dot_dark_screen2">#ffffff</color>

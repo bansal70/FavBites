@@ -62,7 +62,9 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:padding="@dimen/_10sdp"
-            android:text="@string/item_name"
+            android:text=""
+            android:layout_toLeftOf="@+id/tvAddReview"
+            android:layout_toStartOf="@+id/tvAddReview"
             android:textColor="#000"
             android:textSize="@dimen/_20ssp"
             android:textStyle="bold" />
@@ -90,7 +92,7 @@
             android:layout_marginStart="@dimen/_5sdp"
             android:isIndicator="true"
             android:numStars="5"
-            android:rating="3.5" />
+            android:rating="0" />
 
         <ImageView
             android:id="@+id/imgBookmark"
@@ -103,7 +105,7 @@
             android:layout_marginEnd="@dimen/_5sdp"
             android:layout_marginRight="@dimen/_5sdp"
             android:contentDescription="@string/bookmark"
-            android:src="@drawable/heart"
+            android:src="@drawable/unbookmark"
             android:visibility="gone" />
 
     </RelativeLayout>
@@ -144,5 +146,18 @@
         android:id="@+id/recyclerReviews"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
+    <TextView
+        android:id="@+id/tvNoReview"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="Sorry, there is no review for this menu item."
+        android:textSize="@dimen/_18ssp"
+        android:padding="@dimen/_10sdp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textColor="#000"
+        android:visibility="gone"
+        android:layout_weight="1"/>
 
 </LinearLayout>

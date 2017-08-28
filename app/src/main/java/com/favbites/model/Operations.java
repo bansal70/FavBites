@@ -54,4 +54,33 @@ public class Operations {
 
         return params;
     }
+
+    public static String getRestaurantDetailsParams(String restaurant_id, String user_id) {
+        String params = Config.restaurant_details_url + "?restaurant_id=" + restaurant_id
+                +"&user_id="+user_id;
+
+        Log.e(TAG, "restaurant_details params-- "+params);
+
+        return params;
+    }
+
+    public static String getItemReviews(int restaurant_id, int dish_id) {
+        String params = Config.dish_reviews_url + "?restaurant_id=" + restaurant_id
+                +"&dish_id=" + dish_id;
+
+        Log.i(TAG, "dish_reviews params-- "+params);
+
+        return params;
+    }
+
+    public static String bookmarkRestaurant(String user_id, String restaurant_id, String status) {
+        String params = Config.bookmark_url + "?user_id=" + user_id
+                +"&restaurant_id=" + restaurant_id
+                +"&status=" + status;
+
+        Log.i(TAG, "bookmark_restaurant params-- "+params);
+
+        return params;
+    }
+
 }

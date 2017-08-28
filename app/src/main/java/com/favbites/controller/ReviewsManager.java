@@ -1,9 +1,12 @@
 package com.favbites.controller;
 
+import android.content.Context;
+
 import com.favbites.model.APIClient;
 import com.favbites.model.APIInterface;
 import com.favbites.model.Constants;
 import com.favbites.model.Event;
+import com.favbites.model.FBPreferences;
 import com.favbites.model.beans.ReviewsData;
 
 import org.greenrobot.eventbus.EventBus;
@@ -21,9 +24,9 @@ import retrofit2.Response;
 
 public class ReviewsManager {
     private final static String TAG = ReviewsManager.class.getSimpleName();
-    public static List<ReviewsData.Datum> datumList = new ArrayList<>();
+    public static List<ReviewsData.Datum> reviewsList = new ArrayList<>();
 
-    public void searchRestaurant(final String params) {
+    public void dishReviews(final Context context, final String params) {
         final APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
         Call<ReviewsData> call = apiInterface.reviewsData(params);
         call.enqueue(new Callback<ReviewsData>() {
@@ -31,16 +34,23 @@ public class ReviewsManager {
             public void onResponse(Call<ReviewsData> call, Response<ReviewsData> response) {
                 try {
                     ReviewsData reviewsData = response.body();
-                    String status = reviewsData.response;
+                    String status = reviewsData.responce;
 
-                    datumList = reviewsData.data;
+                    if (status.equals("0")) {
+                        EventBus.getDefault().post(new Event(Constants.REVIEWS_EMPTY, ""));
+                        FBPreferences.putString(context, "dish_ratings", "0");
 
-                    if (datumList.isEmpty()) {
-                        EventBus.getDefault().post(new Event(Constants.RESTAURANTS_SEARCH_FAILED, ""));
                         return;
                     }
 
-                    EventBus.getDefault().post(new Event(Constants.RESTAURANTS_SEARCH_SUCCESS, ""));
+                    reviewsList = reviewsData.data;
+
+                    String ratings = reviewsData.rating;
+                  //  ReviewsData.Subitem subItem = reviewsList.get(0).subitem;
+                 //   FBPreferences.putString(context, "dish_name", subItem.name);
+                    FBPreferences.putString(context, "dish_ratings", ratings);
+
+                    EventBus.getDefault().post(new Event(Constants.REVIEWS_SUCCESS, ""));
 
                 } catch (Exception e) {
                     e.printStackTrace();

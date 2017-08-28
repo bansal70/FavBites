@@ -35,6 +35,7 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
     String search = "";
     boolean isSearch = false;
     LinearLayout resultLayout;
+   // private List<RestaurantData.Datum> restaurantsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +47,14 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
 
     public void initViews() {
 
-        pd = Utils.showMessageDialog(this, "Fetching restaurants...");
-        pd.show();
-        resultLayout = (LinearLayout) findViewById(R.id.resultLayout);
-
         ModelManager.getInstance().getRestaurantsManager()
                 .searchRestaurant(Operations.getSearchRestaurantParams("", page));
+        pd = Utils.showMessageDialog(this, "Fetching restaurants...");
+        pd.show();
+
+        resultLayout = (LinearLayout) findViewById(R.id.resultLayout);
+
+      //  restaurantsList = new ArrayList<>();
 
         editSearch = (EditText) findViewById(R.id.editSearch);
         editSearch.setOnTouchListener(this);
@@ -61,8 +64,9 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
 
-        restaurantsAdapter = new RestaurantsAdapter(this);
+        restaurantsAdapter = new RestaurantsAdapter(this, Utils.restaurantsList);
         recyclerView.setAdapter(restaurantsAdapter);
+        loadMore();
     }
 
     @Override
@@ -75,9 +79,11 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
                     [DRAWABLE_RIGHT].getBounds().width())) {
                 search = editSearch.getText().toString().trim();
                 if (search.isEmpty()) {
-                   return true;
+                    return true;
                 }
+                page = 1;
                 isSearch = true;
+                Utils.restaurantsList.clear();
                 pd.show();
                 ModelManager.getInstance().getRestaurantsManager()
                         .searchRestaurant(Operations.getSearchRestaurantParams(search, 1));
@@ -105,65 +111,55 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
     public void onEvent(Event event) {
         switch (event.getKey()) {
             case Constants.RESTAURANTS_SEARCH_SUCCESS:
+                pd.dismiss();
                 if (isSearch) {
                     resultLayout.setVisibility(View.VISIBLE);
                     tvResults.setText(editSearch.getText().toString());
-                    editSearch.setText("");
                 }
-                pd.dismiss();
-                setData();
+
+                Utils.restaurantsList.addAll(RestaurantsManager.datumList);
+                restaurantsAdapter.notifyDataSetChanged();
+
                 break;
 
             case Constants.RESTAURANTS_SEARCH_FAILED:
                 if (isSearch) {
                     resultLayout.setVisibility(View.VISIBLE);
                     tvResults.setText(editSearch.getText().toString());
-                    editSearch.setText("");
                 }
 
                 pd.dismiss();
-              //  Toast.makeText(activity, ""+event.getValue(), Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(activity, ""+event.getValue(), Toast.LENGTH_SHORT).show();
                 break;
         }
     }
 
-    private int lastVisibleItem, totalItemCount;
-    private boolean loading;
-    private int visibleThreshold = 1;
-
-    public void setData() {
-        restaurantsAdapter.notifyDataSetChanged();
-
+    public void loadMore() {
         final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView
                 .getLayoutManager();
 
-        recyclerView
-                .addOnScrollListener(new RecyclerView.OnScrollListener() {
-                    @Override
-                    public void onScrolled(RecyclerView recyclerView,
-                                           int dx, int dy) {
-                        super.onScrolled(recyclerView, dx, dy);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView,
+                                   int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
 
-                        totalItemCount = recyclerView.getLayoutManager().getItemCount();
-                        lastVisibleItem = linearLayoutManager
-                                .findLastVisibleItemPosition();
-                        if (!loading
-                                && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
-                            // End has been reached
-                            //  if (list.size() != 0) {
+                int totalItemCount = linearLayoutManager.getItemCount();
+                int lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                int visibleThreshold = 1;
+                boolean endHasBeenReached = lastVisibleItem + visibleThreshold >= totalItemCount;
 
-                            // linearLayoutManager.scrollToPositionWithOffset(0, lastVisibleItem);
-                            if (RestaurantsManager.datumList.size() > 9) {
-                                pd.show();
-                                ModelManager.getInstance().getRestaurantsManager()
-                                        .searchRestaurant(Operations.getSearchRestaurantParams(search, ++page));
-                            }
-                            //                        restaurantsAdapter.notifyDataSetChanged();
-                            loading = true;
-                        }
+                if (totalItemCount > 0 && endHasBeenReached) {
+                    if (RestaurantsManager.datumList.size() > 9) {
+                        RestaurantsManager.datumList.clear();
+                        pd.show();
+                        ModelManager.getInstance().getRestaurantsManager()
+                                .searchRestaurant(Operations.getSearchRestaurantParams(search, ++page));
+//                        restaurantsAdapter.notifyDataSetChanged();
                     }
-                });
-
+                }
+            }
+        });
     }
 
 }

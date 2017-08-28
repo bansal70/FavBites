@@ -45,5 +45,9 @@
     <string name="submit">Submit</string>
     <string name="forgot_pass">Forgot Password</string>
     <string name="call">Call</string>
+    <string name="open_now">Open now</string>
+    <string name="closed_now">Closed</string>
+    <string name="show_more">Show More</string>
+    <string name="anonymous">Anonymous User</string>
 
 </resources>

@@ -13,6 +13,8 @@ public class ModelManager {
     private LocationManager locationManager;
     private GuestLoginManager guestLoginManager;
     private RestaurantsManager restaurantsManager;
+    private ReviewsManager reviewsManager;
+    private BookmarkManager bookmarkManager;
 
     public static ModelManager getInstance() {
         if (modelManager == null)
@@ -28,6 +30,8 @@ public class ModelManager {
         locationManager = new LocationManager();
         guestLoginManager = new GuestLoginManager();
         restaurantsManager = new RestaurantsManager();
+        reviewsManager = new ReviewsManager();
+        bookmarkManager = new BookmarkManager();
     }
 
     public RegistrationManager getRegistrationManager() {
@@ -52,5 +56,13 @@ public class ModelManager {
 
     public RestaurantsManager getRestaurantsManager() {
         return restaurantsManager;
+    }
+
+    public ReviewsManager getReviewsManager() {
+        return reviewsManager;
+    }
+
+    public BookmarkManager getBookmarkManager() {
+        return bookmarkManager;
     }
 }
