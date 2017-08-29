@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/_30sdp"
     android:paddingLeft="@dimen/_10sdp"
-    android:paddingRight="@dimen/_10sdp">
+    android:paddingRight="@dimen/_10sdp"
+    android:background="?selectableItemBackground">
 
     <TextView
         android:id="@+id/tvItemName"
@@ -56,6 +57,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:visibility="invisible"
         android:text="(0)"/>
 
 </RelativeLayout>

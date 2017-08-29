@@ -43,6 +43,12 @@ public class RestaurantDetailAdapter extends RecyclerView.Adapter<RestaurantDeta
 
         holder.tvItemName.setText(subItems.name);
         holder.tvItemPrice.setText(String.format("$%s", subItems.basePrice));
+        if (subItems.rating.isEmpty())
+            holder.rbItemRatings.setRating(0.0f);
+        else {
+            float ratings = Float.parseFloat(subItems.rating);
+            holder.rbItemRatings.setRating(ratings);
+        }
     }
 
     @Override

@@ -95,4 +95,14 @@ public class Operations {
         return params;
     }
 
+    public static String uploadPhoto(String user_id, String restaurant_id, String comment) {
+        String params = Config.upload_photo_url + "?user_id=" + user_id
+                +"&restaurant_id=" + restaurant_id
+                +"&comment=" + comment;
+
+        Log.i(TAG, "upload_photo params-- "+params);
+
+        return params;
+    }
+
 }

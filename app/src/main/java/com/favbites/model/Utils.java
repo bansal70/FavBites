@@ -7,6 +7,9 @@ package com.favbites.model;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
+import android.location.Geocoder;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Window;
 import android.widget.LinearLayout;
@@ -14,8 +17,13 @@ import android.widget.LinearLayout;
 import com.favbites.model.beans.RestaurantData;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -68,6 +76,42 @@ public class Utils {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         return dialog;
+    }
+
+    public static File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DCIM), "Camera");
+        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+
+        Log.e(TAG, "imagePath: "+image.getAbsolutePath());
+        return image;
+    }
+
+    public static String getCompleteAddressString(Context context, double LATITUDE, double LONGITUDE) {
+        String strAdd = "";
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(LATITUDE, LONGITUDE, 1);
+            if (addresses != null) {
+                Address returnedAddress = addresses.get(0);
+
+                if (returnedAddress.getPostalCode() != null)
+                    strAdd = returnedAddress.getPostalCode(); //postal code
+                else if (returnedAddress.getLocality() != null)
+                    strAdd = returnedAddress.getLocality(); //city
+                else if (returnedAddress.getAdminArea() != null)
+                    strAdd = returnedAddress.getAdminArea(); //state
+
+            } else {
+                Log.e(TAG, "No address returned");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return strAdd;
     }
 
 }

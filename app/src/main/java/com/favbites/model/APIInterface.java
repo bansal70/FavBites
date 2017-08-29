@@ -1,12 +1,16 @@
 package com.favbites.model;
 
+import com.favbites.model.beans.ImageResult;
 import com.favbites.model.beans.RestaurantData;
 import com.favbites.model.beans.RestaurantDetailsData;
 import com.favbites.model.beans.ReviewsData;
 
+import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.http.GET;
+import retrofit2.http.Multipart;
+import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Url;
 
 /*
@@ -15,18 +19,22 @@ import retrofit2.http.Url;
 
 public interface APIInterface {
 
-    @GET
+    @POST
     Call<ResponseBody> response(@Url String string);
 
-    @GET
+    @POST
     Call<RestaurantData> restaurantData(@Url String string);
 
-    @GET
+    @POST
     Call<RestaurantDetailsData> restaurantDetailsData(@Url String string);
 
-    @GET
+    @POST
     Call<ReviewsData> reviewsData(@Url String string);
 
-    @GET
-    Call<RestaurantData.Restaurant> restaurantDetails(@Url String string);
+    /*@GET
+    Call<RestaurantData.Restaurant> restaurantDetails(@Url String string);*/
+
+    @Multipart
+    @POST
+    Call<ImageResult> uploadImage(@Url String string, @Part MultipartBody.Part file);
 }

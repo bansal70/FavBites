@@ -16,6 +16,7 @@ public class ModelManager {
     private RestaurantDetailsManager restaurantDetailsManager;
     private ReviewsManager reviewsManager;
     private BookmarkManager bookmarkManager;
+    private UploadPhotoManager uploadPhotoManager;
 
     public static ModelManager getInstance() {
         if (modelManager == null)
@@ -34,6 +35,7 @@ public class ModelManager {
         reviewsManager = new ReviewsManager();
         bookmarkManager = new BookmarkManager();
         restaurantDetailsManager = new RestaurantDetailsManager();
+        uploadPhotoManager = new UploadPhotoManager();
     }
 
     public RegistrationManager getRegistrationManager() {
@@ -70,5 +72,9 @@ public class ModelManager {
 
     public RestaurantDetailsManager getRestaurantDetailsManager() {
         return restaurantDetailsManager;
+    }
+
+    public UploadPhotoManager getUploadPhotoManager() {
+        return uploadPhotoManager;
     }
 }

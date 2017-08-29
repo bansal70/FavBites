@@ -119,6 +119,9 @@ public class RestaurantData {
         @SerializedName("restaurant_id")
         @Expose
         public String restaurantId;
+        @SerializedName("rating")
+        @Expose
+        public String rating;
 
     }
 

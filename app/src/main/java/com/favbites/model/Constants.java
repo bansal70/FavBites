@@ -8,7 +8,7 @@ public class Constants {
 
     public static final int SPLASH_TIMEOUT = 3000;
 
-    public static final String SERVER_ERROR = "Some error occurred! Please try again.";
+    public static final String SERVER_ERROR = "Something went wrong! Please try again.";
     public static final int NO_RESPONSE = 1000;
 
     public static final int REGISTRATION_SUCCESS = 1001;
@@ -35,4 +35,13 @@ public class Constants {
 
     public static final int ADD_REVIEWS_SUCCESS = 1015;
     public static final int ADD_REVIEWS_FAILED = 1016;
+
+    public static final int UPLOAD_PHOTO_SUCCESS = 1017;
+    public static final int UPLOAD_PHOTO_FAILED = 1018;
+
+    public static final int LOCATION_SUCCESS = 1019;
+    public static final int LOCATION_EMPTY = 1020;
+
+    public static final int GPS_SUCCESS = 1019;
+    public static final int GPS_EMPTY = 1020;
 }

@@ -82,7 +82,7 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
         recyclerView.addItemDecoration(new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL));
 
-        reviewsAdapter = new ReviewsAdapter(activity, reviewsList);
+        reviewsAdapter = new ReviewsAdapter(activity, reviewsList, tvAddReview);
         recyclerView.setAdapter(reviewsAdapter);
 
         tvAddReview.setOnClickListener(this);
@@ -110,6 +110,14 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
                 break;
 
             case R.id.tvAddReview:
+                if (user_id.isEmpty()) {
+                    Toast.makeText(activity, "Please login to add your review", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!ReviewsAdapter.rating.isEmpty()) {
+                    rbItemRating.setRating(Float.parseFloat(ReviewsAdapter.rating));
+                    editComment.setText(ReviewsAdapter.comment);
+                }
                 dialogReview.show();
                 break;
 
@@ -162,6 +170,8 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
 
             case Constants.REVIEWS_EMPTY:
                 pd.dismiss();
+                ReviewsAdapter.rating = "";
+                ReviewsAdapter.comment = "";
                 rbRatings.setRating(0);
                 tvNoReview.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.GONE);
@@ -170,16 +180,20 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
             case Constants.ADD_REVIEWS_SUCCESS:
                 dialogReview.dismiss();
                 reviewsList.clear();
+                tvNoReview.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
                 ModelManager.getInstance().getReviewsManager().dishReviews(this,
                         Operations.getItemReviews(restaurant_id, dish_key));
                 Toast.makeText(activity, ""+event.getValue(), Toast.LENGTH_SHORT).show();
                 break;
 
             case Constants.ADD_REVIEWS_FAILED:
+                pd.dismiss();
                 Toast.makeText(activity, ""+event.getValue(), Toast.LENGTH_SHORT).show();
                 break;
 
             case Constants.NO_RESPONSE:
+                pd.dismiss();
                 Toast.makeText(activity, ""+event.getValue(), Toast.LENGTH_SHORT).show();
                 break;
         }

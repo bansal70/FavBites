@@ -1,6 +1,8 @@
 package com.favbites.view;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
@@ -23,6 +25,12 @@ import com.favbites.model.Operations;
 import com.favbites.model.Utils;
 import com.favbites.model.beans.RestaurantDetailsData;
 import com.favbites.view.adapters.RestaurantDetailAdapter;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
 import org.greenrobot.eventbus.EventBus;
@@ -31,28 +39,30 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RestaurantDetailActivity extends BaseActivity implements View.OnClickListener {
+public class RestaurantDetailActivity extends BaseActivity implements View.OnClickListener, OnMapReadyCallback {
 
     private Context context = this;
     ImageView imgBack, imgRestaurant, imgBookmark;
     TextView tvRestaurant, tvAddress, tvPhone, tvOpen;
     RatingBar rbRatings;
     String isOpen;
-    String restaurant_id, user_id, bookmark_status;
-    TextView tvShowMore;
+    String restaurant_id, user_id, bookmark_status, restaurant_name, restaurant_phone;
+    TextView tvShowMore, tvUploadPhoto, tvCall, tvCheckIn;
     int totalItems = 6;
     private RecyclerView recyclerView;
     private RestaurantDetailAdapter restaurantDetailAdapter;
     private List<RestaurantDetailsData.Subitem> subItemList;
     KProgressHUD pd;
     String bookmark;
+    GoogleMap googleMap;
+    double latitude, longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_detail);
 
-        initViews();
+
     }
 
     public void initViews() {
@@ -73,10 +83,15 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
         tvPhone = (TextView) findViewById(R.id.tvPhone);
         tvOpen = (TextView) findViewById(R.id.tvOpen);
         tvShowMore = (TextView) findViewById(R.id.tvShowMore);
+        tvUploadPhoto = (TextView) findViewById(R.id.tvUploadPhoto);
+        tvCall = (TextView) findViewById(R.id.tvCall);
+        tvCheckIn = (TextView) findViewById(R.id.tvCheckIn);
 
         imgBack.setOnClickListener(this);
         tvShowMore.setOnClickListener(this);
         imgBookmark.setOnClickListener(this);
+        tvUploadPhoto.setOnClickListener(this);
+        tvCall.setOnClickListener(this);
 
         ModelManager.getInstance().getRestaurantDetailsManager()
                 .getRestaurantDetails(Operations.getRestaurantDetailsParams(restaurant_id, user_id));
@@ -93,12 +108,13 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
         RestaurantDetailsData.Data data = RestaurantDetailsManager.data;
         RestaurantDetailsData.Restaurant restaurant = data.restaurant;
 
-        String name = restaurant.name;
+        restaurant_name = restaurant.name;
         String streetAddress = "Address: " + restaurant.streetAddress + ", "
                 + restaurant.city + ", "
                 + restaurant.state + " "
                 + restaurant.zip;
         String logoUrl = restaurant.logoUrl;
+        restaurant_phone = restaurant.phone;
         String phone = "Phone: " + restaurant.phone;
         isOpen = restaurant.isOpen;
         restaurant_id = restaurant.id;
@@ -107,7 +123,7 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
         Glide.with(this)
                 .load(logoUrl)
                 .into(imgRestaurant);
-        tvRestaurant.setText(name);
+        tvRestaurant.setText(restaurant_name);
         tvAddress.setText(streetAddress);
         tvPhone.setText(phone);
 
@@ -128,6 +144,20 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
             bookmark_status = "1";
             imgBookmark.setImageResource(R.drawable.bookmark);
         }
+
+        latitude = Double.parseDouble(restaurant.latitude);
+        longitude = Double.parseDouble(restaurant.longitude);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        initViews();
     }
 
     @Override
@@ -156,8 +186,26 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
                             Operations.bookmarkRestaurant(user_id, restaurant_id, "1"));
                 else
                     ModelManager.getInstance().getBookmarkManager().bookmarkRestaurant(
-                        Operations.bookmarkRestaurant(user_id, restaurant_id, "0"));
+                            Operations.bookmarkRestaurant(user_id, restaurant_id, "0"));
 
+                break;
+
+            case R.id.tvUploadPhoto:
+                if (user_id.isEmpty()) {
+                    Toast.makeText(context, "Please login to post something...", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                startActivity(new Intent(this, UploadPhotoActivity.class));
+                break;
+
+            case R.id.tvCall:
+                if (restaurant_phone.isEmpty()) {
+                    Toast.makeText(context, "Sorry, this restaurant doesn't have any contact information", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:"+restaurant_phone));
+                startActivity(intent);
                 break;
         }
     }
@@ -180,6 +228,19 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
     public void onEvent(Event event) {
         switch (event.getKey()) {
 
+            case Constants.RESTAURANT_DETAILS_SUCCESS:
+                pd.dismiss();
+                if (subItemList.size() > 6)
+                    tvShowMore.setVisibility(View.VISIBLE);
+
+                setData();
+
+                RestaurantDetailsData.Data data = RestaurantDetailsManager.data;
+                subItemList.addAll(data.subitem);
+                restaurantDetailAdapter.notifyDataSetChanged();
+
+                break;
+
             case Constants.BOOKMARK_ADDED:
                 pd.dismiss();
                 if (bookmark_status.equals("0")) {
@@ -199,18 +260,18 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
                 Toast.makeText(context, ""+event.getValue(), Toast.LENGTH_SHORT).show();
                 break;
 
-            case Constants.RESTAURANT_DETAILS_SUCCESS:
-                pd.dismiss();
-                if (subItemList.size() > 6)
-                    tvShowMore.setVisibility(View.VISIBLE);
-
-                setData();
-
-                RestaurantDetailsData.Data data = RestaurantDetailsManager.data;
-                subItemList.addAll(data.subitem);
-                restaurantDetailAdapter.notifyDataSetChanged();
-
-                break;
         }
     }
+
+    @Override
+    public void onMapReady(GoogleMap mMap) {
+        googleMap = mMap;
+
+        LatLng latLng = new LatLng(latitude, longitude);
+        googleMap.addMarker(new MarkerOptions().position(latLng).title(restaurant_name));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+    }
+
+
+
 }

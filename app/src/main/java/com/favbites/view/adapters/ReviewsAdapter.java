@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.favbites.R;
+import com.favbites.model.FBPreferences;
 import com.favbites.model.beans.ReviewsData;
 
 import java.util.List;
@@ -22,10 +23,13 @@ import java.util.List;
 public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHolder> {
     private Context context;
     private List<ReviewsData.Datum> reviewsList;
+    private TextView tvAddReview;
+    public static String rating="", comment="";
 
-    public ReviewsAdapter(Context context, List<ReviewsData.Datum> reviewsList) {
+    public ReviewsAdapter(Context context, List<ReviewsData.Datum> reviewsList, TextView tvAddReview) {
         this.context = context;
         this.reviewsList = reviewsList;
+        this.tvAddReview = tvAddReview;
     }
 
     @Override
@@ -45,6 +49,12 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHold
         holder.tvDate.setText(dish.created);
 
         ReviewsData.User user = reviews.user;
+
+        if (user.id.equals(FBPreferences.readString(context, "user_id"))) {
+            tvAddReview.setText(R.string.edit_review);
+            comment = dish.message;
+            rating = dish.rating;
+        }
 
         if (user.image == null)
             holder.imgCustomer.setImageResource(R.drawable.demo_img);

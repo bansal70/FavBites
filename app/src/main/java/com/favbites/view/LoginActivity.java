@@ -158,6 +158,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             case Constants.GUEST_LOGIN_SUCCESS:
                 dialog.dismiss();
                 startActivity(new Intent(activity, RestaurantsActivity.class));
+                finish();
                 break;
 
             case Constants.GUEST_LOGIN_FAILED:
