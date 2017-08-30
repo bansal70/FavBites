@@ -1,7 +1,7 @@
 package com.favbites.controller;
 
 /*
- * Created by rishav on 8/22/2017.
+ * Created by rishav on 8/30/2017.
  */
 
 import android.content.Context;
@@ -24,10 +24,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginManager {
-    private final String TAG = LoginManager.class.getSimpleName();
+public class LogoutManager {
+    private final String TAG = LogoutManager.class.getSimpleName();
 
-    public void loginUser(final Context context, String params) {
+    public void logoutUser(final Context context, String params) {
         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
         Call<ResponseBody> call = apiInterface.response(params);
         call.enqueue(new Callback<ResponseBody>() {
@@ -35,25 +35,17 @@ public class LoginManager {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     String output = response.body().string();
-                    Log.e(TAG, "Login response-- "+output);
+                    Log.e(TAG, "logout response-- "+output);
                     JSONObject jsonObject = new JSONObject(output);
                     String status = jsonObject.getString("response");
-                    String msg = jsonObject.getString("mesg");
+
                     if (status.equals("1")) {
-                        JSONObject data = jsonObject.getJSONObject("data");
-
-                        String user_id = data.getString("id");
-                        String first_name = data.getString("fname");
-                        String last_name = data.getString("lname");
-
-                        FBPreferences.putString(context, "user_id", user_id);
-                        FBPreferences.putString(context, "first_name", first_name);
-                        FBPreferences.putString(context, "last_name", last_name);
-
-                        EventBus.getDefault().post(new Event(Constants.LOGIN_SUCCESS, msg));
+                        EventBus.getDefault().post(new Event(Constants.LOGOUT_SUCCESS, ""));
+                        FBPreferences.clearPref(context);
+                    } else {
+                        EventBus.getDefault().post(new Event(Constants.LOGOUT_FAILED, ""));
                     }
-                    else
-                        EventBus.getDefault().post(new Event(Constants.LOGIN_FAILED, msg));
+
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
                 }
@@ -61,7 +53,7 @@ public class LoginManager {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                EventBus.getDefault().post(new Event(Constants.LOGIN_FAILED, Constants.SERVER_ERROR));
+                EventBus.getDefault().post(new Event(Constants.NO_RESPONSE, Constants.SERVER_ERROR));
             }
         });
     }

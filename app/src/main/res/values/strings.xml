@@ -11,7 +11,7 @@
     <string name="slide_3_title">ONLINE DUMMY OPTION</string>
     <string name="slide_3_desc">Best discounts on every single service we offer!</string>
     <string name="sign_up">Sign Up</string>
-    <string name="login">LOGIN</string>
+    <string name="login">Login</string>
     <string name="sign_in">Sign In</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -54,5 +54,8 @@
     <string name="photo">Photo</string>
     <string name="edit_review">Edit Review</string>
     <string name="add_review">Add Review</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="guest_user">Guest User</string>
 
 </resources>

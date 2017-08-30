@@ -17,6 +17,7 @@ public class ModelManager {
     private ReviewsManager reviewsManager;
     private BookmarkManager bookmarkManager;
     private UploadPhotoManager uploadPhotoManager;
+    private LogoutManager logoutManager;
 
     public static ModelManager getInstance() {
         if (modelManager == null)
@@ -36,6 +37,7 @@ public class ModelManager {
         bookmarkManager = new BookmarkManager();
         restaurantDetailsManager = new RestaurantDetailsManager();
         uploadPhotoManager = new UploadPhotoManager();
+        logoutManager = new LogoutManager();
     }
 
     public RegistrationManager getRegistrationManager() {
@@ -76,5 +78,9 @@ public class ModelManager {
 
     public UploadPhotoManager getUploadPhotoManager() {
         return uploadPhotoManager;
+    }
+
+    public LogoutManager getLogoutManager() {
+        return logoutManager;
     }
 }

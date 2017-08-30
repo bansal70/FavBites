@@ -9,8 +9,11 @@ import android.util.Log;
 public class Operations {
     private static final String TAG = Operations.class.getSimpleName();
 
-    public static String getRegistrationParams(String email, String password, String deviceToken, String deviceType) {
-        String params = Config.registration_url+"?email=" + email
+    public static String getRegistrationParams(String firstName, String lastName, String email,
+                                               String password, String deviceToken, String deviceType) {
+        String params = Config.registration_url + "?fname=" + firstName
+                +"&lname=" + lastName
+                +"&email=" + email
                 +"&password=" + password
                 +"&deviceToken=" + deviceToken
                 +"&deviceType=" + deviceType;
@@ -102,6 +105,13 @@ public class Operations {
 
         Log.i(TAG, "upload_photo params-- "+params);
 
+        return params;
+    }
+
+    public static String logoutParams(String user_id) {
+        String params = Config.logout_url + "?user_id=" + user_id;
+
+        Log.e(TAG, "logout_photo params-- "+params);
         return params;
     }
 

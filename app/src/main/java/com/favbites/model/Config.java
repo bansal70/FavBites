@@ -9,6 +9,7 @@ class Config {
     static final String BASE_URL = "http://nimbyisttechnologies.com/himanshu/favbite/api/apis/";
     static final String registration_url = "registerUser";
     static final String login_url = "login";
+    static final String logout_url = "logout";
     static final String forgot_password = "forgetPassword";
     static final String guest_login_url = "guestLogin";
     static final String search_restaurant_url = "search";

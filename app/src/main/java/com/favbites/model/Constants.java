@@ -42,6 +42,6 @@ public class Constants {
     public static final int LOCATION_SUCCESS = 1019;
     public static final int LOCATION_EMPTY = 1020;
 
-    public static final int GPS_SUCCESS = 1019;
-    public static final int GPS_EMPTY = 1020;
+    public static final int LOGOUT_SUCCESS = 1021;
+    public static final int LOGOUT_FAILED = 1022;
 }

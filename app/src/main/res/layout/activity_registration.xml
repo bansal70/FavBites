@@ -19,10 +19,10 @@
 
             <ImageView
                 android:id="@+id/imgBack"
-                android:layout_width="@dimen/_40sdp"
-                android:layout_height="@dimen/_30sdp"
+                android:layout_width="@dimen/_45sdp"
+                android:layout_height="@dimen/_50sdp"
                 android:src="@drawable/back"
-                android:padding="@dimen/_5sdp"
+                android:padding="@dimen/_10sdp"
                 android:background="?selectableItemBackground"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
@@ -73,10 +73,39 @@
                     android:src="@drawable/splash_logo" />
 
                 <EditText
-                    android:id="@+id/editEmail"
+                    android:id="@+id/editFirstName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_15sdp"
+                    android:background="@drawable/round_shape_edittext"
+                    android:gravity="center"
+                    android:hint="@string/first_name"
+                    android:inputType="text"
+                    android:padding="@dimen/_10sdp"
+                    android:textColor="#fff"
+                    android:textColorHint="#fff" />
+
+                <EditText
+                    android:id="@+id/editLastName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_15sdp"
+                    android:layout_marginRight="@dimen/_15sdp"
+                    android:background="@drawable/round_shape_edittext"
+                    android:gravity="center"
+                    android:hint="@string/last_name"
+                    android:inputType="text"
+                    android:padding="@dimen/_10sdp"
+                    android:textColor="#fff"
+                    android:textColorHint="#fff" />
+
+                <EditText
+                    android:id="@+id/editEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_15sdp"
+                    android:layout_marginRight="@dimen/_15sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
                     android:background="@drawable/round_shape_edittext"
                     android:gravity="center"
                     android:hint="@string/email"
@@ -91,6 +120,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_15sdp"
                     android:layout_marginRight="@dimen/_15sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
                     android:background="@drawable/round_shape_edittext"
                     android:gravity="center"
                     android:hint="@string/enter_password"

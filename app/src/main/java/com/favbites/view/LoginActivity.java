@@ -146,7 +146,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             case Constants.LOGIN_SUCCESS:
                 dialog.dismiss();
                 Toast.makeText(this, "" + event.getValue(), Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(this, RestaurantsActivity.class));
+                startActivity(new Intent(this, RestaurantsActivity.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 finish();
                 break;
 
@@ -157,7 +158,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
             case Constants.GUEST_LOGIN_SUCCESS:
                 dialog.dismiss();
-                startActivity(new Intent(activity, RestaurantsActivity.class));
+                startActivity(new Intent(activity, RestaurantsActivity.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 finish();
                 break;
 

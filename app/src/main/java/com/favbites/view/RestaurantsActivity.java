@@ -12,13 +12,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,14 +53,16 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
     RecyclerView recyclerView;
     RestaurantsAdapter restaurantsAdapter;
     EditText editSearch;
-    TextView tvResults;
+    // TextView tvResults;
     String search = "";
     boolean isSearch = false;
-    LinearLayout resultLayout;
+    // LinearLayout resultLayout;
     Dialog dialogLocation;
     TextView tvSubmit, tvAutoDetect, tvNoRestaurant;
     EditText editLocation;
-    ImageView imgLocation;
+    ImageView imgLocation, imgHome;
+    DrawerLayout navigationDrawer;
+    String user_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +74,7 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
     }
 
     public void checkLocation() {
-        pd = Utils.showMessageDialog(this, "Fetching restaurants...");
+        pd = Utils.showDialog(this);
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         RestaurantsManager.datumList.clear();
         Utils.restaurantsList.clear();
@@ -92,13 +95,17 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
     }
 
     public void initViews() {
-        resultLayout = (LinearLayout) findViewById(R.id.resultLayout);
-
+        // resultLayout = (LinearLayout) findViewById(R.id.resultLayout);
+        user_id = FBPreferences.readString(this, "user_id");
+        navigationDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        imgHome = (ImageView) findViewById(R.id.imgHome);
         editSearch = (EditText) findViewById(R.id.editSearch);
         editSearch.setOnTouchListener(this);
-        tvResults = (TextView) findViewById(R.id.tvResults);
+        // tvResults = (TextView) findViewById(R.id.tvResults);
         tvNoRestaurant = (TextView) findViewById(R.id.tvNoRestaurant);
         imgLocation = (ImageView) findViewById(R.id.imgLocation);
+
+        imgHome.setOnClickListener(this);
         imgLocation.setOnClickListener(this);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerRestaurants);
@@ -108,6 +115,7 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
         restaurantsAdapter = new RestaurantsAdapter(this, Utils.restaurantsList);
         recyclerView.setAdapter(restaurantsAdapter);
         loadMore();
+        setDrawer();
     }
 
     @Override
@@ -166,7 +174,41 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
             case R.id.imgLocation:
                 enableLoc();
                 break;
+
+            case R.id.imgHome:
+                navigationDrawer.openDrawer(GravityCompat.START);
+                break;
+
+            case R.id.tvLogout:
+                if (user_id.isEmpty()){
+                    startActivity(new Intent(this, LoginActivity.class));
+                    return;
+                }
+                pd.show();
+                ModelManager.getInstance().getLogoutManager().logoutUser(this,
+                        Operations.logoutParams(user_id));
+                break;
         }
+    }
+
+    public void setDrawer() {
+        TextView tvUsername = (TextView) findViewById(R.id.tvUsername);
+        TextView tvLogout = (TextView) findViewById(R.id.tvLogout);
+
+        String first_name = FBPreferences.readString(this, "first_name");
+        String last_name = FBPreferences.readString(this, "last_name");
+        String name = first_name + " " + last_name;
+
+        if (user_id.isEmpty())
+            tvLogout.setText(R.string.login);
+
+        if (!first_name.isEmpty())
+            tvUsername.setText(name);
+        else
+            tvUsername.setText(R.string.guest_user);
+
+        tvLogout.setOnClickListener(this);
+
     }
 
     @Override
@@ -188,10 +230,10 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
         switch (event.getKey()) {
             case Constants.RESTAURANTS_SEARCH_SUCCESS:
                 pd.dismiss();
-                if (isSearch) {
+                /*if (isSearch) {
                     resultLayout.setVisibility(View.VISIBLE);
                     tvResults.setText(editSearch.getText().toString());
-                }
+                }*/
 
                 tvNoRestaurant.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
@@ -205,10 +247,10 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
                 break;
 
             case Constants.RESTAURANTS_SEARCH_FAILED:
-                if (isSearch) {
+                /*if (isSearch) {
                     resultLayout.setVisibility(View.VISIBLE);
                     tvResults.setText(editSearch.getText().toString());
-                }
+                }*/
 
                 tvNoRestaurant.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.GONE);
@@ -231,6 +273,23 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
 
             case Constants.LOCATION_EMPTY:
                 Toast.makeText(activity, "Unable to get your current location.", Toast.LENGTH_SHORT).show();
+                break;
+
+            case Constants.LOGOUT_SUCCESS:
+                pd.dismiss();
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
+                Toast.makeText(activity, "You have been logged out successfully", Toast.LENGTH_SHORT).show();
+                break;
+
+            case Constants.LOGOUT_FAILED:
+                pd.dismiss();
+                Toast.makeText(activity, Constants.SERVER_ERROR, Toast.LENGTH_SHORT).show();
+                break;
+
+            case Constants.NO_RESPONSE:
+                pd.dismiss();
+                Toast.makeText(activity, ""+event.getValue(), Toast.LENGTH_SHORT).show();
                 break;
         }
     }

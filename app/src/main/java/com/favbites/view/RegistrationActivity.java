@@ -24,7 +24,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 public class RegistrationActivity extends BaseActivity implements View.OnClickListener{
 
-    EditText editEmail, editPassword, editConfirmPassword;
+    EditText editFirstName, editLastName, editEmail, editPassword, editConfirmPassword;
     TextView tvSignUp;
     CheckBox cbTerms;
     KProgressHUD pd;
@@ -44,6 +44,8 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id
                 .coordinatorLayout);
 
+        editFirstName = (EditText) findViewById(R.id.editFirstName);
+        editLastName = (EditText) findViewById(R.id.editLastName);
         editEmail = (EditText) findViewById(R.id.editEmail);
         editPassword = (EditText) findViewById(R.id.editPassword);
         editConfirmPassword = (EditText) findViewById(R.id.editConfirmPassword);
@@ -71,11 +73,14 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
     }
 
     public void registerUser() {
+        String firstName = editFirstName.getText().toString();
+        String lastName = editLastName.getText().toString();
         String email = editEmail.getText().toString().trim();
         String password = editPassword.getText().toString().trim();
         String confirmPassword = editConfirmPassword.getText().toString().trim();
 
-        if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+        if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty()
+                || password.isEmpty() || confirmPassword.isEmpty()) {
             Toast.makeText(this, "Please fill all the details", Toast.LENGTH_SHORT).show();
         } else if(!password.equals(confirmPassword)) {
             Toast.makeText(this, "Password didn't match", Toast.LENGTH_SHORT).show();
@@ -88,8 +93,8 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
         } else {
             pd.show();
 
-            ModelManager.getInstance().getRegistrationManager()
-                    .registerUser(Operations.getRegistrationParams(email, password, "token", "A"));
+            ModelManager.getInstance().getRegistrationManager().registerUser(
+                    Operations.getRegistrationParams(firstName, lastName, email, password, "token", "A"));
         }
     }
 

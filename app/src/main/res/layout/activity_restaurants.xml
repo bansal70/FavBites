@@ -6,176 +6,200 @@
     android:orientation="vertical"
     tools:ignore="MissingPrefix">
 
-    <RelativeLayout
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_40sdp"
-        android:background="#2A2736"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:layout_width="@dimen/_30sdp"
-            android:layout_height="@dimen/_30sdp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:contentDescription="@string/location"
-            android:padding="@dimen/_5sdp"
-            android:src="@drawable/menu" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:text="@string/home"
-            android:textAllCaps="true"
-            android:textColor="#fff"
-            android:textSize="@dimen/_20ssp" />
-
-        <ImageView
-            android:id="@+id/imgLocation"
-            android:layout_width="@dimen/_30sdp"
-            android:layout_height="@dimen/_30sdp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:contentDescription="@string/location"
-            android:padding="@dimen/_5sdp"
-            android:src="@drawable/location" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="@dimen/_5sdp"
-        android:background="#fff"
-        android:layout_margin="@dimen/_5sdp">
-
-        <EditText
-            android:id="@+id/editSearch"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/search_restaurant"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:padding="@dimen/_5sdp"
-            android:inputType="text"
-            android:layout_toLeftOf="@+id/tvFilter"
-            android:layout_toStartOf="@+id/tvFilter"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:drawableEnd="@drawable/search"
-            android:drawableRight="@drawable/search"
-            android:background="@drawable/round_custom_views"/>
-
-        <TextView
-            android:id="@+id/tvFilter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/filter"
-            android:textSize="@dimen/_15ssp"
-            android:layout_gravity="center"
-            android:gravity="center|end"
-            android:paddingTop="@dimen/_5sdp"
-            android:paddingBottom="@dimen/_5sdp"
-            android:paddingLeft="@dimen/_10sdp"
-            android:paddingRight="@dimen/_10sdp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:background="@drawable/round_custom_views"
-            android:drawableRight="@drawable/filter"
-            android:drawableEnd="@drawable/filter"
-            android:drawablePadding="@dimen/_10sdp"/>
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_30sdp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:text="@string/restaurant"
-            android:background="@color/colorPrimary"
-            android:layout_weight="1"
-            android:textColor="#000"
-            android:textSize="@dimen/_15ssp"
-            android:layout_gravity="center"
-            android:gravity="center"/>
+            android:orientation="vertical">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:text="@string/favbites"
-            android:background="#2A2736"
-            android:layout_weight="1"
-            android:layout_marginLeft="@dimen/_2sdp"
-            android:layout_marginRight="@dimen/_2sdp"
-            android:textColor="#fff"
-            android:textSize="@dimen/_15ssp"
-            android:layout_gravity="center"
-            android:gravity="center"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:background="#2A2736"
+                android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:text="@string/check_in"
-            android:background="#2A2736"
-            android:layout_weight="1"
-            android:textColor="#fff"
-            android:textSize="@dimen/_15ssp"
-            android:layout_gravity="center"
-            android:gravity="center"/>
+                <ImageView
+                    android:id="@+id/imgHome"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:contentDescription="@string/location"
+                    android:padding="@dimen/_5sdp"
+                    android:src="@drawable/menu" />
 
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:text="@string/home"
+                    android:textAllCaps="true"
+                    android:textColor="#fff"
+                    android:textSize="@dimen/_20ssp" />
 
-    <LinearLayout
-        android:id="@+id/resultLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        android:paddingTop="@dimen/_10sdp"
-        android:paddingLeft="@dimen/_10sdp"
-        android:paddingRight="@dimen/_10sdp">
+                <ImageView
+                    android:id="@+id/imgLocation"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_centerVertical="true"
+                    android:contentDescription="@string/location"
+                    android:padding="@dimen/_5sdp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/location" />
 
-        <TextView
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/_5sdp"
+                android:background="#fff"
+                android:layout_margin="@dimen/_5sdp">
+
+                <EditText
+                    android:id="@+id/editSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/search_restaurant"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:padding="@dimen/_5sdp"
+                    android:inputType="text"
+                    android:layout_toLeftOf="@+id/tvFilter"
+                    android:layout_toStartOf="@+id/tvFilter"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:drawableEnd="@drawable/search"
+                    android:drawableRight="@drawable/search"
+                    android:background="@drawable/round_custom_views"/>
+
+                <TextView
+                    android:id="@+id/tvFilter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/filter"
+                    android:textSize="@dimen/_15ssp"
+                    android:layout_gravity="center"
+                    android:gravity="center|end"
+                    android:paddingTop="@dimen/_5sdp"
+                    android:paddingBottom="@dimen/_5sdp"
+                    android:paddingLeft="@dimen/_10sdp"
+                    android:paddingRight="@dimen/_10sdp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/round_custom_views"
+                    android:drawableRight="@drawable/filter"
+                    android:drawableEnd="@drawable/filter"
+                    android:drawablePadding="@dimen/_10sdp"/>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/restaurant"
+                    android:background="@color/colorPrimary"
+                    android:layout_weight="1"
+                    android:textColor="#000"
+                    android:textSize="@dimen/_15ssp"
+                    android:layout_gravity="center"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/favbites"
+                    android:background="#2A2736"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="@dimen/_2sdp"
+                    android:layout_marginRight="@dimen/_2sdp"
+                    android:textColor="#fff"
+                    android:textSize="@dimen/_15ssp"
+                    android:layout_gravity="center"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/check_in"
+                    android:background="#2A2736"
+                    android:layout_weight="1"
+                    android:textColor="#fff"
+                    android:textSize="@dimen/_15ssp"
+                    android:layout_gravity="center"
+                    android:gravity="center"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/resultLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:paddingTop="@dimen/_10sdp"
+                android:paddingLeft="@dimen/_10sdp"
+                android:paddingRight="@dimen/_10sdp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Showing results for: "
+                    android:textSize="@dimen/_15ssp"/>
+
+                <TextView
+                    android:id="@+id/tvResults"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="#000"
+                    android:textSize="@dimen/_15ssp"/>
+
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerRestaurants"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <TextView
+                android:id="@+id/tvNoRestaurant"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:text="Sorry, there is no restaurant in this location."
+                android:textSize="@dimen/_18ssp"
+                android:padding="@dimen/_10sdp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:visibility="gone"
+                android:textColor="#000"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/left_drawer"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Showing results for: "
-            android:textSize="@dimen/_15ssp"/>
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="#111">
 
-        <TextView
-            android:id="@+id/tvResults"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textColor="#000"
-            android:textSize="@dimen/_15ssp"/>
-
-    </LinearLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerRestaurants"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-    <TextView
-        android:id="@+id/tvNoRestaurant"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:text="Sorry, there is no restaurant in this location."
-        android:textSize="@dimen/_18ssp"
-        android:padding="@dimen/_10sdp"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:visibility="gone"
-        android:textColor="#000"
-        android:layout_weight="1"/>
+            <include layout="@layout/navigation_menu" />
+        </RelativeLayout>
+    </android.support.v4.widget.DrawerLayout>
 
 </LinearLayout>
