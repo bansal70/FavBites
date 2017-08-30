@@ -3,6 +3,7 @@ package com.favbites.view;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ public class ForgotPasswordActivity extends BaseActivity implements View.OnClick
     private EditText editEmail;
     TextView tvSubmit;
     KProgressHUD pd;
+    ImageView imgBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +37,10 @@ public class ForgotPasswordActivity extends BaseActivity implements View.OnClick
         pd = Utils.showDialog(this);
         editEmail = (EditText) findViewById(R.id.editEmail);
         tvSubmit = (TextView) findViewById(R.id.tvSubmit);
+        imgBack = (ImageView) findViewById(R.id.imgBack);
 
         tvSubmit.setOnClickListener(this);
+        imgBack.setOnClickListener(this);
     }
 
     @Override
@@ -44,6 +48,10 @@ public class ForgotPasswordActivity extends BaseActivity implements View.OnClick
         switch (view.getId()) {
             case R.id.tvSubmit:
                 recoverPassword();
+                break;
+
+            case R.id.imgBack:
+                finish();
                 break;
         }
     }

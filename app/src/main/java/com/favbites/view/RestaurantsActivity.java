@@ -179,6 +179,10 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
                 navigationDrawer.openDrawer(GravityCompat.START);
                 break;
 
+            case R.id.tvAccount:
+                startActivity(new Intent(this, MyAccountActivity.class));
+                break;
+
             case R.id.tvLogout:
                 if (user_id.isEmpty()){
                     startActivity(new Intent(this, LoginActivity.class));
@@ -194,6 +198,7 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
     public void setDrawer() {
         TextView tvUsername = (TextView) findViewById(R.id.tvUsername);
         TextView tvLogout = (TextView) findViewById(R.id.tvLogout);
+        TextView tvAccount = (TextView) findViewById(R.id.tvAccount);
 
         String first_name = FBPreferences.readString(this, "first_name");
         String last_name = FBPreferences.readString(this, "last_name");
@@ -208,6 +213,7 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
             tvUsername.setText(R.string.guest_user);
 
         tvLogout.setOnClickListener(this);
+        tvAccount.setOnClickListener(this);
 
     }
 

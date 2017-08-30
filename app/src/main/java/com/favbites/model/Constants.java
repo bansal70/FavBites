@@ -44,4 +44,7 @@ public class Constants {
 
     public static final int LOGOUT_SUCCESS = 1021;
     public static final int LOGOUT_FAILED = 1022;
+
+    public static final int PROFILE_SUCCESS = 1023;
+    public static final int PROFILE_EMPTY = 1024;
 }

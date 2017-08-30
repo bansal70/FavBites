@@ -97,6 +97,7 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
                 .getRestaurantDetails(Operations.getRestaurantDetailsParams(restaurant_id, user_id));
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerMenus);
+        recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
