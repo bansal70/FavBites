@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    app:cardUseCompatPadding="false"
+    app:cardCornerRadius="@dimen/_10sdp"
+    android:layout_margin="@dimen/_20sdp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fff">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Choose Picture.."
+            android:padding="@dimen/_15sdp"
+            android:textSize="@dimen/_20ssp"
+            android:textColor="#fff"
+            android:background="@color/colorHome"/>
+
+        <TextView
+            android:id="@+id/tvCamera"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:text="Camera"
+            android:drawableLeft="@drawable/camera"
+            android:drawableStart="@drawable/camera"
+            android:drawablePadding="@dimen/_10sdp"
+            android:background="?selectableItemBackground"
+            android:textSize="@dimen/_18ssp"
+            android:padding="@dimen/_15ssp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="#eee"/>
+
+        <TextView
+            android:id="@+id/tvGallery"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:text="Gallery"
+            android:drawableLeft="@drawable/gallery"
+            android:drawableStart="@drawable/gallery"
+            android:drawablePadding="@dimen/_10sdp"
+            android:background="?selectableItemBackground"
+            android:textSize="@dimen/_18ssp"
+            android:padding="@dimen/_15ssp"/>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

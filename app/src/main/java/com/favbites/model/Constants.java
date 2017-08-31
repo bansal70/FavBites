@@ -47,4 +47,7 @@ public class Constants {
 
     public static final int PROFILE_SUCCESS = 1023;
     public static final int PROFILE_EMPTY = 1024;
+
+    public static final int UPDATE_PROFILE_SUCCESS = 1025;
+    public static final int UPDATE_PROFILE_FAILED = 1026;
 }

@@ -38,9 +38,10 @@
             android:textSize="@dimen/_20ssp" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/_50sdp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:gravity="center"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true">
@@ -52,11 +53,12 @@
 
             <ImageView
                 android:id="@+id/imgEdit"
-                android:layout_width="@dimen/_50sdp"
-                android:layout_height="@dimen/_40sdp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:contentDescription="@string/location"
                 android:foreground="@drawable/selectable_item_background"
                 android:padding="@dimen/_10sdp"
+                android:layout_gravity="center"
                 android:clickable="true"
                 android:src="@drawable/edit" />
 
@@ -69,6 +71,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:id="@+id/imgBackground"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_150sdp"
             android:src="@drawable/demo_img"
@@ -76,6 +79,7 @@
             android:contentDescription="@null"/>
 
         <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imgProfilePic"
             android:layout_width="@dimen/_70sdp"
             android:layout_height="@dimen/_70sdp"
             android:layout_centerInParent="true"
@@ -96,7 +100,7 @@
             android:text="Followers"
             android:textColor="#fff"
             android:gravity="center"
-            android:padding="@dimen/_15sdp"
+            android:padding="@dimen/_10sdp"
             android:textSize="@dimen/_18ssp"
             android:layout_weight="1"/>
 
@@ -111,7 +115,7 @@
             android:text="Following"
             android:textColor="#fff"
             android:gravity="center"
-            android:padding="@dimen/_15sdp"
+            android:padding="@dimen/_10sdp"
             android:textSize="@dimen/_18ssp"
             android:layout_weight="1"/>
 
@@ -126,11 +130,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Account Info"
-        android:padding="@dimen/_15sdp"
+        android:padding="@dimen/_10sdp"
         android:textColor="#000"
         android:textSize="@dimen/_18ssp"/>
 
     <LinearLayout
+        android:id="@+id/editProfileLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorHome"
@@ -142,11 +147,12 @@
             android:orientation="horizontal">
 
             <EditText
+                android:id="@+id/editFirstName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:hint="First Name"
                 android:textColorHint="#fff"
-                android:padding="@dimen/_15sdp"
+                android:padding="@dimen/_10sdp"
                 android:background="@android:color/transparent"
                 android:textColor="#fff"
                 android:inputType="text"
@@ -154,10 +160,11 @@
                 android:layout_weight="1"/>
 
             <EditText
+                android:id="@+id/editLastName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:hint="Last Name"
-                android:padding="@dimen/_15sdp"
+                android:padding="@dimen/_10sdp"
                 android:background="@android:color/transparent"
                 android:textColorHint="#fff"
                 android:inputType="text"
@@ -168,25 +175,27 @@
         </LinearLayout>
 
         <EditText
+            android:id="@+id/editEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email"
             android:textColorHint="#fff"
-            android:padding="@dimen/_15sdp"
-            android:inputType="text"
+            android:padding="@dimen/_10sdp"
+            android:inputType="textEmailAddress"
             android:background="@android:color/transparent"
             android:textSize="@dimen/_18ssp"
             android:textColor="#fff" />
 
         <EditText
+            android:id="@+id/editChangePassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Change Password"
+            android:hint="Change Password"
             android:textSize="@dimen/_18ssp"
-            android:inputType="none"
-            android:padding="@dimen/_15sdp"
+            android:padding="@dimen/_10sdp"
+            android:inputType="textPassword"
             android:enabled="false"
-            android:textColor="#fff" />
+            android:textColorHint="#fff" />
 
     </LinearLayout>
 

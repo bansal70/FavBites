@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:layout_width="230dp"
+    android:layout_width="250dp"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:paddingTop="@dimen/_10sdp">
@@ -11,7 +12,9 @@
         android:layout_width="@dimen/_50sdp"
         android:layout_height="@dimen/_50sdp"
         android:layout_gravity="center"
-        android:src="@drawable/demo_img"/>
+        app:civ_border_color="@color/colorHome"
+        app:civ_border_width="@dimen/_1sdp"
+        android:src="@drawable/demo_img" />
 
     <TextView
         android:id="@+id/tvUsername"
@@ -37,9 +40,13 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="248dp"
             android:layout_height="wrap_content"
             android:text="Bookmarks"
+            android:drawableLeft="@drawable/favourite"
+            android:drawableStart="@drawable/favourite"
+            android:drawablePadding="@dimen/_10sdp"
+            android:foreground="@drawable/selectable_item_background"
             android:padding="@dimen/_10sdp"
             android:textSize="@dimen/_18ssp"
             android:textColor="#fff"/>
@@ -48,7 +55,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Check-ins"
-            android:background="?selectableItemBackground"
+            android:drawableLeft="@drawable/checkin"
+            android:drawableStart="@drawable/checkin"
+            android:drawablePadding="@dimen/_10sdp"
+            android:foreground="@drawable/selectable_item_background"
             android:padding="@dimen/_10sdp"
             android:textSize="@dimen/_18ssp"
             android:textColor="#fff"/>
@@ -58,6 +68,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="My Account"
+            android:drawableLeft="@drawable/profile"
+            android:drawableStart="@drawable/profile"
+            android:drawablePadding="@dimen/_10sdp"
+            android:clickable="true"
+            android:foreground="@drawable/selectable_item_background"
+            android:padding="@dimen/_10sdp"
+            android:textSize="@dimen/_18ssp"
+            android:textColor="#fff"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="About"
+            android:drawableLeft="@drawable/about"
+            android:drawableStart="@drawable/about"
+            android:drawablePadding="@dimen/_10sdp"
+            android:foreground="@drawable/selectable_item_background"
+            android:textAllCaps="false"
             android:padding="@dimen/_10sdp"
             android:textSize="@dimen/_18ssp"
             android:textColor="#fff"/>
@@ -67,6 +95,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Logout"
+            android:drawableLeft="@drawable/logout"
+            android:drawableStart="@drawable/logout"
+            android:drawablePadding="@dimen/_10sdp"
+            android:foreground="@drawable/selectable_item_background"
             android:textAllCaps="false"
             android:padding="@dimen/_10sdp"
             android:textSize="@dimen/_18ssp"

@@ -204,8 +204,10 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
         String last_name = FBPreferences.readString(this, "last_name");
         String name = first_name + " " + last_name;
 
-        if (user_id.isEmpty())
+        if (user_id.isEmpty()) {
             tvLogout.setText(R.string.login);
+            tvAccount.setVisibility(View.GONE);
+        }
 
         if (!first_name.isEmpty())
             tvUsername.setText(name);

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    app:cardUseCompatPadding="false"
+    app:cardCornerRadius="@dimen/_5sdp"
+    android:layout_margin="@dimen/_20sdp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Edit Profile"
+            android:padding="@dimen/_10sdp"
+            android:textSize="@dimen/_20ssp"
+            android:textColor="#fff"
+            android:background="@color/colorHome"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:text="Are you sure you want to edit your profile ?"
+            android:textSize="@dimen/_18ssp"
+            android:padding="@dimen/_15ssp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvCancel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/colorHome"
+                android:textColor="@color/colorWhite"
+                android:layout_weight="1"
+                android:text="Cancel"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="@dimen/_10sdp"
+                android:textSize="@dimen/_20ssp"
+                android:textAllCaps="false"/>
+
+            <View
+                android:layout_width="@dimen/_1sdp"
+                android:layout_height="match_parent"
+                android:background="#fff"/>
+
+            <TextView
+                android:id="@+id/tvConfirm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/colorHome"
+                android:textColor="@color/colorWhite"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="@dimen/_10sdp"
+                android:text="Confirm"
+                android:textAllCaps="false"
+                android:textSize="@dimen/_20ssp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</android.support.v7.widget.CardView>

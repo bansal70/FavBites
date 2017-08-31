@@ -73,8 +73,8 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
     }
 
     public void registerUser() {
-        String firstName = editFirstName.getText().toString();
-        String lastName = editLastName.getText().toString();
+        String firstName = editFirstName.getText().toString().trim();
+        String lastName = editLastName.getText().toString().trim();
         String email = editEmail.getText().toString().trim();
         String password = editPassword.getText().toString().trim();
         String confirmPassword = editConfirmPassword.getText().toString().trim();

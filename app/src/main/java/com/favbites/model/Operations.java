@@ -115,4 +115,22 @@ public class Operations {
         return params;
     }
 
+    public static String profileParams(String user_id) {
+        String params = Config.profile_url + "?id=" + user_id;
+
+        Log.e(TAG, "user_profile params-- "+params);
+        return params;
+    }
+
+    public static String updateProfileParams(String user_id, String first_name,
+                                             String last_name, String email) {
+        String params = Config.update_profile_url + "?user_id=" + user_id
+                +"&fname=" + first_name
+                +"&lname" + last_name
+                +"&email=" + email;
+
+        Log.e(TAG, "update_profile params-- "+params);
+        return params;
+    }
+
 }

@@ -18,6 +18,7 @@ public class ModelManager {
     private BookmarkManager bookmarkManager;
     private UploadPhotoManager uploadPhotoManager;
     private LogoutManager logoutManager;
+    private AccountManager accountManager;
 
     public static ModelManager getInstance() {
         if (modelManager == null)
@@ -38,6 +39,7 @@ public class ModelManager {
         restaurantDetailsManager = new RestaurantDetailsManager();
         uploadPhotoManager = new UploadPhotoManager();
         logoutManager = new LogoutManager();
+        accountManager = new AccountManager();
     }
 
     public RegistrationManager getRegistrationManager() {
@@ -82,5 +84,9 @@ public class ModelManager {
 
     public LogoutManager getLogoutManager() {
         return logoutManager;
+    }
+
+    public AccountManager getAccountManager() {
+        return accountManager;
     }
 }

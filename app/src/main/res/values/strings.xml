@@ -57,5 +57,6 @@
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="guest_user">Guest User</string>
+    <string name="update_profile_failed">Sorry, failed to update your profile. Please try again.</string>
 
 </resources>
