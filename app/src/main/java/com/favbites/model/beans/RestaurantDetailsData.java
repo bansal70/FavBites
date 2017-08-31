@@ -31,7 +31,7 @@ public class RestaurantDetailsData {
         public List<Food> food = null;
         @SerializedName("Comment")
         @Expose
-        public List<Object> comment = null;
+        public List<Comment> comment = null;
         @SerializedName("Review")
         @Expose
         public List<Review> review = null;
@@ -41,6 +41,7 @@ public class RestaurantDetailsData {
         @SerializedName("Subitem")
         @Expose
         public List<Subitem> subitem = null;
+
     }
 
     public class Food {
@@ -238,5 +239,88 @@ public class RestaurantDetailsData {
         @SerializedName("rating")
         @Expose
         public String rating;
+    }
+
+    public class Comment {
+
+        @SerializedName("id")
+        @Expose
+        public String id;
+        @SerializedName("user_id")
+        @Expose
+        public String userId;
+        @SerializedName("restaurant_id")
+        @Expose
+        public String restaurantId;
+        @SerializedName("comment")
+        @Expose
+        public String comment;
+        @SerializedName("image")
+        @Expose
+        public String image;
+        @SerializedName("created")
+        @Expose
+        public String created;
+        @SerializedName("modified")
+        @Expose
+        public String modified;
+        @SerializedName("User")
+        @Expose
+        public User user;
+    }
+
+    public class User {
+        @SerializedName("id")
+        @Expose
+        public String id;
+        @SerializedName("username")
+        @Expose
+        public String username;
+        @SerializedName("password")
+        @Expose
+        public String password;
+        @SerializedName("email")
+        @Expose
+        public String email;
+        @SerializedName("fname")
+        @Expose
+        public String fname;
+        @SerializedName("lname")
+        @Expose
+        public String lname;
+        @SerializedName("phone")
+        @Expose
+        public Object phone;
+        @SerializedName("userType")
+        @Expose
+        public String userType;
+        @SerializedName("image")
+        @Expose
+        public String image;
+        @SerializedName("status")
+        @Expose
+        public String status;
+        @SerializedName("forgot_key")
+        @Expose
+        public Object forgotKey;
+        @SerializedName("activationKey")
+        @Expose
+        public Object activationKey;
+        @SerializedName("deviceToken")
+        @Expose
+        public String deviceToken;
+        @SerializedName("deviceType")
+        @Expose
+        public String deviceType;
+        @SerializedName("created")
+        @Expose
+        public String created;
+        @SerializedName("modified")
+        @Expose
+        public String modified;
+        @SerializedName("social_id")
+        @Expose
+        public String socialId;
+
     }
 }

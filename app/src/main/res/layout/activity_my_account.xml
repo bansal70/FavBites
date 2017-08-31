@@ -37,32 +37,18 @@
             android:textColor="#fff"
             android:textSize="@dimen/_20ssp" />
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/imgEdit"
             android:layout_width="@dimen/_50sdp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
+            android:contentDescription="@string/location"
+            android:foreground="@drawable/selectable_item_background"
+            android:padding="@dimen/_10sdp"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true">
-
-            <View
-                android:layout_width="@dimen/_1sdp"
-                android:layout_height="match_parent"
-                android:background="#fff"/>
-
-            <ImageView
-                android:id="@+id/imgEdit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/location"
-                android:foreground="@drawable/selectable_item_background"
-                android:padding="@dimen/_10sdp"
-                android:layout_gravity="center"
-                android:clickable="true"
-                android:src="@drawable/edit" />
-
-        </LinearLayout>
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:src="@drawable/edit" />
 
     </RelativeLayout>
 
@@ -78,14 +64,33 @@
             android:scaleType="centerCrop"
             android:contentDescription="@null"/>
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imgProfilePic"
-            android:layout_width="@dimen/_70sdp"
-            android:layout_height="@dimen/_70sdp"
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
             android:layout_centerInParent="true"
-            app:civ_border_color="@color/colorPrimaryDark"
-            app:civ_border_width="@dimen/_2sdp"
-            android:src="@drawable/demo_img" />
+            android:layout_marginTop="20dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imgProfilePic"
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="@dimen/_80sdp"
+                android:layout_centerInParent="true"
+                app:civ_border_color="@color/colorPrimaryDark"
+                app:civ_border_width="@dimen/_2sdp"
+                android:src="@drawable/demo_img" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_icon_edit_profile"
+                android:layout_alignBottom="@+id/imgProfilePic"
+                android:layout_alignRight="@+id/imgProfilePic"
+                android:layout_alignEnd="@+id/imgProfilePic"
+                android:contentDescription="@null"/>
+
+        </RelativeLayout>
+
     </RelativeLayout>
 
     <LinearLayout
@@ -186,15 +191,15 @@
             android:textSize="@dimen/_18ssp"
             android:textColor="#fff" />
 
-        <EditText
-            android:id="@+id/editChangePassword"
+        <TextView
+            android:id="@+id/tvChangePass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Change Password"
+            android:hint="@string/change_password"
+            android:foreground="@drawable/selectable_item_background"
             android:textSize="@dimen/_18ssp"
             android:padding="@dimen/_10sdp"
-            android:inputType="textPassword"
-            android:enabled="false"
+            android:clickable="true"
             android:textColorHint="#fff" />
 
     </LinearLayout>

@@ -50,4 +50,13 @@ public class Constants {
 
     public static final int UPDATE_PROFILE_SUCCESS = 1025;
     public static final int UPDATE_PROFILE_FAILED = 1026;
+
+    public static final int CHANGE_PASSWORD_SUCCESS = 1027;
+    public static final int CHANGE_PASSWORD_FAILED = 1028;
+
+    public static final int FAVBITES_RESTAURANTS_SUCCESS = 1029;
+    public static final int FAVBITES_RESTAURANTS_EMPTY = 1030;
+
+    public static final int CHECK_IN_RESTAURANTS_SUCCESS = 1031;
+    public static final int CHECK_IN_RESTAURANTS_EMPTY = 1032;
 }

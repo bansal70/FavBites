@@ -11,15 +11,16 @@ import com.favbites.model.APIInterface;
 import com.favbites.model.Constants;
 import com.favbites.model.Event;
 import com.favbites.model.beans.AccountData;
-import com.favbites.model.beans.AccountUpdateData;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONObject;
 
 import java.io.File;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -59,23 +60,30 @@ public class AccountManager {
     }
 
     public void updateProfile(String params, String filePath) {
-        File file = new File(filePath);
-        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        final APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+        Call<ResponseBody> resultCall;
+        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
 
-        MultipartBody.Part body =
-                MultipartBody.Part.createFormData("image", file.getName(), requestFile);
+        if (!filePath.isEmpty()) {
+            File file = new File(filePath);
+            RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            MultipartBody.Part body =
+                    MultipartBody.Part.createFormData("image", file.getName(), requestFile);
+            resultCall = apiInterface.updateProfile(params, body);
+        } else {
+            resultCall = apiInterface.response(params);
+        }
 
-        Call<AccountUpdateData> resultCall = apiInterface.updateProfile(params, body);
-
-        resultCall.enqueue(new Callback<AccountUpdateData>() {
+        resultCall.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<AccountUpdateData> call, Response<AccountUpdateData> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
-                    String result = response.body().response;
+                    String result = response.body().string();
                     Log.e(TAG, "update_profile response-- "+result);
 
-                    if (result.equals("1"))
+                    JSONObject jsonObject = new JSONObject(result);
+                    String status = jsonObject.getString("responce");
+
+                    if (status.equals("1"))
                         EventBus.getDefault().post(new Event(Constants.UPDATE_PROFILE_SUCCESS, ""));
                     else
                         EventBus.getDefault().post(new Event(Constants.UPDATE_PROFILE_FAILED, ""));
@@ -87,8 +95,38 @@ public class AccountManager {
             }
 
             @Override
-            public void onFailure(Call<AccountUpdateData> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 //t.printStackTrace();
+                EventBus.getDefault().post(new Event(Constants.NO_RESPONSE, Constants.SERVER_ERROR));
+            }
+        });
+    }
+
+    public void changePassword(String params) {
+        APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+        Call<ResponseBody> call = apiInterface.response(params);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String status = response.body().string();
+                    Log.e(TAG, "change_password response-- "+status);
+                    JSONObject jsonObject = new JSONObject(status);
+                    String output = jsonObject.getString("response");
+
+                    if (output.equals("1")) {
+                        EventBus.getDefault().post(new Event(Constants.CHANGE_PASSWORD_SUCCESS, ""));
+                    } else {
+                        EventBus.getDefault().post(new Event(Constants.CHANGE_PASSWORD_FAILED, ""));
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 EventBus.getDefault().post(new Event(Constants.NO_RESPONSE, Constants.SERVER_ERROR));
             }
         });

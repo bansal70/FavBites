@@ -4,26 +4,23 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.FileProvider;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.favbites.BuildConfig;
 import com.favbites.R;
 import com.favbites.controller.ModelManager;
 import com.favbites.model.Constants;
 import com.favbites.model.Event;
 import com.favbites.model.FBPreferences;
+import com.favbites.model.ImagePicker;
 import com.favbites.model.Operations;
 import com.favbites.model.Utils;
 import com.kaopiz.kprogresshud.KProgressHUD;
@@ -32,7 +29,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
-import java.io.IOException;
 
 import static android.os.Build.VERSION_CODES.M;
 
@@ -81,28 +77,13 @@ public class UploadPhotoActivity extends BaseActivity implements View.OnClickLis
                             Manifest.permission.CAMERA}, PERMISSION_REQUEST_CODE);
 
         } else {
-            captureImage();
+            chooseImage();
         }
     }
 
-    public void captureImage() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        File photoFile;
-        try {
-            photoFile = Utils.createImageFile();
-            filePath = photoFile.getAbsolutePath();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return;
-        }
-
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            Uri photoURI = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID
-                    + ".provider", photoFile);
-            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
+    public void chooseImage() {
+        Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
+        startActivityForResult(chooseImageIntent, REQUEST_IMAGE_CAPTURE);
     }
 
     @Override
@@ -110,7 +91,7 @@ public class UploadPhotoActivity extends BaseActivity implements View.OnClickLis
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if (requestCode == PERMISSION_REQUEST_CODE && hasAllPermissionsGranted(grantResults)) {
-            captureImage();
+            chooseImage();
         } else {
             Toast.makeText(this, "Please grant all the permissions...", Toast.LENGTH_SHORT).show();
         }
@@ -128,17 +109,14 @@ public class UploadPhotoActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Uri imageUri = Uri.parse(filePath);
-            File file = new File(imageUri.getPath());
-            try {
-                //InputStream ims = new FileInputStream(file);
-                Bitmap d = new BitmapDrawable(this.getResources() , file.getAbsolutePath()).getBitmap();
-                int nh = (int) ( d.getHeight() * (512.0 / d.getWidth()) );
-                Bitmap scaled = Bitmap.createScaledBitmap(d, 512, nh, true);
-                imgPhoto.setImageBitmap(scaled);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+
+            Bitmap photo = ImagePicker.getImageFromResult(this, resultCode, data);
+
+            Uri tempUri = ImagePicker.getImageUri(this, photo);
+            File finalFile = new File(ImagePicker.getRealPathFromURI(this, tempUri));
+            filePath = finalFile.getAbsolutePath();
+
+            imgPhoto.setImageBitmap(photo);
         }
     }
 

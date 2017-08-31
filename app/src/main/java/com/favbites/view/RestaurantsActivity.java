@@ -63,6 +63,7 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
     ImageView imgLocation, imgHome;
     DrawerLayout navigationDrawer;
     String user_id;
+    TextView tvRestaurants, tvFavRestaurants, tvCheckInRestaurants;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +97,10 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
 
     public void initViews() {
         // resultLayout = (LinearLayout) findViewById(R.id.resultLayout);
+        tvRestaurants = (TextView) findViewById(R.id.tvRestaurants);
+        tvFavRestaurants = (TextView) findViewById(R.id.tvFavRestaurants);
+        tvCheckInRestaurants = (TextView) findViewById(R.id.tvCheckInRestaurants);
+
         user_id = FBPreferences.readString(this, "user_id");
         navigationDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         imgHome = (ImageView) findViewById(R.id.imgHome);
@@ -114,6 +119,11 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
 
         restaurantsAdapter = new RestaurantsAdapter(this, Utils.restaurantsList);
         recyclerView.setAdapter(restaurantsAdapter);
+
+        tvRestaurants.setOnClickListener(this);
+        tvFavRestaurants.setOnClickListener(this);
+        tvCheckInRestaurants.setOnClickListener(this);
+
         loadMore();
         setDrawer();
     }
@@ -180,7 +190,7 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
                 break;
 
             case R.id.tvAccount:
-                startActivity(new Intent(this, MyAccountActivity.class));
+                startActivity(new Intent(this, ProfileActivity.class));
                 break;
 
             case R.id.tvLogout:
@@ -192,7 +202,34 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
                 ModelManager.getInstance().getLogoutManager().logoutUser(this,
                         Operations.logoutParams(user_id));
                 break;
+
+            case R.id.tvRestaurants:
+                setBackground(R.color.colorPrimary, R.color.colorHome, R.color.colorHome);
+                setTextColor(R.color.colorBlack, R.color.colorWhite, R.color.colorWhite);
+                break;
+
+            case R.id.tvFavRestaurants:
+                setBackground(R.color.colorHome, R.color.colorPrimary, R.color.colorHome);
+                setTextColor(R.color.colorWhite, R.color.colorBlack, R.color.colorWhite);
+                break;
+
+            case R.id.tvCheckInRestaurants:
+                setBackground(R.color.colorHome, R.color.colorHome, R.color.colorPrimary);
+                setTextColor(R.color.colorWhite, R.color.colorWhite, R.color.colorBlack);
+                break;
         }
+    }
+
+    public void setBackground(int a, int b, int c) {
+        tvRestaurants.setBackgroundResource(a);
+        tvFavRestaurants.setBackgroundResource(b);
+        tvCheckInRestaurants.setBackgroundResource(c);
+    }
+
+    public void setTextColor(int a, int b, int c) {
+        tvRestaurants.setTextColor(ContextCompat.getColor(this, a));
+        tvFavRestaurants.setTextColor(ContextCompat.getColor(this, b));
+        tvCheckInRestaurants.setTextColor(ContextCompat.getColor(this, c));
     }
 
     public void setDrawer() {

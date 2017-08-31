@@ -68,7 +68,7 @@ public class AccountData {
         public String userType;
         @SerializedName("image")
         @Expose
-        public Object image;
+        public String image;
         @SerializedName("status")
         @Expose
         public String status;

@@ -20,4 +20,5 @@ class Config {
     static final String upload_photo_url = "comment";
     static final String profile_url = "userProfile";
     static final String update_profile_url = "updateUser";
+    static final String update_password_url = "updatePassword";
 }

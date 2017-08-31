@@ -23,6 +23,7 @@ public class RestaurantDetailsManager {
  //   public static List<RestaurantDetailsData.Data> dataList = new ArrayList<>();
     public static RestaurantDetailsData.Data data;
 
+
     public void getRestaurantDetails(final String params) {
         final APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
         Call<RestaurantDetailsData> call = apiInterface.restaurantDetailsData(params);

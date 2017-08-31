@@ -4,13 +4,12 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.FileProvider;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -18,14 +17,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.favbites.BuildConfig;
 import com.favbites.R;
 import com.favbites.controller.AccountManager;
 import com.favbites.controller.ModelManager;
 import com.favbites.model.Constants;
 import com.favbites.model.Event;
 import com.favbites.model.FBPreferences;
-import com.favbites.model.FilePath;
+import com.favbites.model.ImagePicker;
 import com.favbites.model.Operations;
 import com.favbites.model.Utils;
 import com.favbites.model.beans.AccountData;
@@ -35,26 +33,24 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
-import java.io.IOException;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.os.Build.VERSION_CODES.M;
 
-public class MyAccountActivity extends BaseActivity implements View.OnClickListener{
+public class ProfileActivity extends BaseActivity implements View.OnClickListener{
 
     EditText editFirstName, editLastName, editEmail;
     TextView tvChangePassword;
-    ImageView imgBack, imgEdit, imgBackground;
-    CircleImageView imgProfilePic;
+    ImageView imgBack, imgEdit, imgBackground, imgProfilePic;
     String user_id;
     KProgressHUD pd;
     boolean isEditing = true;
-    Dialog dialogEdit, dialogImage;
-    TextView tvCancel, tvConfirm, tvCamera, tvGallery;
+    Dialog dialogEdit, dialogPassword;
+    TextView tvCancel, tvConfirm;
+    TextView tvConfirmPassword, tvCancelPassword;
+    EditText editOldPassword, editNewPassword, editConfirmPassword;
     private int REQUEST_IMAGE = 101;
     private int PERMISSION_REQUEST_CODE = 102;
-    String filePath;
+    String filePath = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +59,7 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
 
         initViews();
         initDialog();
-        initImageDialog();
+        initPasswordDialog();
     }
 
     public void initViews() {
@@ -77,15 +73,17 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
         editLastName = (EditText) findViewById(R.id.editLastName);
         editEmail = (EditText) findViewById(R.id.editEmail);
         tvChangePassword = (TextView) findViewById(R.id.tvChangePass);
+
         imgBack = (ImageView) findViewById(R.id.imgBack);
         imgEdit = (ImageView) findViewById(R.id.imgEdit);
-        imgProfilePic = (CircleImageView) findViewById(R.id.imgProfilePic);
+        imgProfilePic = (ImageView) findViewById(R.id.imgProfilePic);
         imgBackground = (ImageView) findViewById(R.id.imgBackground);
         editFields(false);
 
         imgBack.setOnClickListener(this);
         imgEdit.setOnClickListener(this);
         imgProfilePic.setOnClickListener(this);
+        tvChangePassword.setOnClickListener(this);
     }
 
     public void initDialog() {
@@ -95,16 +93,6 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
 
         tvCancel.setOnClickListener(this);
         tvConfirm.setOnClickListener(this);
-    }
-
-    public void initImageDialog() {
-        dialogImage = Utils.createDialog(this, R.layout.dialog_image_picker);
-        dialogImage.setCancelable(true);
-        tvCamera = dialogImage.findViewById(R.id.tvCamera);
-        tvGallery = dialogImage.findViewById(R.id.tvGallery);
-
-        tvCamera.setOnClickListener(this);
-        tvGallery.setOnClickListener(this);
     }
 
     @Override
@@ -126,6 +114,7 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
                 dialogEdit.dismiss();
                 isEditing = false;
                 editFields(true);
+                filePath = "";
                 imgEdit.setImageResource(R.drawable.edit_done);
                 break;
 
@@ -137,13 +126,47 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
                 checkPermissions();
                 break;
 
-            case R.id.tvCamera:
-                chooseImage("Camera");
+            case R.id.tvChangePass:
+                dialogPassword.show();
                 break;
 
-            case R.id.tvGallery:
-                chooseImage("Gallery");
+            case R.id.tvConfirmPassword:
+                changePassword();
                 break;
+
+            case R.id.tvCancelPassword:
+                dialogPassword.dismiss();
+                break;
+        }
+    }
+
+    public void initPasswordDialog() {
+        dialogPassword = Utils.createDialog(this, R.layout.dialog_change_password);
+        editOldPassword = dialogPassword.findViewById(R.id.editOldPassword);
+        editNewPassword = dialogPassword.findViewById(R.id.editNewPassword);
+        editConfirmPassword = dialogPassword.findViewById(R.id.editConfirmPassword);
+
+        tvConfirmPassword = dialogPassword.findViewById(R.id.tvConfirmPassword);
+        tvCancelPassword = dialogPassword.findViewById(R.id.tvCancelPassword);
+
+        tvConfirmPassword.setOnClickListener(this);
+        tvCancelPassword.setOnClickListener(this);
+    }
+
+    public void changePassword() {
+        String oldPass = editOldPassword.getText().toString();
+        String newPass = editNewPassword.getText().toString();
+        String confirmPass = editConfirmPassword.getText().toString();
+        if (oldPass.isEmpty() || newPass.isEmpty() || confirmPass.isEmpty())
+            Toast.makeText(this, "Please fill all the data", Toast.LENGTH_SHORT).show();
+        else if (!newPass.equals(confirmPass))
+            Toast.makeText(this, "Password didn't match", Toast.LENGTH_SHORT).show();
+        else if (newPass.length() < 6)
+            Toast.makeText(this, "Password must contains at least 6 letters.", Toast.LENGTH_SHORT).show();
+        else {
+            pd.show();
+            ModelManager.getInstance().getAccountManager().changePassword(
+                    Operations.changePasswordParams(user_id, oldPass, newPass));
         }
     }
 
@@ -156,75 +179,28 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
                             Manifest.permission.CAMERA}, PERMISSION_REQUEST_CODE);
 
         } else {
-            dialogImage.show();
+            chooseImage();
         }
     }
 
-    public void chooseImage(String param) {
-        Intent takePictureIntent = new Intent();
-        if (param.equals("Gallery")) {
-            filePath = "";
-            takePictureIntent.setType("image/*");
-            takePictureIntent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(takePictureIntent,
-                    "Select Picture"), REQUEST_IMAGE);
-        } else {
-            takePictureIntent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-
-            File photoFile;
-            try {
-                photoFile = Utils.createImageFile();
-                filePath = photoFile.getAbsolutePath();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                return;
-            }
-
-            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                Uri photoURI = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID
-                        + ".provider", photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(Intent.createChooser(takePictureIntent,
-                        "Select Picture..."), REQUEST_IMAGE);
-            }
-        }
+    public void chooseImage() {
+        Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
+        startActivityForResult(chooseImageIntent, REQUEST_IMAGE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE && resultCode == RESULT_OK) {
-            Uri imageUri;
-            dialogImage.dismiss();
-            if (filePath.isEmpty()) {
-                imageUri = data.getData();
-                filePath = FilePath.getRealPathFromURI(imageUri, this);
-                decodeImage(filePath);
-            }
-            else {
-                imageUri = Uri.parse(filePath);
-                File file = new File(imageUri.getPath());
-                decodeImage(file.getAbsolutePath());
-            }
-        }
-    }
 
-    public void decodeImage(String path) {
-        try {
+            Bitmap photo = ImagePicker.getImageFromResult(this, resultCode, data);
+            // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+            Uri tempUri = ImagePicker.getImageUri(this, photo);
 
-            Glide.with(getApplicationContext())
-                    .load(path).asBitmap()
-                    .placeholder(R.drawable.demo_img)
-                    .crossFade()
-                    .into(imgProfilePic);
-
-            Glide.with(getApplicationContext())
-                    .load(path).asBitmap()
-                    .placeholder(R.drawable.demo_img)
-                    .crossFade()
-                    .into(imgBackground);
-
-        } catch (Exception e) {
-            e.printStackTrace();
+            // CALL THIS METHOD TO GET THE ACTUAL PATH
+            File finalFile = new File(ImagePicker.getRealPathFromURI(this, tempUri));
+            filePath = finalFile.getAbsolutePath();
+            imgProfilePic.setImageBitmap(photo);
+            imgBackground.setImageBitmap(photo);
         }
     }
 
@@ -233,7 +209,7 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if (requestCode == PERMISSION_REQUEST_CODE && hasAllPermissionsGranted(grantResults)) {
-            dialogImage.show();
+            chooseImage();
         } else {
             Toast.makeText(this, "Please grant all the permissions", Toast.LENGTH_SHORT).show();
         }
@@ -262,6 +238,7 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
                     Operations.updateProfileParams(user_id, firstName, lastName, email), filePath);
         }
     }
+
     public void editFields(boolean status) {
         editFirstName.setEnabled(status);
         editLastName.setEnabled(status);
@@ -301,10 +278,23 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
                 imgEdit.setImageResource(R.drawable.edit);
                 isEditing = true;
                 editFields(false);
+                Toast.makeText(this, "Your profile has been updated successfully", Toast.LENGTH_SHORT).show();
                 break;
 
             case Constants.UPDATE_PROFILE_FAILED:
+                pd.dismiss();
                 Toast.makeText(this, R.string.update_profile_failed, Toast.LENGTH_SHORT).show();
+                break;
+
+            case Constants.CHANGE_PASSWORD_SUCCESS:
+                dialogPassword.dismiss();
+                pd.dismiss();
+                Toast.makeText(this, "Password has been updated successfully.", Toast.LENGTH_SHORT).show();
+                break;
+
+            case Constants.CHANGE_PASSWORD_FAILED:
+                pd.dismiss();
+                Toast.makeText(this, "Please enter the correct password", Toast.LENGTH_SHORT).show();
                 break;
 
             case Constants.NO_RESPONSE:
@@ -323,16 +313,23 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
         if (!user.email.isEmpty())
             editEmail.setText(user.email);
 
-        if (user.image != null) {
-            decodeImage(user.image.toString());
-            /*Glide.with(this).load(user.image)
-                    .placeholder(R.drawable.demo_img)
-                    .crossFade()
-                    .into(imgProfilePic);
-            Glide.with(this).load(user.image)
-                    .placeholder(R.drawable.demo_img)
-                    .crossFade()
-                    .into(imgBackground);*/
+        if (!user.image.isEmpty()) {
+            decodeImage(user.image);
         }
     }
+
+    public void decodeImage(String path) {
+        Glide.with(this)
+                .load(path)
+                .placeholder(R.drawable.demo_img)
+                .crossFade()
+                .into(imgBackground);
+
+        Glide.with(this)
+                .load(path)
+                .placeholder(R.drawable.demo_img)
+                .crossFade()
+                .into(imgProfilePic);
+    }
+
 }

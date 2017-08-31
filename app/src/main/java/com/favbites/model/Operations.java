@@ -133,4 +133,13 @@ public class Operations {
         return params;
     }
 
+    public static String changePasswordParams(String user_id, String oldPassword, String newPassword) {
+        String params = Config.update_password_url + "?user_id=" + user_id
+                +"&oldPass=" + oldPassword
+                +"&newPass=" + newPassword;
+
+        Log.e(TAG, "change_password params-- "+params);
+        return params;
+    }
+
 }

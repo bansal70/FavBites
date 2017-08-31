@@ -52,7 +52,71 @@ public class RestaurantsManager {
             @Override
             public void onFailure(Call<RestaurantData> call, Throwable t) {
                 Log.e(TAG, "Error in operation");
-                EventBus.getDefault().post(new Event(Constants.RESTAURANTS_SEARCH_FAILED, Constants.SERVER_ERROR));
+                EventBus.getDefault().post(new Event(Constants.NO_RESPONSE, Constants.SERVER_ERROR));
+            }
+        });
+    }
+
+    public void favRestaurants(final String params) {
+        final APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+        Call<RestaurantData> call = apiInterface.restaurantData(params);
+        call.enqueue(new Callback<RestaurantData>() {
+            @Override
+            public void onResponse(Call<RestaurantData> call, Response<RestaurantData> response) {
+                try {
+                    Log.e(TAG, "response code: "+response.code());
+                    RestaurantData restaurantData = response.body();
+                    //String status = restaurantData.response;
+
+                    datumList = restaurantData.data;
+
+                    if (datumList.isEmpty()) {
+                        EventBus.getDefault().post(new Event(Constants.FAVBITES_RESTAURANTS_EMPTY, ""));
+                        return;
+                    }
+
+                    EventBus.getDefault().post(new Event(Constants.FAVBITES_RESTAURANTS_SUCCESS, ""));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RestaurantData> call, Throwable t) {
+                Log.e(TAG, "Error in operation");
+                EventBus.getDefault().post(new Event(Constants.NO_RESPONSE, Constants.SERVER_ERROR));
+            }
+        });
+    }
+
+    public void checkInRestaurants(final String params) {
+        final APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+        Call<RestaurantData> call = apiInterface.restaurantData(params);
+        call.enqueue(new Callback<RestaurantData>() {
+            @Override
+            public void onResponse(Call<RestaurantData> call, Response<RestaurantData> response) {
+                try {
+                    Log.e(TAG, "response code: "+response.code());
+                    RestaurantData restaurantData = response.body();
+                    //String status = restaurantData.response;
+
+                    datumList = restaurantData.data;
+
+                    if (datumList.isEmpty()) {
+                        EventBus.getDefault().post(new Event(Constants.CHECK_IN_RESTAURANTS_EMPTY, ""));
+                        return;
+                    }
+
+                    EventBus.getDefault().post(new Event(Constants.CHECK_IN_RESTAURANTS_SUCCESS, ""));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RestaurantData> call, Throwable t) {
+                Log.e(TAG, "Error in operation");
+                EventBus.getDefault().post(new Event(Constants.NO_RESPONSE, Constants.SERVER_ERROR));
             }
         });
     }

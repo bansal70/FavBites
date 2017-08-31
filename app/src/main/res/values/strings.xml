@@ -58,5 +58,11 @@
     <string name="last_name">Last Name</string>
     <string name="guest_user">Guest User</string>
     <string name="update_profile_failed">Sorry, failed to update your profile. Please try again.</string>
+    <string name="pick_image_intent_text">Update Image</string>
+    <string name="change_password">Change Password</string>
+    <string name="enter_new_password">Enter new password</string>
+    <string name="enter_old_password">Enter old password</string>
+    <string name="favbites_user">FavBites User</string>
+    <string name="photos">Photos</string>
 
 </resources>

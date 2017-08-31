@@ -62,7 +62,10 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".view.MyAccountActivity"></activity>
+        <activity android:name=".view.MyAccountActivity" />
+        <activity android:name=".view.ProfileActivity" />
+        <activity android:name=".view.PostsViewActivity" />
+        <activity android:name=".view.PostsActivity"></activity>
     </application>
 
 </manifest>

@@ -1,7 +1,6 @@
 package com.favbites.model;
 
 import com.favbites.model.beans.AccountData;
-import com.favbites.model.beans.AccountUpdateData;
 import com.favbites.model.beans.ImageResult;
 import com.favbites.model.beans.RestaurantData;
 import com.favbites.model.beans.RestaurantDetailsData;
@@ -42,5 +41,5 @@ public interface APIInterface {
 
     @Multipart
     @POST
-    Call<AccountUpdateData> updateProfile(@Url String string, @Part MultipartBody.Part file);
+    Call<ResponseBody> updateProfile(@Url String string, @Part MultipartBody.Part file);
 }

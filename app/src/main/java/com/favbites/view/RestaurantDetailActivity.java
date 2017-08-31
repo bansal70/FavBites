@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.favbites.model.FBPreferences;
 import com.favbites.model.Operations;
 import com.favbites.model.Utils;
 import com.favbites.model.beans.RestaurantDetailsData;
+import com.favbites.view.adapters.PostsAdapter;
 import com.favbites.view.adapters.RestaurantDetailAdapter;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -39,6 +41,8 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.view.View.GONE;
+
 public class RestaurantDetailActivity extends BaseActivity implements View.OnClickListener, OnMapReadyCallback {
 
     private Context context = this;
@@ -47,11 +51,13 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
     RatingBar rbRatings;
     String isOpen;
     String restaurant_id, user_id, bookmark_status, restaurant_name, restaurant_phone;
-    TextView tvShowMore, tvUploadPhoto, tvCall, tvCheckIn;
+    TextView tvShowMore, tvUploadPhoto, tvCall, tvCheckIn, tvNoPosts, tvViewMore;
     int totalItems = 6;
-    private RecyclerView recyclerView;
+    RecyclerView recyclerView, recyclerPosts;
     private RestaurantDetailAdapter restaurantDetailAdapter;
+    private PostsAdapter postsAdapter;
     private List<RestaurantDetailsData.Subitem> subItemList;
+    private List<RestaurantDetailsData.Comment> postsList;
     KProgressHUD pd;
     String bookmark;
     GoogleMap googleMap;
@@ -61,7 +67,6 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_detail);
-
 
     }
 
@@ -73,6 +78,7 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
         restaurant_id = getIntent().getStringExtra("restaurant_id");
 
         subItemList = new ArrayList<>();
+        postsList = new ArrayList<>();
         imgBack = (ImageView) findViewById(R.id.imgBack);
         imgRestaurant = (ImageView) findViewById(R.id.imgRestaurant);
         imgBookmark = (ImageView) findViewById(R.id.imgBookmark);
@@ -86,23 +92,31 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
         tvUploadPhoto = (TextView) findViewById(R.id.tvUploadPhoto);
         tvCall = (TextView) findViewById(R.id.tvCall);
         tvCheckIn = (TextView) findViewById(R.id.tvCheckIn);
+        tvNoPosts = (TextView) findViewById(R.id.tvNoPosts);
+        tvViewMore = (TextView) findViewById(R.id.tvViewMore);
 
         imgBack.setOnClickListener(this);
         tvShowMore.setOnClickListener(this);
         imgBookmark.setOnClickListener(this);
         tvUploadPhoto.setOnClickListener(this);
         tvCall.setOnClickListener(this);
+        tvViewMore.setOnClickListener(this);
 
         ModelManager.getInstance().getRestaurantDetailsManager()
                 .getRestaurantDetails(Operations.getRestaurantDetailsParams(restaurant_id, user_id));
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerMenus);
-        recyclerView.setNestedScrollingEnabled(false);
+        //recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-
         restaurantDetailAdapter = new RestaurantDetailAdapter(this, subItemList, totalItems);
         recyclerView.setAdapter(restaurantDetailAdapter);
+
+        recyclerPosts = (RecyclerView) findViewById(R.id.recyclerPosts);
+        recyclerPosts.setLayoutManager(new GridLayoutManager(this, 4));
+        //recyclerPosts.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));
+        postsAdapter = new PostsAdapter(this, postsList, "Details");
+        recyclerPosts.setAdapter(postsAdapter);
     }
 
     public void setData() {
@@ -173,7 +187,7 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
                 restaurantDetailAdapter = new RestaurantDetailAdapter(this, subItemList, totalItems);
                 recyclerView.setAdapter(restaurantDetailAdapter);
                 recyclerView.scrollToPosition(6);
-                tvShowMore.setVisibility(View.GONE);
+                tvShowMore.setVisibility(GONE);
                 break;
 
             case R.id.imgBookmark:
@@ -208,6 +222,11 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
                 intent.setData(Uri.parse("tel:"+restaurant_phone));
                 startActivity(intent);
                 break;
+
+            case R.id.tvViewMore:
+                startActivity(new Intent(this, PostsActivity.class
+                ));
+                break;
         }
     }
 
@@ -239,6 +258,20 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
                 RestaurantDetailsData.Data data = RestaurantDetailsManager.data;
                 subItemList.addAll(data.subitem);
                 restaurantDetailAdapter.notifyDataSetChanged();
+                postsList.addAll(data.comment);
+                postsAdapter.notifyDataSetChanged();
+
+                if (postsList.size() != 0) {
+                    tvNoPosts.setVisibility(View.GONE);
+                    recyclerPosts.setVisibility(View.VISIBLE);
+                }
+                else {
+                    tvNoPosts.setVisibility(View.VISIBLE);
+                    recyclerPosts.setVisibility(View.GONE);
+                }
+
+                if (postsList.size() > 4)
+                    tvViewMore.setVisibility(View.VISIBLE);
 
                 break;
 

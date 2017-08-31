@@ -33,6 +33,7 @@
             android:drawableStart="@drawable/camera"
             android:drawablePadding="@dimen/_10sdp"
             android:background="?selectableItemBackground"
+            android:foreground="@drawable/selectable_item_background"
             android:textSize="@dimen/_18ssp"
             android:padding="@dimen/_15ssp"/>
 
@@ -51,6 +52,7 @@
             android:drawableStart="@drawable/gallery"
             android:drawablePadding="@dimen/_10sdp"
             android:background="?selectableItemBackground"
+            android:foreground="@drawable/selectable_item_background"
             android:textSize="@dimen/_18ssp"
             android:padding="@dimen/_15ssp"/>
 
