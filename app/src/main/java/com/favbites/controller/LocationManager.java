@@ -136,7 +136,7 @@ public class LocationManager implements com.google.android.gms.location.Location
                 public void onResult(@NonNull Status status) {
                 }
             });
-            mGoogleApiClient.disconnect();
+            //mGoogleApiClient.disconnect();
         }
     }
 

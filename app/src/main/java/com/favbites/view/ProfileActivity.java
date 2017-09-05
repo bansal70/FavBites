@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.favbites.R;
 import com.favbites.controller.AccountManager;
 import com.favbites.controller.ModelManager;
@@ -28,18 +30,21 @@ import com.favbites.model.Operations;
 import com.favbites.model.Utils;
 import com.favbites.model.beans.AccountData;
 import com.kaopiz.kprogresshud.KProgressHUD;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
+import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
+import java.util.List;
 
 import static android.os.Build.VERSION_CODES.M;
 
 public class ProfileActivity extends BaseActivity implements View.OnClickListener{
 
     EditText editFirstName, editLastName, editEmail;
-    TextView tvChangePassword;
+    TextView tvChangePassword, tvFollowers, tvFollowings;
     ImageView imgBack, imgEdit, imgBackground, imgProfilePic;
     String user_id;
     KProgressHUD pd;
@@ -73,6 +78,8 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
         editLastName = (EditText) findViewById(R.id.editLastName);
         editEmail = (EditText) findViewById(R.id.editEmail);
         tvChangePassword = (TextView) findViewById(R.id.tvChangePass);
+        tvFollowers = (TextView) findViewById(R.id.tvFollowers);
+        tvFollowings = (TextView) findViewById(R.id.tvFollowing);
 
         imgBack = (ImageView) findViewById(R.id.imgBack);
         imgEdit = (ImageView) findViewById(R.id.imgEdit);
@@ -84,6 +91,8 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
         imgEdit.setOnClickListener(this);
         imgProfilePic.setOnClickListener(this);
         tvChangePassword.setOnClickListener(this);
+        tvFollowers.setOnClickListener(this);
+        tvFollowings.setOnClickListener(this);
     }
 
     public void initDialog() {
@@ -136,6 +145,14 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
 
             case R.id.tvCancelPassword:
                 dialogPassword.dismiss();
+                break;
+
+            case R.id.tvFollowers:
+                startActivity(new Intent(this, FollowersActivity.class));
+                break;
+
+            case R.id.tvFollowing:
+                startActivity(new Intent(this, FollowingActivity.class));
                 break;
         }
     }
@@ -264,6 +281,7 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
     public void onEvent(Event event) {
         switch (event.getKey()) {
             case Constants.PROFILE_SUCCESS:
+                if (pd.isShowing())
                 pd.dismiss();
                 setData();
                 break;
@@ -275,6 +293,7 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
 
             case Constants.UPDATE_PROFILE_SUCCESS:
                 pd.dismiss();
+                ModelManager.getInstance().getAccountManager().userAccount(Operations.profileParams(user_id));
                 imgEdit.setImageResource(R.drawable.edit);
                 isEditing = true;
                 editFields(false);
@@ -315,20 +334,40 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
 
         if (!user.image.isEmpty()) {
             decodeImage(user.image);
+            FBPreferences.putString(this, "profile_pic", user.image);
         }
+
+        List<AccountData.Follower> followersList = data.follower;
+        List<AccountData.Following> followingsList = data.following;
+
+        String followers = followersList.size() + " " + "Follower";
+        String followings = followingsList.size() + " " + "Following";
+
+        tvFollowers.setText(followers);
+        tvFollowings.setText(followings);
     }
 
     public void decodeImage(String path) {
         Glide.with(this)
                 .load(path)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .placeholder(R.drawable.demo_img)
                 .crossFade()
+                .centerCrop()
                 .into(imgBackground);
 
-        Glide.with(this)
+        com.squareup.picasso.Transformation transformation = new RoundedTransformationBuilder()
+                .borderColor(Color.BLACK)
+                .borderWidthDp(3)
+                .cornerRadiusDp(30)
+                .oval(false)
+                .build();
+
+        Picasso.with(this)
                 .load(path)
+                .fit()
+                .transform(Utils.imageTransformation())
                 .placeholder(R.drawable.demo_img)
-                .crossFade()
                 .into(imgProfilePic);
     }
 

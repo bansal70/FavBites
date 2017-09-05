@@ -1,7 +1,7 @@
 package com.favbites.model.beans;
 
 /*
- * Created by rishav on 8/30/2017.
+ * Created by rishav on 9/4/2017.
  */
 
 import com.google.gson.annotations.Expose;
@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class AccountData {
+public class FollowingData {
     @SerializedName("mesg")
     @Expose
     public String mesg;
@@ -21,27 +21,13 @@ public class AccountData {
     public Data data;
 
     public class Data {
-        @SerializedName("User")
+        @SerializedName("FollowingTo")
         @Expose
-        public User user;
-        @SerializedName("Follower")
-        @Expose
-        public List<Follower> follower = null;
-        @SerializedName("Following")
-        @Expose
-        public List<Following> following = null;
-        @SerializedName("Bookmark")
-        @Expose
-        public List<Object> bookmark = null;
-        @SerializedName("Comment")
-        @Expose
-        public List<Object> comment = null;
-        @SerializedName("Check")
-        @Expose
-        public List<Object> check = null;
+        public List<FollowingTo> followingTo = null;
     }
 
-    public class User {
+    public class FollowingTo {
+
         @SerializedName("id")
         @Expose
         public String id;
@@ -74,7 +60,7 @@ public class AccountData {
         public String status;
         @SerializedName("forgot_key")
         @Expose
-        public Object forgotKey;
+        public String forgotKey;
         @SerializedName("activationKey")
         @Expose
         public Object activationKey;
@@ -93,41 +79,7 @@ public class AccountData {
         @SerializedName("social_id")
         @Expose
         public String socialId;
+
     }
 
-    public class Follower {
-        @SerializedName("id")
-        @Expose
-        public String id;
-        @SerializedName("follower")
-        @Expose
-        public String follower;
-        @SerializedName("follow_to")
-        @Expose
-        public String followTo;
-        @SerializedName("created")
-        @Expose
-        public String created;
-        @SerializedName("modified")
-        @Expose
-        public String modified;
-    }
-
-    public class Following {
-        @SerializedName("id")
-        @Expose
-        public String id;
-        @SerializedName("follower")
-        @Expose
-        public String follower;
-        @SerializedName("follow_to")
-        @Expose
-        public String followTo;
-        @SerializedName("created")
-        @Expose
-        public String created;
-        @SerializedName("modified")
-        @Expose
-        public String modified;
-    }
 }

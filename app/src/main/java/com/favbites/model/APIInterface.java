@@ -1,6 +1,9 @@
 package com.favbites.model;
 
 import com.favbites.model.beans.AccountData;
+import com.favbites.model.beans.BookmarkData;
+import com.favbites.model.beans.FollowersData;
+import com.favbites.model.beans.FollowingData;
 import com.favbites.model.beans.ImageResult;
 import com.favbites.model.beans.RestaurantData;
 import com.favbites.model.beans.RestaurantDetailsData;
@@ -42,4 +45,13 @@ public interface APIInterface {
     @Multipart
     @POST
     Call<ResponseBody> updateProfile(@Url String string, @Part MultipartBody.Part file);
+
+    @POST
+    Call<BookmarkData> bookmarkData(@Url String string);
+
+    @POST
+    Call<FollowersData> followersData(@Url String string);
+
+    @POST
+    Call<FollowingData> followingData(@Url String string);
 }

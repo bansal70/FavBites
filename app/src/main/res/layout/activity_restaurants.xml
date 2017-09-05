@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#eee"
     tools:ignore="MissingPrefix">
 
     <android.support.v4.widget.DrawerLayout
@@ -116,6 +117,7 @@
                     android:layout_height="match_parent"
                     android:text="@string/restaurant"
                     android:background="@color/colorPrimary"
+                    android:foreground="@drawable/selectable_item_background"
                     android:layout_weight="1"
                     android:textColor="#000"
                     android:textSize="@dimen/_15ssp"
@@ -128,6 +130,7 @@
                     android:layout_height="match_parent"
                     android:text="@string/favbites"
                     android:background="#2A2736"
+                    android:foreground="@drawable/selectable_item_background"
                     android:layout_weight="1"
                     android:layout_marginLeft="@dimen/_2sdp"
                     android:layout_marginRight="@dimen/_2sdp"
@@ -142,6 +145,7 @@
                     android:layout_height="match_parent"
                     android:text="@string/check_in"
                     android:background="#2A2736"
+                    android:foreground="@drawable/selectable_item_background"
                     android:layout_weight="1"
                     android:textColor="#fff"
                     android:textSize="@dimen/_15ssp"

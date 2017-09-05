@@ -10,7 +10,7 @@
         android:layout_height="@dimen/_110sdp"
         android:scaleType="fitXY"
         android:background="#fff"
-        android:foreground="?selectableItemBackground"
+        android:foreground="?android:attr/selectableItemBackground"
         android:contentDescription="@null"/>
 
 </LinearLayout>

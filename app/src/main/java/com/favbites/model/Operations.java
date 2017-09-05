@@ -58,6 +58,24 @@ public class Operations {
         return params;
     }
 
+    public static String getFavRestaurantsParams(String search, int page) {
+        String params = Config.fav_restaurant_url + "?search=" + search
+                +"&page="+page;
+
+        Log.i(TAG, "fav_restaurant params-- "+params);
+
+        return params;
+    }
+
+    public static String getCheckInRestaurantsParams(String search, int page) {
+        String params = Config.check_restaurant_url + "?search=" + search
+                +"&page="+page;
+
+        Log.i(TAG, "check_in_restaurant params-- "+params);
+
+        return params;
+    }
+
     public static String getRestaurantDetailsParams(String restaurant_id, String user_id) {
         String params = Config.restaurant_details_url + "?restaurant_id=" + restaurant_id
                 +"&user_id="+user_id;
@@ -67,9 +85,10 @@ public class Operations {
         return params;
     }
 
-    public static String getItemReviews(int restaurant_id, int dish_id) {
+    public static String getItemReviews(int restaurant_id, int dish_id, String user_id) {
         String params = Config.dish_reviews_url + "?restaurant_id=" + restaurant_id
-                +"&dish_id=" + dish_id;
+                +"&dish_id=" + dish_id
+                +"&user_id=" + user_id;
 
         Log.i(TAG, "dish_reviews params-- "+params);
 
@@ -94,6 +113,14 @@ public class Operations {
                 +"&status=" + status;
 
         Log.i(TAG, "bookmark_restaurant params-- "+params);
+
+        return params;
+    }
+
+    public static String getBookmarkRestaurantsParams(String user_id) {
+        String params = Config.bookmark_restaurants_url + "?user_id=" + user_id;
+
+        Log.e(TAG, "bookmark_restaurant params-- "+params);
 
         return params;
     }
@@ -139,6 +166,29 @@ public class Operations {
                 +"&newPass=" + newPassword;
 
         Log.e(TAG, "change_password params-- "+params);
+        return params;
+    }
+
+    //status ==> 1=>follow, 2=>un-follow
+    public static String followUserParams(String follow_id, String follower_id, String status) {
+        String params = Config.follow_user_url + "?follow_to=" + follow_id
+                +"&follower=" + follower_id + "&status=" + status;
+
+        Log.e(TAG, "follow_user params-- "+params);
+        return params;
+    }
+
+    public static String followersParams(String user_id) {
+        String params = Config.follower_url + "?id=" + user_id;
+
+        Log.e(TAG, "followers param-- "+params);
+        return params;
+    }
+
+    public static String followingParams(String user_id) {
+        String params = Config.following_url + "?id=" + user_id;
+
+        Log.e(TAG, "following params-- "+params);
         return params;
     }
 

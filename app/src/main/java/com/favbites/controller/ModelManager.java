@@ -19,6 +19,9 @@ public class ModelManager {
     private UploadPhotoManager uploadPhotoManager;
     private LogoutManager logoutManager;
     private AccountManager accountManager;
+    private FollowUserManager followUserManager;
+    private FollowersManager followersManager;
+    private FollowingManager followingManager;
 
     public static ModelManager getInstance() {
         if (modelManager == null)
@@ -40,6 +43,9 @@ public class ModelManager {
         uploadPhotoManager = new UploadPhotoManager();
         logoutManager = new LogoutManager();
         accountManager = new AccountManager();
+        followUserManager = new FollowUserManager();
+        followersManager = new FollowersManager();
+        followingManager = new FollowingManager();
     }
 
     public RegistrationManager getRegistrationManager() {
@@ -88,5 +94,17 @@ public class ModelManager {
 
     public AccountManager getAccountManager() {
         return accountManager;
+    }
+
+    public FollowUserManager getFollowUserManager() {
+        return followUserManager;
+    }
+
+    public FollowersManager getFollowersManager() {
+        return followersManager;
+    }
+
+    public FollowingManager getFollowingManager() {
+        return followingManager;
     }
 }

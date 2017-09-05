@@ -49,6 +49,7 @@ public class RestaurantDetailAdapter extends RecyclerView.Adapter<RestaurantDeta
             float ratings = Float.parseFloat(subItems.rating);
             holder.rbItemRatings.setRating(ratings);
         }
+        holder.tvReviewCount.setText("(" + subItems.reviewCount + ")");
     }
 
     @Override
@@ -61,7 +62,7 @@ public class RestaurantDetailAdapter extends RecyclerView.Adapter<RestaurantDeta
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView tvItemName, tvItemPrice;
+        private TextView tvItemName, tvItemPrice, tvReviewCount;
         private RatingBar rbItemRatings;
 
         ViewHolder(View itemView) {
@@ -70,6 +71,8 @@ public class RestaurantDetailAdapter extends RecyclerView.Adapter<RestaurantDeta
             tvItemName = itemView.findViewById(R.id.tvItemName);
             tvItemPrice = itemView.findViewById(R.id.tvItemPrice);
             rbItemRatings = itemView.findViewById(R.id.rbItemRatings);
+            tvReviewCount = itemView.findViewById(R.id.tvReviewCount);
+
             itemView.setOnClickListener(this);
         }
 

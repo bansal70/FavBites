@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -47,6 +48,7 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
     ReviewsAdapter reviewsAdapter;
     List<ReviewsData.Datum> reviewsList;
     RatingBar rbRatings;
+    String userComment = "", userRating = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +60,7 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
     }
 
     public void initViews() {
-        pd = Utils.showMessageDialog(this, "Please wait...");
+        pd = Utils.showDialog(this);
         pd.show();
 
         String key = getIntent().getStringExtra("dish_key");
@@ -68,7 +70,7 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
         user_id = FBPreferences.readString(this, "user_id");
 
         ModelManager.getInstance().getReviewsManager().dishReviews(this,
-                Operations.getItemReviews(restaurant_id, dish_key));
+                Operations.getItemReviews(restaurant_id, dish_key, user_id));
 
         tvItem = (TextView) findViewById(R.id.tvItem);
         tvAddReview = (TextView) findViewById(R.id.tvAddReview);
@@ -82,7 +84,7 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
         recyclerView.addItemDecoration(new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL));
 
-        reviewsAdapter = new ReviewsAdapter(activity, reviewsList, tvAddReview);
+        reviewsAdapter = new ReviewsAdapter(activity, reviewsList);
         recyclerView.setAdapter(reviewsAdapter);
 
         tvAddReview.setOnClickListener(this);
@@ -106,6 +108,7 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
         switch (view.getId()) {
 
             case R.id.imgBack:
+                recyclerView.setAdapter(null);
                 finish();
                 break;
 
@@ -114,9 +117,9 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
                     Toast.makeText(activity, "Please login to add your review", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (!ReviewsAdapter.rating.isEmpty()) {
-                    rbItemRating.setRating(Float.parseFloat(ReviewsAdapter.rating));
-                    editComment.setText(ReviewsAdapter.comment);
+                if (!userRating.isEmpty()) {
+                    rbItemRating.setRating(Float.parseFloat(userRating));
+                    editComment.setText(userComment);
                 }
                 dialogReview.show();
                 break;
@@ -166,12 +169,13 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
 
                 reviewsList.addAll(ReviewsManager.reviewsList);
                 reviewsAdapter.notifyDataSetChanged();
+                checkUserRating();
                 break;
 
             case Constants.REVIEWS_EMPTY:
                 pd.dismiss();
-                ReviewsAdapter.rating = "";
-                ReviewsAdapter.comment = "";
+                userRating = "";
+                userRating = "";
                 rbRatings.setRating(0);
                 tvNoReview.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.GONE);
@@ -183,7 +187,7 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
                 tvNoReview.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
                 ModelManager.getInstance().getReviewsManager().dishReviews(this,
-                        Operations.getItemReviews(restaurant_id, dish_key));
+                        Operations.getItemReviews(restaurant_id, dish_key, user_id));
                 Toast.makeText(activity, ""+event.getValue(), Toast.LENGTH_SHORT).show();
                 break;
 
@@ -192,10 +196,35 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
                 Toast.makeText(activity, ""+event.getValue(), Toast.LENGTH_SHORT).show();
                 break;
 
+
+
             case Constants.NO_RESPONSE:
                 pd.dismiss();
                 Toast.makeText(activity, ""+event.getValue(), Toast.LENGTH_SHORT).show();
                 break;
         }
+    }
+
+    public void checkUserRating() {
+        Log.e("ReviewsActivity", "size list: "+reviewsList.size());
+        for (int i=0; i<ReviewsManager.reviewsList.size(); i++) {
+            ReviewsData.Datum data = ReviewsManager.reviewsList.get(i);
+            ReviewsData.User user = data.user;
+            ReviewsData.Review subItem = data.review;
+            Log.e("ReviewsActivity", "user_id: "+user.id+ "\nprofile_id: "+user_id);
+            if (user.id.equals(user_id)) {
+                tvAddReview.setText(R.string.edit_review);
+                userComment = subItem.message;
+                userRating = subItem.rating;
+                return;
+            }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        recyclerView.setAdapter(null);
     }
 }

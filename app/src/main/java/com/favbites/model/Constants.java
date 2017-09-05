@@ -54,9 +54,15 @@ public class Constants {
     public static final int CHANGE_PASSWORD_SUCCESS = 1027;
     public static final int CHANGE_PASSWORD_FAILED = 1028;
 
-    public static final int FAVBITES_RESTAURANTS_SUCCESS = 1029;
-    public static final int FAVBITES_RESTAURANTS_EMPTY = 1030;
+    public static final int BOOKMARK_RESTAURANTS_SUCCESS = 1029;
+    public static final int BOOKMARK_RESTAURANTS_EMPTY = 1030;
 
-    public static final int CHECK_IN_RESTAURANTS_SUCCESS = 1031;
-    public static final int CHECK_IN_RESTAURANTS_EMPTY = 1032;
+    public static final int FOLLOW_SUCCESS = 1031;
+    public static final int UNFOLLOW_SUCCESS = 1032;
+
+    public static final int FOLLOWER_SUCCESS = 1033;
+    public static final int FOLLOWER_EMPTY = 1034;
+
+    public static final int FOLLOWING_SUCCESS = 1035;
+    public static final int FOLLOWING_EMPTY = 1036;
 }

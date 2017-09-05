@@ -24,6 +24,7 @@ import retrofit2.Response;
 public class RestaurantsManager {
     private final static String TAG = RestaurantsManager.class.getSimpleName();
     public static List<RestaurantData.Datum> datumList = new ArrayList<>();
+    public static int totalPages;
 
     public void searchRestaurant(final String params) {
         final APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
@@ -35,8 +36,8 @@ public class RestaurantsManager {
                     Log.e(TAG, "response code: "+response.code());
                     RestaurantData restaurantData = response.body();
                     //String status = restaurantData.response;
-
                     datumList = restaurantData.data;
+                    totalPages = restaurantData.totalPages;
 
                     if (datumList.isEmpty()) {
                         EventBus.getDefault().post(new Event(Constants.RESTAURANTS_SEARCH_FAILED, ""));
@@ -65,17 +66,15 @@ public class RestaurantsManager {
             public void onResponse(Call<RestaurantData> call, Response<RestaurantData> response) {
                 try {
                     Log.e(TAG, "response code: "+response.code());
-                    RestaurantData restaurantData = response.body();
-                    //String status = restaurantData.response;
-
-                    datumList = restaurantData.data;
-
-                    if (datumList.isEmpty()) {
-                        EventBus.getDefault().post(new Event(Constants.FAVBITES_RESTAURANTS_EMPTY, ""));
-                        return;
+                    String output = response.body().response;
+                    if (output.equals("1")) {
+                        EventBus.getDefault().post(new Event(Constants.RESTAURANTS_SEARCH_SUCCESS, ""));
+                        RestaurantData restaurantData = response.body();
+                        datumList = restaurantData.data;
                     }
+                    else
+                        EventBus.getDefault().post(new Event(Constants.RESTAURANTS_SEARCH_FAILED, ""));
 
-                    EventBus.getDefault().post(new Event(Constants.FAVBITES_RESTAURANTS_SUCCESS, ""));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -97,17 +96,14 @@ public class RestaurantsManager {
             public void onResponse(Call<RestaurantData> call, Response<RestaurantData> response) {
                 try {
                     Log.e(TAG, "response code: "+response.code());
-                    RestaurantData restaurantData = response.body();
-                    //String status = restaurantData.response;
-
-                    datumList = restaurantData.data;
-
-                    if (datumList.isEmpty()) {
-                        EventBus.getDefault().post(new Event(Constants.CHECK_IN_RESTAURANTS_EMPTY, ""));
-                        return;
+                    String output = response.body().response;
+                    if (output.equals("1")) {
+                        EventBus.getDefault().post(new Event(Constants.RESTAURANTS_SEARCH_SUCCESS, ""));
+                        RestaurantData restaurantData = response.body();
+                        datumList = restaurantData.data;
                     }
-
-                    EventBus.getDefault().post(new Event(Constants.CHECK_IN_RESTAURANTS_SUCCESS, ""));
+                    else
+                        EventBus.getDefault().post(new Event(Constants.RESTAURANTS_SEARCH_FAILED, ""));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

@@ -6,6 +6,7 @@ package com.favbites.model;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -16,6 +17,8 @@ import android.widget.LinearLayout;
 
 import com.favbites.model.beans.RestaurantData;
 import com.kaopiz.kprogresshud.KProgressHUD;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
+import com.squareup.picasso.Transformation;
 
 import java.io.File;
 import java.io.IOException;
@@ -112,6 +115,18 @@ public class Utils {
             e.printStackTrace();
         }
         return strAdd;
+    }
+
+    public static Transformation imageTransformation() {
+        Transformation transformation = new RoundedTransformationBuilder()
+                .borderColor(Color.BLACK)
+                .cornerRadiusDp(30)
+                .oval(false)
+                .build();
+
+        Log.e(TAG, "Circular image transformation");
+
+        return transformation;
     }
 
 }

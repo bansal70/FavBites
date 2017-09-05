@@ -100,10 +100,12 @@
         android:background="@color/colorHome">
 
         <TextView
+            android:id="@+id/tvFollowers"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Followers"
             android:textColor="#fff"
+            android:foreground="@drawable/selectable_item_background"
             android:gravity="center"
             android:padding="@dimen/_10sdp"
             android:textSize="@dimen/_18ssp"
@@ -115,10 +117,12 @@
             android:background="#fff"/>
 
         <TextView
+            android:id="@+id/tvFollowing"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Following"
             android:textColor="#fff"
+            android:foreground="@drawable/selectable_item_background"
             android:gravity="center"
             android:padding="@dimen/_10sdp"
             android:textSize="@dimen/_18ssp"

@@ -71,6 +71,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter {
         List<RestaurantData.Subitem> subItemList = datum.subitem;
         ItemsAdapter itemsAdapter = new ItemsAdapter(context, subItemList);
         ((ItemsViewHolder) holder).recyclerItems.setAdapter(itemsAdapter);
+
     }
 
     @Override

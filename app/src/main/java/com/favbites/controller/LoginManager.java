@@ -45,10 +45,12 @@ public class LoginManager {
                         String user_id = data.getString("id");
                         String first_name = data.getString("fname");
                         String last_name = data.getString("lname");
+                        String image = data.getString("image");
 
                         FBPreferences.putString(context, "user_id", user_id);
                         FBPreferences.putString(context, "first_name", first_name);
                         FBPreferences.putString(context, "last_name", last_name);
+                        FBPreferences.putString(context, "profile_pic", image);
 
                         EventBus.getDefault().post(new Event(Constants.LOGIN_SUCCESS, msg));
                     }

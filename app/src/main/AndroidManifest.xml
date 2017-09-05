@@ -29,19 +29,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.WelcomeActivity" />
+        <activity
+            android:name=".view.WelcomeActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.LoginActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".view.RegistrationActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".view.RestaurantsActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".view.RestaurantDetailActivity" />
-        <activity android:name=".view.ReviewsActivity" />
-        <activity android:name=".view.ForgotPasswordActivity" />
+        <activity
+            android:name=".view.RestaurantDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.ReviewsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.ForgotPasswordActivity"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -50,7 +61,9 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".view.UploadPhotoActivity" />
+        <activity
+            android:name=".view.UploadPhotoActivity"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -62,10 +75,21 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".view.MyAccountActivity" />
-        <activity android:name=".view.ProfileActivity" />
-        <activity android:name=".view.PostsViewActivity" />
-        <activity android:name=".view.PostsActivity"></activity>
+        <activity
+            android:name=".view.MyAccountActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.ProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.PostsViewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.PostsActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".view.BookmarkRestaurantsActivity" />
+        <activity android:name=".view.FollowersActivity" />
+        <activity android:name=".view.FollowingActivity"></activity>
     </application>
 
 </manifest>

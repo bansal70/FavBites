@@ -89,7 +89,7 @@ public class ReviewsData {
         public String userType;
         @SerializedName("image")
         @Expose
-        public Object image;
+        public String image;
         @SerializedName("status")
         @Expose
         public String status;
@@ -114,6 +114,9 @@ public class ReviewsData {
         @SerializedName("social_id")
         @Expose
         public String socialId;
+        @SerializedName("is_follow")
+        @Expose
+        public int isFollow;
     }
 
 

@@ -19,9 +19,9 @@ public class RestaurantData {
     @SerializedName("data")
     @Expose
     public List<Datum> data;
-   /* @SerializedName("totalpages")
+    @SerializedName("totalpages")
     @Expose
-    public Integer totalPages;*/
+    public Integer totalPages;
 
     public class Food {
 
@@ -122,6 +122,9 @@ public class RestaurantData {
         @SerializedName("rating")
         @Expose
         public String rating;
+        @SerializedName("reviewCount")
+        @Expose
+        public int reviewCount;
 
     }
 

@@ -239,6 +239,9 @@ public class RestaurantDetailsData {
         @SerializedName("rating")
         @Expose
         public String rating;
+        @SerializedName("reviewCount")
+        @Expose
+        public int reviewCount;
     }
 
     public class Comment {

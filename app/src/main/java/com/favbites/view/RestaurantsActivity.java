@@ -36,13 +36,16 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.kaopiz.kprogresshud.KProgressHUD;
+import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import static com.favbites.model.Utils.restaurantsList;
+
 public class RestaurantsActivity extends BaseActivity implements View.OnTouchListener,
         View.OnClickListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener{
+        GoogleApiClient.OnConnectionFailedListener {
 
     private static final int PERMISSION_REQUEST_CODE = 10001;
     GoogleApiClient mGoogleApiClient;
@@ -60,10 +63,12 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
     Dialog dialogLocation;
     TextView tvSubmit, tvAutoDetect, tvNoRestaurant;
     EditText editLocation;
-    ImageView imgLocation, imgHome;
+    ImageView imgLocation, imgHome, imgProfilePic;
     DrawerLayout navigationDrawer;
     String user_id;
     TextView tvRestaurants, tvFavRestaurants, tvCheckInRestaurants;
+    boolean isRes, isFav, isCheck;
+    LocationManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,20 +81,19 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
 
     public void checkLocation() {
         pd = Utils.showDialog(this);
-        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         RestaurantsManager.datumList.clear();
-        Utils.restaurantsList.clear();
+        restaurantsList.clear();
 
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             initDialog();
-        }
-        else {
-            String location = FBPreferences.readString(this, "location");
-            if (!location.isEmpty()) {
+        } else {
+            search = FBPreferences.readString(this, "location");
+            if (!search.isEmpty()) {
                 ModelManager.getInstance().getRestaurantsManager()
-                        .searchRestaurant(Operations.getSearchRestaurantParams(location, page));
+                        .searchRestaurant(Operations.getSearchRestaurantParams(search, page));
                 pd.show();
-            }  else {
+            } else {
                 initDialog();
             }
         }
@@ -109,6 +113,7 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
         // tvResults = (TextView) findViewById(R.id.tvResults);
         tvNoRestaurant = (TextView) findViewById(R.id.tvNoRestaurant);
         imgLocation = (ImageView) findViewById(R.id.imgLocation);
+        imgProfilePic = (ImageView) findViewById(R.id.imgProfilePic);
 
         imgHome.setOnClickListener(this);
         imgLocation.setOnClickListener(this);
@@ -117,15 +122,15 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
 
-        restaurantsAdapter = new RestaurantsAdapter(this, Utils.restaurantsList);
+        restaurantsAdapter = new RestaurantsAdapter(this, restaurantsList);
         recyclerView.setAdapter(restaurantsAdapter);
 
         tvRestaurants.setOnClickListener(this);
         tvFavRestaurants.setOnClickListener(this);
         tvCheckInRestaurants.setOnClickListener(this);
 
+        isLoaded(true, false, false);
         loadMore();
-        setDrawer();
     }
 
     @Override
@@ -142,10 +147,18 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
                 }
                 page = 1;
                 isSearch = true;
-                Utils.restaurantsList.clear();
+                restaurantsList.clear();
                 pd.show();
-                ModelManager.getInstance().getRestaurantsManager()
-                        .searchRestaurant(Operations.getSearchRestaurantParams(search, 1));
+                if (isRes)
+                    ModelManager.getInstance().getRestaurantsManager()
+                            .searchRestaurant(Operations.getSearchRestaurantParams(search, page));
+                else if (isFav)
+                    ModelManager.getInstance().getRestaurantsManager()
+                            .favRestaurants(Operations.getFavRestaurantsParams(search, page));
+                else
+                    ModelManager.getInstance().getRestaurantsManager()
+                            .checkInRestaurants(Operations.getCheckInRestaurantsParams(search, page));
+
                 return true;
             }
         }
@@ -167,14 +180,14 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tvSubmit:
-                String location = editLocation.getText().toString().trim();
-                if (location.isEmpty()) {
+                search = editLocation.getText().toString().trim();
+                if (search.isEmpty()) {
                     Toast.makeText(activity, "Please enter your location..", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 pd.show();
                 ModelManager.getInstance().getRestaurantsManager()
-                        .searchRestaurant(Operations.getSearchRestaurantParams(location, 1));
+                        .searchRestaurant(Operations.getSearchRestaurantParams(search, 1));
                 break;
 
             case R.id.tvAutoDetect:
@@ -194,7 +207,7 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
                 break;
 
             case R.id.tvLogout:
-                if (user_id.isEmpty()){
+                if (user_id.isEmpty()) {
                     startActivity(new Intent(this, LoginActivity.class));
                     return;
                 }
@@ -204,20 +217,68 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
                 break;
 
             case R.id.tvRestaurants:
+                if (!isRes) {
+                    pd.show();
+                    page = 1;
+                    ModelManager.getInstance().getRestaurantsManager()
+                            .searchRestaurant(Operations.getSearchRestaurantParams(search, page));
+                    RestaurantsManager.datumList.clear();
+                    restaurantsList.clear();
+                    recyclerView.scrollToPosition(0);
+                    isLoaded(true, false, false);
+                }
+
                 setBackground(R.color.colorPrimary, R.color.colorHome, R.color.colorHome);
                 setTextColor(R.color.colorBlack, R.color.colorWhite, R.color.colorWhite);
                 break;
 
             case R.id.tvFavRestaurants:
+                if (!isFav) {
+                    pd.show();
+                    page = 1;
+                    ModelManager.getInstance().getRestaurantsManager()
+                            .favRestaurants(Operations.getFavRestaurantsParams(search, page));
+                    RestaurantsManager.datumList.clear();
+                    restaurantsList.clear();
+                    recyclerView.scrollToPosition(0);
+                    isLoaded(false, true, false);
+                }
+
                 setBackground(R.color.colorHome, R.color.colorPrimary, R.color.colorHome);
                 setTextColor(R.color.colorWhite, R.color.colorBlack, R.color.colorWhite);
                 break;
 
             case R.id.tvCheckInRestaurants:
+                if (!isCheck) {
+                    pd.show();
+                    page = 1;
+                    ModelManager.getInstance().getRestaurantsManager()
+                            .checkInRestaurants(Operations.getCheckInRestaurantsParams(search, page));
+                    RestaurantsManager.datumList.clear();
+                    restaurantsList.clear();
+                    recyclerView.scrollToPosition(0);
+                    isLoaded(false, false, true);
+                }
+
                 setBackground(R.color.colorHome, R.color.colorHome, R.color.colorPrimary);
                 setTextColor(R.color.colorWhite, R.color.colorWhite, R.color.colorBlack);
                 break;
+
+            case R.id.tvBookmarks:
+                if (user_id.isEmpty()) {
+                    Toast.makeText(activity, "Please login to check your bookmark restaurants",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                startActivity(new Intent(this, BookmarkRestaurantsActivity.class));
+                break;
         }
+    }
+
+    public void isLoaded(boolean a, boolean b, boolean c) {
+        isRes = a;
+        isFav = b;
+        isCheck = c;
     }
 
     public void setBackground(int a, int b, int c) {
@@ -236,15 +297,24 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
         TextView tvUsername = (TextView) findViewById(R.id.tvUsername);
         TextView tvLogout = (TextView) findViewById(R.id.tvLogout);
         TextView tvAccount = (TextView) findViewById(R.id.tvAccount);
+        TextView tvBookmarks = (TextView) findViewById(R.id.tvBookmarks);
 
         String first_name = FBPreferences.readString(this, "first_name");
         String last_name = FBPreferences.readString(this, "last_name");
         String name = first_name + " " + last_name;
+        String profile_pic = FBPreferences.readString(this, "profile_pic");
 
         if (user_id.isEmpty()) {
             tvLogout.setText(R.string.login);
             tvAccount.setVisibility(View.GONE);
         }
+        if (!profile_pic.isEmpty())
+            Picasso.with(this)
+                    .load(profile_pic)
+                    .fit()
+                    .transform(Utils.imageTransformation())
+                    .placeholder(R.drawable.demo_img)
+                    .into(imgProfilePic);
 
         if (!first_name.isEmpty())
             tvUsername.setText(name);
@@ -253,7 +323,14 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
 
         tvLogout.setOnClickListener(this);
         tvAccount.setOnClickListener(this);
+        tvBookmarks.setOnClickListener(this);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        setDrawer();
     }
 
     @Override
@@ -286,7 +363,7 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
                 if (dialogLocation != null && dialogLocation.isShowing())
                     dialogLocation.dismiss();
 
-                Utils.restaurantsList.addAll(RestaurantsManager.datumList);
+                restaurantsList.addAll(RestaurantsManager.datumList);
                 restaurantsAdapter.notifyDataSetChanged();
 
                 break;
@@ -312,8 +389,15 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
                 pd.show();
                 if (dialogLocation != null && dialogLocation.isShowing())
                     dialogLocation.dismiss();
-                ModelManager.getInstance().getRestaurantsManager()
-                        .searchRestaurant(Operations.getSearchRestaurantParams(event.getValue(), 1));
+                if (isRes)
+                    ModelManager.getInstance().getRestaurantsManager()
+                            .searchRestaurant(Operations.getSearchRestaurantParams(event.getValue(), 1));
+                else if (isFav)
+                    ModelManager.getInstance().getRestaurantsManager()
+                            .favRestaurants(Operations.getFavRestaurantsParams(event.getValue(), page));
+                else
+                    ModelManager.getInstance().getRestaurantsManager()
+                            .checkInRestaurants(Operations.getCheckInRestaurantsParams(event.getValue(), page));
                 break;
 
             case Constants.LOCATION_EMPTY:
@@ -334,7 +418,7 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
 
             case Constants.NO_RESPONSE:
                 pd.dismiss();
-                Toast.makeText(activity, ""+event.getValue(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "" + event.getValue(), Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -367,11 +451,22 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
     }
 
     private void enableLoc() {
+
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addApi(LocationServices.API)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this).build();
+        }
+
+        if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            if (!mGoogleApiClient.isConnected())
+                mGoogleApiClient.connect();
+
+            Toast.makeText(activity, "Getting your current location...", Toast.LENGTH_SHORT).show();
+            ModelManager.getInstance().getLocationManager()
+                    .startLocationUpdates(this, mGoogleApiClient);
+            return;
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -386,7 +481,6 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
             ModelManager.getInstance().getLocationManager()
                     .requestLocation(this, mGoogleApiClient);
         }
-
     }
 
     @Override
@@ -410,7 +504,9 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
             case com.favbites.controller.LocationManager.REQUEST_CHECK_SETTINGS:
                 switch (resultCode) {
                     case Activity.RESULT_OK:
-                        ModelManager.getInstance().getLocationManager().startLocationUpdates(this, mGoogleApiClient);
+                        pd.show();
+                        ModelManager.getInstance().getLocationManager()
+                                .startLocationUpdates(this, mGoogleApiClient);
                         break;
                     case Activity.RESULT_CANCELED:
                         break;

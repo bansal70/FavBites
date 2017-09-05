@@ -48,17 +48,19 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
     }
 
     private void enableLoc() {
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODE);
             } else {
-                ModelManager.getInstance().getLocationManager()
-                        .requestLocation(this, mGoogleApiClient);
-                handleSleep();
+                if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+                    ModelManager.getInstance().getLocationManager()
+                            .requestLocation(this, mGoogleApiClient);
+                else
+                    handleSleep();
             }
         } else {
-            final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER))
                 ModelManager.getInstance().getLocationManager()
                     .requestLocation(this, mGoogleApiClient);
@@ -70,10 +72,14 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (requestCode == PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                ModelManager.getInstance().getLocationManager()
-                        .requestLocation(this, mGoogleApiClient);
+                if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+                    ModelManager.getInstance().getLocationManager()
+                            .requestLocation(this, mGoogleApiClient);
+                else
+                    handleSleep();
             } else {
                 handleSleep();
             }
@@ -108,15 +114,10 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
             public void run() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (ContextCompat.checkSelfPermission(SplashActivity.this,
-                            Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODE);
-                    } else {
+                            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                         ModelManager.getInstance().getLocationManager()
                                 .startLocationUpdates(SplashActivity.this, mGoogleApiClient);
                     }
-                } else {
-                    ModelManager.getInstance().getLocationManager()
-                            .startLocationUpdates(SplashActivity.this, mGoogleApiClient);
                 }
 
                 if (FBPreferences.readString(SplashActivity.this, "user_id").isEmpty())

@@ -12,8 +12,7 @@
         android:layout_height="@dimen/_80sdp"
         android:padding="@dimen/_2sdp"
         android:scaleType="fitXY"
-        android:background="?selectableItemBackground"
-        android:foreground="?selectableItemBackground"
+        android:foreground="?android:attr/selectableItemBackground"
         android:contentDescription="@null"/>
 
 </android.support.v7.widget.CardView>

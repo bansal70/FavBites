@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardUseCompatPadding="true"
+    app:cardUseCompatPadding="false"
     app:cardCornerRadius="@dimen/_2sdp"
     android:gravity="center"
     android:layout_margin="@dimen/_20sdp">
@@ -24,7 +24,7 @@
             android:textAllCaps="false"
             android:gravity="start"
             android:textSize="@dimen/_18ssp"
-            android:padding="@dimen/_15sdp"
+            android:padding="@dimen/_10sdp"
             style="?borderlessButtonStyle"/>
 
         <EditText
@@ -55,8 +55,12 @@
                 android:textSize="@dimen/_15ssp"
                 android:padding="@dimen/_10sdp"
                 android:textAllCaps="false"
-                android:layout_margin="@dimen/_1sdp"
                 style="?borderlessButtonStyle"/>
+
+            <View
+                android:layout_width="@dimen/_1sdp"
+                android:layout_height="match_parent"
+                android:background="#fff"/>
 
             <TextView
                 android:id="@+id/tvSubmit"
@@ -66,7 +70,6 @@
                 android:foreground="@drawable/selectable_item_background"
                 android:textColor="@color/colorWhite"
                 android:layout_weight="1"
-                android:layout_margin="@dimen/_1sdp"
                 android:text="Submit"
                 android:textAllCaps="false"
                 android:padding="@dimen/_10sdp"

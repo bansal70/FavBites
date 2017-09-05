@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_30sdp"
-    android:paddingLeft="@dimen/_10sdp"
-    android:paddingRight="@dimen/_10sdp"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/_5sdp"
     android:background="?selectableItemBackground">
 
     <TextView
@@ -43,21 +42,20 @@
         style="@style/Widget.AppCompat.RatingBar.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/tvRatings"
-        android:layout_toStartOf="@+id/tvRatings"
+        android:layout_toLeftOf="@+id/tvReviewCount"
+        android:layout_toStartOf="@+id/tvReviewCount"
         android:layout_centerVertical="true"
         android:isIndicator="true"
         android:numStars="5"
         android:rating="0" />
 
     <TextView
-        android:id="@+id/tvRatings"
+        android:id="@+id/tvReviewCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:visibility="invisible"
         android:text="(0)"/>
 
 </RelativeLayout>

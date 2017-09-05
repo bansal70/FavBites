@@ -13,6 +13,8 @@ class Config {
     static final String forgot_password = "forgetPassword";
     static final String guest_login_url = "guestLogin";
     static final String search_restaurant_url = "search";
+    static final String fav_restaurant_url = "reviewRestaurant";
+    static final String check_restaurant_url = "checkinsRestaurant";
     static final String restaurant_details_url = "getRestaurantData";
     static final String dish_reviews_url = "fetchReview";
     static final String add_dish_reviews_url = "addReview";
@@ -21,4 +23,8 @@ class Config {
     static final String profile_url = "userProfile";
     static final String update_profile_url = "updateUser";
     static final String update_password_url = "updatePassword";
+    static final String bookmark_restaurants_url = "getBookmarks";
+    static final String follow_user_url = "follow";
+    static final String follower_url = "followerList";
+    static final String following_url = "followingList";
 }

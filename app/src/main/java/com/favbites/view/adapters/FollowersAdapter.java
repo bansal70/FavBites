@@ -1,9 +1,5 @@
 package com.favbites.view.adapters;
 
-/*
- * Created by rishav on 8/21/2017.
- */
-
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,8 +17,7 @@ import com.favbites.model.Event;
 import com.favbites.model.FBPreferences;
 import com.favbites.model.Operations;
 import com.favbites.model.Utils;
-import com.favbites.model.beans.ReviewsData;
-import com.kaopiz.kprogresshud.KProgressHUD;
+import com.favbites.model.beans.FollowersData;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
@@ -31,71 +25,59 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 
-public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHolder> {
-    private Context context;
-    private List<ReviewsData.Datum> reviewsList;
-    private String user_id;
-    private KProgressHUD pd;
-    private String user_name;
+/*
+ * Created by rishav on 9/4/2017.
+ */
 
-    public ReviewsAdapter(Context context, List<ReviewsData.Datum> reviewsList) {
+public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.ViewHolder> {
+
+    private Context context;
+    private List<FollowersData.Follower> followerList;
+    private String user_name;
+    private String user_id;
+
+    public FollowersAdapter(Context context, List<FollowersData.Follower> followerList) {
         this.context = context;
-        this.reviewsList = reviewsList;
-        pd = Utils.showDialog(context);
+        this.followerList = followerList;
         EventBus.getDefault().register(this);
     }
 
     @Override
-    public ReviewsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.view_reviews, parent, false);
+    public FollowersAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.view_followers, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ReviewsAdapter.ViewHolder holder, int position) {
-        ReviewsData.Datum reviews = reviewsList.get(position);
+    public void onBindViewHolder(FollowersAdapter.ViewHolder holder, int position) {
+        FollowersData.Follower follower = followerList.get(position);
 
-        ReviewsData.Review dish = reviews.review;
-        float ratings = Float.parseFloat(dish.rating);
-        holder.rbRatings.setRating(ratings);
-        holder.tvDescription.setText(dish.message);
-        holder.tvDate.setText(dish.created);
+        if (!follower.image.isEmpty())
+        Picasso.with(context)
+                .load(follower.image)
+                .fit()
+                .transform(Utils.imageTransformation())
+                .placeholder(R.drawable.demo_img)
+                .into(holder.imgUser);
 
-        ReviewsData.User user = reviews.user;
+        String name = follower.fname + " " + follower.lname;
+        if (!name.isEmpty())
+            holder.tvUser.setText(name);
 
         user_id = FBPreferences.readString(context, "user_id");
-        if (user_id.equals(user.id))
-            holder.tvFollow.setVisibility(View.INVISIBLE);
-        else
-            holder.tvFollow.setVisibility(View.VISIBLE);
 
-        if (user.image.isEmpty())
-            holder.imgCustomer.setImageResource(R.drawable.demo_img);
-        else
-            Picasso.with(context)
-                    .load(user.image)
-                    .fit()
-                    .transform(Utils.imageTransformation())
-                    .placeholder(R.drawable.demo_img)
-                    .into(holder.imgCustomer);
-
-        if (user.fname.isEmpty())
-            holder.tvCustomer.setText(R.string.anonymous);
-        else
-            holder.tvCustomer.setText(user.fname + " " + user.lname);
-
-        if (user.isFollow == 1) {
+        if (follower.isFollow == 1)
             followUser(holder.tvFollow, "1");
-        } else {
+        else
             followUser(holder.tvFollow, "2");
-        }
 
     }
 
     @Override
     public int getItemCount() {
-        return reviewsList.size();
+        return followerList.size();
     }
+
 
     @Override
     public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
@@ -105,19 +87,15 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHold
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        private TextView tvCustomer, tvDate, tvDescription, tvFollow;
-        private ImageView imgCustomer;
-        private RatingBar rbRatings;
+        TextView tvUser, tvFollow;
+        ImageView imgUser;
 
         private ViewHolder(View itemView) {
             super(itemView);
 
-            tvCustomer = itemView.findViewById(R.id.tvCustomerName);
-            tvDate = itemView.findViewById(R.id.tvDate);
-            tvDescription = itemView.findViewById(R.id.tvDescription);
-            imgCustomer = itemView.findViewById(R.id.imgCustomer);
-            rbRatings = itemView.findViewById(R.id.rbRatings);
+            tvUser = itemView.findViewById(R.id.tvUser);
             tvFollow = itemView.findViewById(R.id.tvFollow);
+            imgUser = itemView.findViewById(R.id.imgUser);
 
             tvFollow.setOnClickListener(this);
         }
@@ -126,20 +104,18 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHold
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.tvFollow:
-                    ReviewsData.Datum reviews = reviewsList.get(getAdapterPosition());
-                    ReviewsData.User user = reviews.user;
-                    user_name = user.fname;
-                    pd.show();
+                    FollowersData.Follower follower = followerList.get(getAdapterPosition());
+                    user_name = follower.fname;
 
                     // follow => 1, un_follow => 2
                     if (tvFollow.getText().toString().equalsIgnoreCase("Follow")) {
                         ModelManager.getInstance().getFollowUserManager().followUser(
-                                Operations.followUserParams(user.id, user_id, "1"));
+                                Operations.followUserParams(follower.id, user_id, "1"));
                         followUser(tvFollow, "1");
                     }
                     else {
                         ModelManager.getInstance().getFollowUserManager().followUser(
-                                Operations.followUserParams(user.id, user_id, "2"));
+                                Operations.followUserParams(follower.id, user_id, "2"));
                         followUser(tvFollow, "2");
                     }
                     break;
@@ -165,18 +141,15 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHold
     public void onEvent(Event event) {
         switch (event.getKey()) {
             case Constants.FOLLOW_SUCCESS:
-                pd.dismiss();
                 Toast.makeText(context, "You're now following "+user_name, Toast.LENGTH_SHORT).show();
                 break;
 
             case Constants.UNFOLLOW_SUCCESS:
-                pd.dismiss();
                 Toast.makeText(context, "You're not following "+user_name+ " anymore", Toast.LENGTH_SHORT).show();
                 break;
+
             case Constants.NO_RESPONSE:
-                pd.dismiss();
                 break;
         }
     }
-
 }

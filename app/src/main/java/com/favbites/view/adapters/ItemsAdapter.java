@@ -44,6 +44,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
             float ratings = Float.parseFloat(subItems.rating);
             holder.rbItemRatings.setRating(ratings);
         }
+        holder.tvReviewCount.setText("(" + subItems.reviewCount + ")");
     }
 
     @Override
@@ -52,7 +53,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        private TextView tvItemName, tvItemPrice;
+        private TextView tvItemName, tvItemPrice, tvReviewCount;
         private RatingBar rbItemRatings;
 
         public ViewHolder(View itemView) {
@@ -61,6 +62,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
             tvItemName = itemView.findViewById(R.id.tvItemName);
             tvItemPrice = itemView.findViewById(R.id.tvItemPrice);
             rbItemRatings = itemView.findViewById(R.id.rbItemRatings);
+            tvReviewCount = itemView.findViewById(R.id.tvReviewCount);
         }
     }
 }

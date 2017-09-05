@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,7 +52,7 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
     RatingBar rbRatings;
     String isOpen;
     String restaurant_id, user_id, bookmark_status, restaurant_name, restaurant_phone;
-    TextView tvShowMore, tvUploadPhoto, tvCall, tvCheckIn, tvNoPosts, tvViewMore;
+    TextView tvShowMore, tvUploadPhoto, tvCall, tvCheckIn, tvNoPosts, tvNoMenus, tvViewMore;
     int totalItems = 6;
     RecyclerView recyclerView, recyclerPosts;
     private RestaurantDetailAdapter restaurantDetailAdapter;
@@ -62,15 +63,18 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
     String bookmark;
     GoogleMap googleMap;
     double latitude, longitude;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_detail);
 
+        initViews();
     }
 
     public void initViews() {
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         pd = Utils.showMessageDialog(this, "Please wait...");
         user_id = FBPreferences.readString(this, "user_id");
         pd.show();
@@ -93,6 +97,7 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
         tvCall = (TextView) findViewById(R.id.tvCall);
         tvCheckIn = (TextView) findViewById(R.id.tvCheckIn);
         tvNoPosts = (TextView) findViewById(R.id.tvNoPosts);
+        tvNoMenus = (TextView) findViewById(R.id.tvNoMenu);
         tvViewMore = (TextView) findViewById(R.id.tvViewMore);
 
         imgBack.setOnClickListener(this);
@@ -102,11 +107,17 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
         tvCall.setOnClickListener(this);
         tvViewMore.setOnClickListener(this);
 
+        RestaurantDetailsData.Data data = RestaurantDetailsManager.data;
+        if (data == null)
         ModelManager.getInstance().getRestaurantDetailsManager()
                 .getRestaurantDetails(Operations.getRestaurantDetailsParams(restaurant_id, user_id));
 
+        initData();
+    }
+
+    public void initData() {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerMenus);
-        //recyclerView.setNestedScrollingEnabled(false);
+        recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         restaurantDetailAdapter = new RestaurantDetailAdapter(this, subItemList, totalItems);
@@ -172,7 +183,20 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
     protected void onResume() {
         super.onResume();
 
-        initViews();
+        RestaurantDetailsData.Data data = RestaurantDetailsManager.data;
+        if (data != null && data.subitem != null) {
+            totalItems = 6;
+            data.subitem.clear();
+            subItemList.clear();
+            postsList.clear();
+            initData();
+
+            ModelManager.getInstance().getRestaurantDetailsManager()
+                    .getRestaurantDetails(Operations.getRestaurantDetailsParams(restaurant_id, user_id));
+            progressBar.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+            tvShowMore.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -186,7 +210,7 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
                 totalItems = Utils.restaurantsList.size();
                 restaurantDetailAdapter = new RestaurantDetailAdapter(this, subItemList, totalItems);
                 recyclerView.setAdapter(restaurantDetailAdapter);
-                recyclerView.scrollToPosition(6);
+                // recyclerView.scrollToPosition(6);
                 tvShowMore.setVisibility(GONE);
                 break;
 
@@ -250,8 +274,9 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
 
             case Constants.RESTAURANT_DETAILS_SUCCESS:
                 pd.dismiss();
-                if (subItemList.size() > 6)
-                    tvShowMore.setVisibility(View.VISIBLE);
+
+                progressBar.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
 
                 setData();
 
@@ -260,6 +285,14 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
                 restaurantDetailAdapter.notifyDataSetChanged();
                 postsList.addAll(data.comment);
                 postsAdapter.notifyDataSetChanged();
+
+                if (subItemList.size() > 6)
+                    tvShowMore.setVisibility(View.VISIBLE);
+
+                if (subItemList.size() == 0) {
+                    tvNoMenus.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.GONE);
+                }
 
                 if (postsList.size() != 0) {
                     tvNoPosts.setVisibility(View.GONE);
