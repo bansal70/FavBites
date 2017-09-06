@@ -153,7 +153,7 @@ public class Operations {
                                              String last_name, String email) {
         String params = Config.update_profile_url + "?user_id=" + user_id
                 +"&fname=" + first_name
-                +"&lname" + last_name
+                +"&lname=" + last_name
                 +"&email=" + email;
 
         Log.e(TAG, "update_profile params-- "+params);
@@ -192,4 +192,19 @@ public class Operations {
         return params;
     }
 
+    public static String userPostsParams(String user_id, int page) {
+        String params = Config.user_posts_url + "?user_id=" + user_id
+                +"&page="+page;
+
+        Log.e(TAG, "user_posts params-- "+params);
+        return params;
+    }
+
+    public static String userReviewsParams(String user_id, int page) {
+        String params = Config.user_reviews_url + "?user_id=" + user_id
+                +"&page="+page;
+
+        Log.e(TAG, "user_reviews params-- "+params);
+        return params;
+    }
 }

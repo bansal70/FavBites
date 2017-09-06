@@ -1,12 +1,14 @@
 package com.favbites.view.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +20,7 @@ import com.favbites.model.FBPreferences;
 import com.favbites.model.Operations;
 import com.favbites.model.Utils;
 import com.favbites.model.beans.FollowersData;
+import com.favbites.view.UserProfileActivity;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
@@ -35,6 +38,7 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.View
     private List<FollowersData.Follower> followerList;
     private String user_name;
     private String user_id;
+    private String follower_id;
 
     public FollowersAdapter(Context context, List<FollowersData.Follower> followerList) {
         this.context = context;
@@ -66,6 +70,11 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.View
 
         user_id = FBPreferences.readString(context, "user_id");
 
+        if (follower.id.equals(user_id))
+            holder.tvFollow.setVisibility(View.GONE);
+        else
+            holder.tvFollow.setVisibility(View.VISIBLE);
+
         if (follower.isFollow == 1)
             followUser(holder.tvFollow, "1");
         else
@@ -87,8 +96,9 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.View
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        TextView tvUser, tvFollow;
-        ImageView imgUser;
+        private TextView tvUser, tvFollow;
+        private ImageView imgUser;
+        private LinearLayout profileLayout;
 
         private ViewHolder(View itemView) {
             super(itemView);
@@ -96,8 +106,10 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.View
             tvUser = itemView.findViewById(R.id.tvUser);
             tvFollow = itemView.findViewById(R.id.tvFollow);
             imgUser = itemView.findViewById(R.id.imgUser);
+            profileLayout = itemView.findViewById(R.id.profileLayout);
 
             tvFollow.setOnClickListener(this);
+            profileLayout.setOnClickListener(this);
         }
 
         @Override
@@ -118,6 +130,14 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.View
                                 Operations.followUserParams(follower.id, user_id, "2"));
                         followUser(tvFollow, "2");
                     }
+                    break;
+
+                case R.id.profileLayout:
+                    FollowersData.Follower follower_data = followerList.get(getAdapterPosition());
+                    follower_id = follower_data.id;
+                    FBPreferences.putString(context, "to_user_id", follower_id);
+                    context.startActivity(new Intent(context, UserProfileActivity.class)
+                                .putExtra("user_id", follower_id));
                     break;
             }
         }

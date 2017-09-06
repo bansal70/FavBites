@@ -79,6 +79,9 @@ public class FollowingData {
         @SerializedName("social_id")
         @Expose
         public String socialId;
+        @SerializedName("is_follow")
+        @Expose
+        public int isFollow;
 
     }
 

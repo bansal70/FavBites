@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -53,9 +54,11 @@ public class RestaurantsAdapter extends RecyclerView.Adapter {
                 + restaurant.zip;
         String logoUrl = restaurant.logoUrl;
         String isOpen = restaurant.isOpen;
+        float rating = Float.parseFloat(restaurant.item_rating);
 
         ((ItemsViewHolder) holder).tvName.setText(name);
         ((ItemsViewHolder) holder).tvAddress.setText(String.format("Address: %s", streetAddress));
+        ((ItemsViewHolder) holder).rbRatings.setRating(rating);
         Glide.with(context)
                 .load(logoUrl)
                 .into(((ItemsViewHolder) holder).imgRestaurant);
@@ -79,18 +82,20 @@ public class RestaurantsAdapter extends RecyclerView.Adapter {
         return restaurantsList.size();
     }
 
-    public class ItemsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private class ItemsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView imgRestaurant;
         private TextView tvName, tvAddress, tvOpenToday;
         private RecyclerView recyclerItems;
+        private RatingBar rbRatings;
 
-        public ItemsViewHolder(View itemView) {
+        private ItemsViewHolder(View itemView) {
             super(itemView);
 
             imgRestaurant = itemView.findViewById(R.id.imgRestaurant);
             tvName = itemView.findViewById(R.id.tvName);
             tvAddress = itemView.findViewById(R.id.tvAddress);
             tvOpenToday = itemView.findViewById(R.id.tvOpenToday);
+            rbRatings = itemView.findViewById(R.id.rbRatings);
 
             recyclerItems = itemView.findViewById(R.id.recyclerItems);
             recyclerItems.setHasFixedSize(true);

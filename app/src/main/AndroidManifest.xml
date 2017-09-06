@@ -89,7 +89,8 @@
             android:screenOrientation="portrait" />
         <activity android:name=".view.BookmarkRestaurantsActivity" />
         <activity android:name=".view.FollowersActivity" />
-        <activity android:name=".view.FollowingActivity"></activity>
+        <activity android:name=".view.FollowingActivity" />
+        <activity android:name=".view.UserProfileActivity" />
     </application>
 
 </manifest>

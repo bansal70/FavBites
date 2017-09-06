@@ -75,7 +75,7 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
 
     public void initViews() {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        pd = Utils.showMessageDialog(this, "Please wait...");
+        pd = Utils.showDialog(this);
         user_id = FBPreferences.readString(this, "user_id");
         pd.show();
 
@@ -145,6 +145,8 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
         isOpen = restaurant.isOpen;
         restaurant_id = restaurant.id;
         FBPreferences.putString(this, "restaurant_id", restaurant_id);
+        float rating = Float.parseFloat(restaurant.item_rating);
+        rbRatings.setRating(rating);
 
         Glide.with(this)
                 .load(logoUrl)
@@ -338,7 +340,5 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
         googleMap.addMarker(new MarkerOptions().position(latLng).title(restaurant_name));
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
     }
-
-
 
 }

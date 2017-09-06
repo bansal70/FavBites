@@ -1,7 +1,7 @@
 package com.favbites.model.beans;
 
 /*
- * Created by rishav on 8/22/2017.
+ * Created by rishav on 9/5/2017.
  */
 
 import com.google.gson.annotations.Expose;
@@ -9,89 +9,60 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class RestaurantData {
+public class UserReviewsData {
     @SerializedName("mesg")
     @Expose
     public String mesg;
-    @SerializedName("response")
+    @SerializedName("responce")
     @Expose
     public String response;
     @SerializedName("data")
     @Expose
-    public List<Datum> data;
-    @SerializedName("totalpages")
-    @Expose
-    public Integer totalPages;
+    public List<Data> data = null;
 
-    public class Food {
-
-        @SerializedName("id")
+    public class Data {
+        @SerializedName("Review")
         @Expose
-        public String id;
-        @SerializedName("name")
+        public Review review;
+        @SerializedName("Subitem")
         @Expose
-        public String name;
-        @SerializedName("created")
+        public Subitem subitem;
+        @SerializedName("User")
         @Expose
-        public String created;
-        @SerializedName("modified")
+        public User user;
+        @SerializedName("Restaurant")
         @Expose
-        public String modified;
-        @SerializedName("restaurant_id")
-        @Expose
-        public String restaurantId;
-
+        public Restaurant restaurant;
     }
 
-    public class Hour {
-
+    public class Review {
         @SerializedName("id")
         @Expose
         public String id;
-        @SerializedName("day")
+        @SerializedName("restaurant_id")
         @Expose
-        public String day;
-        @SerializedName("timinig")
+        public String restaurantId;
+        @SerializedName("dish_id")
         @Expose
-        public String timinig;
+        public String dishId;
+        @SerializedName("message")
+        @Expose
+        public String message;
         @SerializedName("created")
         @Expose
         public String created;
         @SerializedName("modified")
         @Expose
         public String modified;
-        @SerializedName("restaurant_id")
+        @SerializedName("rating")
         @Expose
-        public String restaurantId;
-    }
-
-    public class Item {
-
-        @SerializedName("id")
+        public String rating;
+        @SerializedName("user_id")
         @Expose
-        public String id;
-        @SerializedName("key")
-        @Expose
-        public String key;
-        @SerializedName("name")
-        @Expose
-        public String name;
-        @SerializedName("description")
-        @Expose
-        public String description;
-        @SerializedName("created")
-        @Expose
-        public String created;
-        @SerializedName("modified")
-        @Expose
-        public String modified;
-        @SerializedName("restaurant_id")
-        @Expose
-        public String restaurantId;
+        public String userId;
     }
 
     public class Subitem {
-
         @SerializedName("id")
         @Expose
         public String id;
@@ -119,13 +90,9 @@ public class RestaurantData {
         @SerializedName("restaurant_id")
         @Expose
         public String restaurantId;
-        @SerializedName("rating")
+        @SerializedName("is_admin")
         @Expose
-        public String rating;
-        @SerializedName("reviewCount")
-        @Expose
-        public int reviewCount;
-
+        public String isAdmin;
     }
 
     public class Restaurant {
@@ -138,7 +105,7 @@ public class RestaurantData {
         public String key;
         @SerializedName("delivry_time")
         @Expose
-        public String deliveryTime;
+        public String delivryTime;
         @SerializedName("logoUrl")
         @Expose
         public String logoUrl;
@@ -208,71 +175,62 @@ public class RestaurantData {
         @SerializedName("modified")
         @Expose
         public String modified;
-        @SerializedName("isOpen")
+        @SerializedName("is_admin")
         @Expose
-        public String isOpen;
-        @SerializedName("bookmark")
-        @Expose
-        public String bookmark;
-        @SerializedName("item_rating")
-        @Expose
-        public String item_rating;
+        public String isAdmin;
     }
 
-    public class Review {
-
+    public class User {
         @SerializedName("id")
         @Expose
         public String id;
-        @SerializedName("restaurant_id")
+        @SerializedName("username")
         @Expose
-        public String restaurantId;
-        @SerializedName("dish_id")
+        public String username;
+        @SerializedName("password")
         @Expose
-        public String dishId;
-        @SerializedName("message")
+        public String password;
+        @SerializedName("email")
         @Expose
-        public String message;
-        @SerializedName("rating")
+        public String email;
+        @SerializedName("fname")
         @Expose
-        public String rating;
-        @SerializedName("user_id")
+        public String fname;
+        @SerializedName("lname")
         @Expose
-        public String userId;
-
+        public String lname;
+        @SerializedName("phone")
+        @Expose
+        public String phone;
+        @SerializedName("userType")
+        @Expose
+        public String userType;
+        @SerializedName("image")
+        @Expose
+        public String image;
+        @SerializedName("status")
+        @Expose
+        public String status;
+        @SerializedName("forgot_key")
+        @Expose
+        public String forgotKey;
+        @SerializedName("activationKey")
+        @Expose
+        public String activationKey;
+        @SerializedName("deviceToken")
+        @Expose
+        public String deviceToken;
+        @SerializedName("deviceType")
+        @Expose
+        public String deviceType;
+        @SerializedName("created")
+        @Expose
+        public String created;
+        @SerializedName("modified")
+        @Expose
+        public String modified;
+        @SerializedName("social_id")
+        @Expose
+        public String socialId;
     }
-
-    public class Bookmark {
-        @SerializedName("restaurant_id")
-        @Expose
-        public Restaurant restaurant_id;
-    }
-
-    public class Datum {
-        @SerializedName("Restaurant")
-        @Expose
-        public Restaurant restaurant;
-        @SerializedName("Food")
-        @Expose
-        public List<Food> food = null;
-        @SerializedName("Hour")
-        @Expose
-        public List<Hour> hour = null;
-        @SerializedName("Comment")
-        @Expose
-        public List<Object> comment = null;
-        @SerializedName("Review")
-        @Expose
-        public List<Object> review = null;
-        @SerializedName("Item")
-        @Expose
-        public List<Item> item = null;
-        @SerializedName("Subitem")
-        @Expose
-        public List<Subitem> subitem = null;
-        @SerializedName("Bookmark")
-        @Expose
-        public List<Object> bookmark = null;
-    }
-
 }

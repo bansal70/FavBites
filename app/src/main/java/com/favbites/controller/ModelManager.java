@@ -22,6 +22,8 @@ public class ModelManager {
     private FollowUserManager followUserManager;
     private FollowersManager followersManager;
     private FollowingManager followingManager;
+    private UserPostManager userPostManager;
+    private UserReviewManager userReviewManager;
 
     public static ModelManager getInstance() {
         if (modelManager == null)
@@ -46,6 +48,8 @@ public class ModelManager {
         followUserManager = new FollowUserManager();
         followersManager = new FollowersManager();
         followingManager = new FollowingManager();
+        userPostManager = new UserPostManager();
+        userReviewManager = new UserReviewManager();
     }
 
     public RegistrationManager getRegistrationManager() {
@@ -106,5 +110,13 @@ public class ModelManager {
 
     public FollowingManager getFollowingManager() {
         return followingManager;
+    }
+
+    public UserPostManager getUserPostManager() {
+        return userPostManager;
+    }
+
+    public UserReviewManager getUserReviewManager() {
+        return userReviewManager;
     }
 }

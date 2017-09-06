@@ -14,7 +14,6 @@ import com.favbites.controller.FollowersManager;
 import com.favbites.controller.ModelManager;
 import com.favbites.model.Constants;
 import com.favbites.model.Event;
-import com.favbites.model.FBPreferences;
 import com.favbites.model.Operations;
 import com.favbites.model.Utils;
 import com.favbites.model.beans.FollowersData;
@@ -26,8 +25,6 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.favbites.R.id.recyclerFollowing;
 
 public class FollowersActivity extends BaseActivity implements View.OnClickListener{
 
@@ -62,7 +59,7 @@ public class FollowersActivity extends BaseActivity implements View.OnClickListe
 
         followersAdapter = new FollowersAdapter(this, followerList);
         recyclerFollowers.setAdapter(followersAdapter);
-        user_id = FBPreferences.readString(this, "user_id");
+        user_id = getIntent().getStringExtra("user_id");
         imgBack.setOnClickListener(this);
 
         ModelManager.getInstance().getFollowersManager().getFollowers(Operations.followersParams(user_id));

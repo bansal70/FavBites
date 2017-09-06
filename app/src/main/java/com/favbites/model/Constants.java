@@ -65,4 +65,11 @@ public class Constants {
 
     public static final int FOLLOWING_SUCCESS = 1035;
     public static final int FOLLOWING_EMPTY = 1036;
+
+    public static final int USER_POSTS_SUCCESS = 1037;
+    public static final int USER_POSTS_EMPTY = 1038;
+
+    public static final int USER_REVIEWS_SUCCESS = 1039;
+    public static final int USER_REVIEWS_EMPTY = 1040;
+
 }

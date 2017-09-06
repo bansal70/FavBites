@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,7 +29,6 @@ import com.favbites.model.Operations;
 import com.favbites.model.Utils;
 import com.favbites.model.beans.AccountData;
 import com.kaopiz.kprogresshud.KProgressHUD;
-import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
@@ -148,11 +146,13 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
                 break;
 
             case R.id.tvFollowers:
-                startActivity(new Intent(this, FollowersActivity.class));
+                startActivity(new Intent(this, FollowersActivity.class)
+                        .putExtra("user_id", user_id));
                 break;
 
             case R.id.tvFollowing:
-                startActivity(new Intent(this, FollowingActivity.class));
+                startActivity(new Intent(this, FollowingActivity.class)
+                        .putExtra("user_id", user_id));
                 break;
         }
     }
@@ -340,7 +340,7 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
         List<AccountData.Follower> followersList = data.follower;
         List<AccountData.Following> followingsList = data.following;
 
-        String followers = followersList.size() + " " + "Follower";
+        String followers = followersList.size() + " " + "Followers";
         String followings = followingsList.size() + " " + "Following";
 
         tvFollowers.setText(followers);
@@ -355,13 +355,6 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
                 .crossFade()
                 .centerCrop()
                 .into(imgBackground);
-
-        com.squareup.picasso.Transformation transformation = new RoundedTransformationBuilder()
-                .borderColor(Color.BLACK)
-                .borderWidthDp(3)
-                .cornerRadiusDp(30)
-                .oval(false)
-                .build();
 
         Picasso.with(this)
                 .load(path)

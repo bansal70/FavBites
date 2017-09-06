@@ -14,7 +14,6 @@ import com.favbites.controller.FollowingManager;
 import com.favbites.controller.ModelManager;
 import com.favbites.model.Constants;
 import com.favbites.model.Event;
-import com.favbites.model.FBPreferences;
 import com.favbites.model.Operations;
 import com.favbites.model.Utils;
 import com.favbites.model.beans.FollowingData;
@@ -59,7 +58,7 @@ public class FollowingActivity extends BaseActivity implements View.OnClickListe
 
         followingAdapter = new FollowingAdapter(this, followingList);
         recyclerFollowing.setAdapter(followingAdapter);
-        user_id = FBPreferences.readString(this, "user_id");
+        user_id = getIntent().getStringExtra("user_id");
         imgBack.setOnClickListener(this);
 
         ModelManager.getInstance().getFollowingManager().getFollowing(Operations.followingParams(user_id));

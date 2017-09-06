@@ -8,6 +8,8 @@ import com.favbites.model.beans.ImageResult;
 import com.favbites.model.beans.RestaurantData;
 import com.favbites.model.beans.RestaurantDetailsData;
 import com.favbites.model.beans.ReviewsData;
+import com.favbites.model.beans.UserPostsData;
+import com.favbites.model.beans.UserReviewsData;
 
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
@@ -54,4 +56,10 @@ public interface APIInterface {
 
     @POST
     Call<FollowingData> followingData(@Url String string);
+
+    @POST
+    Call<UserPostsData> userPosts(@Url String string);
+
+    @POST
+    Call<UserReviewsData> userReviews(@Url String string);
 }

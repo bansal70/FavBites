@@ -27,4 +27,6 @@ class Config {
     static final String follow_user_url = "follow";
     static final String follower_url = "followerList";
     static final String following_url = "followingList";
+    static final String user_posts_url = "gettingComment";
+    static final String user_reviews_url = "gettingReview";
 }

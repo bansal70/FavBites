@@ -67,8 +67,12 @@
     <string name="no_bookmark">Sorry, you have no bookmarked restaurants.</string>
     <string name="following">Following</string>
     <string name="follow">Follow</string>
-    <string name="no_followers">Sorry, you don\'t have any follower.</string>
-    <string name="no_following">You are not following anyone.</string>
+    <string name="no_followers">Sorry, there is no data about the followers.</string>
+    <string name="no_following">Sorry, there is no data about the following.</string>
     <string name="followers">Followers</string>
+    <string name="user_profile">User Profile</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

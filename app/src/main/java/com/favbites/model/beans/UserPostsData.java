@@ -1,7 +1,7 @@
 package com.favbites.model.beans;
 
 /*
- * Created by rishav on 8/28/2017.
+ * Created by rishav on 9/5/2017.
  */
 
 import com.google.gson.annotations.Expose;
@@ -9,87 +9,55 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class RestaurantDetailsData {
+public class UserPostsData {
 
     @SerializedName("mesg")
     @Expose
     public String mesg;
-    @SerializedName("response")
+    @SerializedName("responce")
     @Expose
     public String response;
     @SerializedName("data")
     @Expose
-    public Data data;
+    public List<Data> data = null;
 
     public class Data {
-
+        @SerializedName("Comment")
+        @Expose
+        public Comment comment;
+        @SerializedName("User")
+        @Expose
+        public User user;
         @SerializedName("Restaurant")
         @Expose
         public Restaurant restaurant;
-        @SerializedName("Food")
-        @Expose
-        public List<Food> food = null;
-        @SerializedName("Comment")
-        @Expose
-        public List<Comment> comment = null;
-        @SerializedName("Review")
-        @Expose
-        public List<Review> review = null;
-        @SerializedName("Item")
-        @Expose
-        public List<Item> item = null;
-        @SerializedName("Subitem")
-        @Expose
-        public List<Subitem> subitem = null;
-
     }
 
-    public class Food {
-
+    public class Comment {
         @SerializedName("id")
         @Expose
         public String id;
-        @SerializedName("name")
+        @SerializedName("user_id")
         @Expose
-        public String name;
+        public String userId;
+        @SerializedName("restaurant_id")
+        @Expose
+        public String restaurantId;
+        @SerializedName("comment")
+        @Expose
+        public String comment;
+        @SerializedName("image")
+        @Expose
+        public String image;
         @SerializedName("created")
         @Expose
         public String created;
         @SerializedName("modified")
         @Expose
         public String modified;
-        @SerializedName("restaurant_id")
-        @Expose
-        public String restaurantId;
-    }
-
-    public class Item {
-
-        @SerializedName("id")
-        @Expose
-        public String id;
-        @SerializedName("key")
-        @Expose
-        public String key;
-        @SerializedName("name")
-        @Expose
-        public String name;
-        @SerializedName("description")
-        @Expose
-        public String description;
-        @SerializedName("created")
-        @Expose
-        public String created;
-        @SerializedName("modified")
-        @Expose
-        public String modified;
-        @SerializedName("restaurant_id")
-        @Expose
-        public String restaurantId;
     }
 
     public class Restaurant {
-
         @SerializedName("id")
         @Expose
         public String id;
@@ -168,111 +136,9 @@ public class RestaurantDetailsData {
         @SerializedName("modified")
         @Expose
         public String modified;
-        @SerializedName("bookmark")
+        @SerializedName("is_admin")
         @Expose
-        public String bookmark;
-        @SerializedName("isOpen")
-        @Expose
-        public String isOpen;
-        @SerializedName("item_rating")
-        @Expose
-        public String item_rating;
-    }
-
-    public class Review {
-
-        @SerializedName("id")
-        @Expose
-        public String id;
-        @SerializedName("restaurant_id")
-        @Expose
-        public String restaurantId;
-        @SerializedName("dish_id")
-        @Expose
-        public String dishId;
-        @SerializedName("message")
-        @Expose
-        public String message;
-        @SerializedName("created")
-        @Expose
-        public String created;
-        @SerializedName("modified")
-        @Expose
-        public String modified;
-        @SerializedName("rating")
-        @Expose
-        public String rating;
-        @SerializedName("user_id")
-        @Expose
-        public String userId;
-        @SerializedName("Subitem")
-        @Expose
-        public Subitem subitem;
-    }
-
-    public class Subitem {
-
-        @SerializedName("id")
-        @Expose
-        public String id;
-        @SerializedName("key")
-        @Expose
-        public String key;
-        @SerializedName("name")
-        @Expose
-        public String name;
-        @SerializedName("description")
-        @Expose
-        public String description;
-        @SerializedName("basePrice")
-        @Expose
-        public String basePrice;
-        @SerializedName("created")
-        @Expose
-        public String created;
-        @SerializedName("modified")
-        @Expose
-        public String modified;
-        @SerializedName("item_id")
-        @Expose
-        public String itemId;
-        @SerializedName("restaurant_id")
-        @Expose
-        public String restaurantId;
-        @SerializedName("rating")
-        @Expose
-        public String rating;
-        @SerializedName("reviewCount")
-        @Expose
-        public int reviewCount;
-    }
-
-    public class Comment {
-
-        @SerializedName("id")
-        @Expose
-        public String id;
-        @SerializedName("user_id")
-        @Expose
-        public String userId;
-        @SerializedName("restaurant_id")
-        @Expose
-        public String restaurantId;
-        @SerializedName("comment")
-        @Expose
-        public String comment;
-        @SerializedName("image")
-        @Expose
-        public String image;
-        @SerializedName("created")
-        @Expose
-        public String created;
-        @SerializedName("modified")
-        @Expose
-        public String modified;
-        @SerializedName("User")
-        @Expose
-        public User user;
+        public String isAdmin;
     }
 
     public class User {
@@ -296,7 +162,7 @@ public class RestaurantDetailsData {
         public String lname;
         @SerializedName("phone")
         @Expose
-        public Object phone;
+        public String phone;
         @SerializedName("userType")
         @Expose
         public String userType;
@@ -308,10 +174,10 @@ public class RestaurantDetailsData {
         public String status;
         @SerializedName("forgot_key")
         @Expose
-        public Object forgotKey;
+        public String forgotKey;
         @SerializedName("activationKey")
         @Expose
-        public Object activationKey;
+        public String activationKey;
         @SerializedName("deviceToken")
         @Expose
         public String deviceToken;
@@ -327,6 +193,6 @@ public class RestaurantDetailsData {
         @SerializedName("social_id")
         @Expose
         public String socialId;
-
     }
+
 }

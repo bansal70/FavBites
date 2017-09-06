@@ -67,6 +67,16 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.View
             holder.tvUser.setText(name);
 
         user_id = FBPreferences.readString(context, "user_id");
+
+        if (following.id.equals(user_id))
+            holder.tvUnFollow.setVisibility(View.GONE);
+        else
+            holder.tvUnFollow.setVisibility(View.VISIBLE);
+
+        if (following.isFollow == 1)
+            followUser(holder.tvUnFollow, "1");
+        else
+            followUser(holder.tvUnFollow, "2");
     }
 
     @Override
