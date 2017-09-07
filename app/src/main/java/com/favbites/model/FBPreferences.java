@@ -25,6 +25,14 @@ public class FBPreferences {
         getPreferences(context).getString(key,value);
     }
 
+    public static void putDouble(Context context, String key, double value) {
+        getPreferences(context).edit().putLong(key, Double.doubleToRawLongBits(value)).apply();
+    }
+
+    public static double readDouble(Context context, String key) {
+        return Double.longBitsToDouble(getPreferences(context).getLong(key, 0));
+    }
+
     public static void putBoolean(Context context, String key, boolean value) {
         getPreferences(context).edit().putBoolean(key, value).apply();
     }
@@ -37,6 +45,9 @@ public class FBPreferences {
         return getPreferences(context).getBoolean(key, false);
     }
 
+    public static void removeKey(Context context, String key) {
+        getPreferences(context).edit().remove(key).apply();
+    }
     public static void clearPref(Context context) {
         getPreferences(context).edit().clear().apply();
     }

@@ -5,12 +5,14 @@ package com.favbites.view.adapters;
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +25,7 @@ import com.favbites.model.FBPreferences;
 import com.favbites.model.Operations;
 import com.favbites.model.Utils;
 import com.favbites.model.beans.ReviewsData;
+import com.favbites.view.UserProfileActivity;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.squareup.picasso.Picasso;
 
@@ -108,6 +111,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHold
         private TextView tvCustomer, tvDate, tvDescription, tvFollow;
         private ImageView imgCustomer;
         private RatingBar rbRatings;
+        private LinearLayout profileLayout;
 
         private ViewHolder(View itemView) {
             super(itemView);
@@ -118,8 +122,10 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHold
             imgCustomer = itemView.findViewById(R.id.imgCustomer);
             rbRatings = itemView.findViewById(R.id.rbRatings);
             tvFollow = itemView.findViewById(R.id.tvFollow);
+            profileLayout = itemView.findViewById(R.id.profileLayout);
 
             tvFollow.setOnClickListener(this);
+            profileLayout.setOnClickListener(this);
         }
 
         @Override
@@ -142,6 +148,16 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHold
                                 Operations.followUserParams(user.id, user_id, "2"));
                         followUser(tvFollow, "2");
                     }
+                    break;
+
+                case R.id.profileLayout:
+                    ReviewsData.Datum reviews_data = reviewsList.get(getAdapterPosition());
+                    ReviewsData.User user_data = reviews_data.user;
+
+                    String id = user_data.id;
+                    FBPreferences.putString(context, "to_user_id", id);
+                    context.startActivity(new Intent(context, UserProfileActivity.class)
+                            .putExtra("user_id", id));
                     break;
             }
         }

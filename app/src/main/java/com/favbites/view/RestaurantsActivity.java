@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -49,6 +50,7 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
 
     private static final int PERMISSION_REQUEST_CODE = 10001;
     GoogleApiClient mGoogleApiClient;
+    LocationManager manager;
 
     private Activity activity = this;
     KProgressHUD pd;
@@ -68,12 +70,21 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
     String user_id;
     TextView tvRestaurants, tvFavRestaurants, tvCheckInRestaurants;
     boolean isRes, isFav, isCheck;
-    LocationManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurants);
+
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this).build();
+        }
+
+        if (!mGoogleApiClient.isConnected())
+            mGoogleApiClient.connect();
 
         checkLocation();
         initViews();
@@ -94,6 +105,8 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
                         .searchRestaurant(Operations.getSearchRestaurantParams(search, page));
                 pd.show();
             } else {
+                Toast.makeText(activity, "Unable to get your current location. " +
+                        "Please select your location", Toast.LENGTH_SHORT).show();
                 initDialog();
             }
         }
@@ -110,6 +123,9 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
         imgHome = (ImageView) findViewById(R.id.imgHome);
         editSearch = (EditText) findViewById(R.id.editSearch);
         editSearch.setOnTouchListener(this);
+
+        if (!search.isEmpty())
+            editSearch.setText(search);
         // tvResults = (TextView) findViewById(R.id.tvResults);
         tvNoRestaurant = (TextView) findViewById(R.id.tvNoRestaurant);
         imgLocation = (ImageView) findViewById(R.id.imgLocation);
@@ -203,6 +219,7 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
                 break;
 
             case R.id.tvAccount:
+                navigationDrawer.closeDrawer(GravityCompat.START);
                 startActivity(new Intent(this, ProfileActivity.class));
                 break;
 
@@ -270,6 +287,7 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
                             Toast.LENGTH_SHORT).show();
                     return;
                 }
+                navigationDrawer.closeDrawer(GravityCompat.START);
                 startActivity(new Intent(this, BookmarkRestaurantsActivity.class));
                 break;
         }
@@ -374,19 +392,23 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
                     tvResults.setText(editSearch.getText().toString());
                 }*/
 
+                pd.dismiss();
                 tvNoRestaurant.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.GONE);
-                pd.dismiss();
 
                 if (dialogLocation != null && dialogLocation.isShowing())
                     dialogLocation.dismiss();
 
-
-                Toast.makeText(activity, "Sorry, there is no restaurant in this location.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, R.string.no_restaurant, Toast.LENGTH_SHORT).show();
                 break;
 
             case Constants.LOCATION_SUCCESS:
-                pd.show();
+                search = FBPreferences.readString(this, "location");
+                if (!search.isEmpty())
+                    editSearch.setText(search);
+
+                if (!pd.isShowing())
+                    pd.show();
                 if (dialogLocation != null && dialogLocation.isShowing())
                     dialogLocation.dismiss();
                 if (isRes)
@@ -407,6 +429,7 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
             case Constants.LOGOUT_SUCCESS:
                 pd.dismiss();
                 startActivity(new Intent(this, LoginActivity.class));
+                navigationDrawer.closeDrawer(GravityCompat.START);
                 finish();
                 Toast.makeText(activity, "You have been logged out successfully", Toast.LENGTH_SHORT).show();
                 break;
@@ -451,29 +474,17 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
     }
 
     private void enableLoc() {
-
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addApi(LocationServices.API)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this).build();
-        }
-
-        if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            if (!mGoogleApiClient.isConnected())
-                mGoogleApiClient.connect();
-
-            Toast.makeText(activity, "Getting your current location...", Toast.LENGTH_SHORT).show();
-            ModelManager.getInstance().getLocationManager()
-                    .startLocationUpdates(this, mGoogleApiClient);
-            return;
-        }
-
+        if (!mGoogleApiClient.isConnected())
+            mGoogleApiClient.connect();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODE);
             } else {
+                if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    getCurrentLocation();
+                    return;
+                }
                 ModelManager.getInstance().getLocationManager()
                         .requestLocation(this, mGoogleApiClient);
             }
@@ -505,14 +516,31 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
                 switch (resultCode) {
                     case Activity.RESULT_OK:
                         pd.show();
-                        ModelManager.getInstance().getLocationManager()
-                                .startLocationUpdates(this, mGoogleApiClient);
+                        getCurrentLocation();
                         break;
                     case Activity.RESULT_CANCELED:
                         break;
                 }
                 break;
         }
+    }
+
+    public void getCurrentLocation() {
+        if (!pd.isShowing())
+            pd.show();
+        ModelManager.getInstance().getLocationManager()
+                .startLocationUpdates(this, mGoogleApiClient);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (pd.isShowing()) {
+                    pd.dismiss();
+                    Toast.makeText(getApplicationContext(), "Unable to get your current location",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, 10000);
     }
 
     @Override

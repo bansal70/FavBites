@@ -36,6 +36,7 @@ public class LocationManager implements com.google.android.gms.location.Location
     private LocationRequest mLocationRequest;
     private Activity context;
     public static final int REQUEST_CHECK_SETTINGS = 1212;
+    private boolean gotLocation = true;
 
     public void requestLocation(Activity context, GoogleApiClient googleApiClient) {
         this.context = context;
@@ -50,7 +51,7 @@ public class LocationManager implements com.google.android.gms.location.Location
 
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(30 * 1000);
+        mLocationRequest.setInterval(10 * 1000);
         mLocationRequest.setFastestInterval(5 * 1000);
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                 .addLocationRequest(mLocationRequest);
@@ -60,7 +61,6 @@ public class LocationManager implements com.google.android.gms.location.Location
         PendingResult<LocationSettingsResult> result =
                 LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, builder.build());
         result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-
 
             @Override
             public void onResult(@NonNull LocationSettingsResult result) {
@@ -84,11 +84,11 @@ public class LocationManager implements com.google.android.gms.location.Location
     public void startLocationUpdates(Activity context, GoogleApiClient googleApiClient) {
         mGoogleApiClient = googleApiClient;
         this.context = context;
-
+        gotLocation = true;
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(30 * 1000);
-        mLocationRequest.setFastestInterval(5 * 1000);
+        mLocationRequest.setInterval(10 * 1000);
+        mLocationRequest.setFastestInterval(1000);
 
         if (!mGoogleApiClient.isConnected())
             mGoogleApiClient.connect();
@@ -110,19 +110,20 @@ public class LocationManager implements com.google.android.gms.location.Location
         getLocation(location);
     }
 
-    @SuppressWarnings("MissingPermission")
     private void getLocation(Location location) {
-        if (location != null) {
+        if (location != null && gotLocation) {
             stopLocationUpdates();
             double latitude = location.getLatitude();
             double longitude = location.getLongitude();
             String address = Utils.getCompleteAddressString(context, latitude, longitude);
-            Log.e(TAG, "latitude: "+ latitude + "\nlongitude: " + longitude);
             FBPreferences.putString(context, "location", address);
+            Log.e(TAG, "latitude: "+ latitude + "\nlongitude: " + longitude);
+
+            FBPreferences.putDouble(context, "latitude", latitude);
+            FBPreferences.putDouble(context, "longitude", longitude);
+
+            gotLocation = false;
             EventBus.getDefault().post(new Event(Constants.LOCATION_SUCCESS, address));
-        } else {
-            Log.e(TAG, "Unable to get the current location");
-            EventBus.getDefault().post(new Event(Constants.LOCATION_EMPTY, ""));
         }
     }
 
@@ -130,13 +131,8 @@ public class LocationManager implements com.google.android.gms.location.Location
         if (mGoogleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(
                     mGoogleApiClient,
-                    this
-            ).setResultCallback(new ResultCallback<Status>() {
-                @Override
-                public void onResult(@NonNull Status status) {
-                }
-            });
-            //mGoogleApiClient.disconnect();
+                    this);
+            mGoogleApiClient.disconnect();
         }
     }
 

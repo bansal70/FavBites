@@ -51,6 +51,11 @@
 
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="#eee"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -36,26 +36,24 @@ public class Utils {
     public static List<RestaurantData.Datum> restaurantsList = new ArrayList<>();
 
     public static KProgressHUD showDialog(Context context) {
-        KProgressHUD hud = KProgressHUD.create(context)
+        KProgressHUD hud;
+        hud = KProgressHUD.create(context)
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                .setCancellable(true)
+                .setCancellable(false)
                 .setAnimationSpeed(1)
                 .setDimAmount(0.5f);
-
-        Log.i(TAG, "Dialog created");
 
         return hud;
     }
 
     public static KProgressHUD showMessageDialog(Context context, String message) {
-        KProgressHUD hud = KProgressHUD.create(context)
+        KProgressHUD hud;
+        hud = KProgressHUD.create(context)
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                .setCancellable(true)
+                .setCancellable(false)
                 .setLabel(message)
                 .setAnimationSpeed(1)
                 .setDimAmount(0.5f);
-
-        Log.i(TAG, "Dialog created");
 
         return hud;
     }
@@ -101,12 +99,12 @@ public class Utils {
             if (addresses != null) {
                 Address returnedAddress = addresses.get(0);
 
-                if (returnedAddress.getPostalCode() != null)
-                    strAdd = returnedAddress.getPostalCode(); //postal code
-                else if (returnedAddress.getLocality() != null)
+                if (returnedAddress.getLocality() != null)
                     strAdd = returnedAddress.getLocality(); //city
                 else if (returnedAddress.getAdminArea() != null)
                     strAdd = returnedAddress.getAdminArea(); //state
+                else if (returnedAddress.getPostalCode() != null)
+                    strAdd = returnedAddress.getPostalCode(); //postal code
 
             } else {
                 Log.e(TAG, "No address returned");

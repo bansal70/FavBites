@@ -36,7 +36,7 @@ public class BookmarkManager {
                     Log.i(TAG, "response code: "+response.code());
                     String result = response.body().string();
                     JSONObject jsonObject = new JSONObject(result);
-                    String status = jsonObject.getString("responce");
+                    String status = jsonObject.getString("response");
                     if (status.equals("1"))
                         EventBus.getDefault().post(new Event(Constants.BOOKMARK_ADDED, ""));
 

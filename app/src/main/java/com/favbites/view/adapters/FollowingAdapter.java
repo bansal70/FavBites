@@ -5,6 +5,7 @@ package com.favbites.view.adapters;
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +25,7 @@ import com.favbites.model.FBPreferences;
 import com.favbites.model.Operations;
 import com.favbites.model.Utils;
 import com.favbites.model.beans.FollowingData;
+import com.favbites.view.UserProfileActivity;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
@@ -92,8 +95,9 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.View
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        TextView tvUser, tvUnFollow;
-        ImageView imgUser;
+        private TextView tvUser, tvUnFollow;
+        private ImageView imgUser;
+        private LinearLayout profileLayout;
 
         private ViewHolder(View itemView) {
             super(itemView);
@@ -101,8 +105,10 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.View
             tvUser = itemView.findViewById(R.id.tvUser);
             tvUnFollow = itemView.findViewById(R.id.tvUnFollow);
             imgUser = itemView.findViewById(R.id.imgUser);
+            profileLayout = itemView.findViewById(R.id.profileLayout);
 
             tvUnFollow.setOnClickListener(this);
+            profileLayout.setOnClickListener(this);
         }
 
         @Override
@@ -124,6 +130,14 @@ public class FollowingAdapter extends RecyclerView.Adapter<FollowingAdapter.View
                                 Operations.followUserParams(following.id, user_id, "2"));
                         followUser(tvUnFollow, "2");
                     }
+                    break;
+
+                case R.id.profileLayout:
+                    FollowingData.FollowingTo following_data = followingList.get(getAdapterPosition());
+                    String following_id = following_data.id;
+                    FBPreferences.putString(context, "to_user_id", following_id);
+                    context.startActivity(new Intent(context, UserProfileActivity.class)
+                            .putExtra("user_id", following_id));
                     break;
             }
         }

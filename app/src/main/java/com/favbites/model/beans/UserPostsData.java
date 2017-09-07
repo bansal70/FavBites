@@ -14,7 +14,7 @@ public class UserPostsData {
     @SerializedName("mesg")
     @Expose
     public String mesg;
-    @SerializedName("responce")
+    @SerializedName("response")
     @Expose
     public String response;
     @SerializedName("data")

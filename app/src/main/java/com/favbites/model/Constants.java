@@ -7,6 +7,7 @@ package com.favbites.model;
 public class Constants {
 
     public static final int SPLASH_TIMEOUT = 3000;
+    public static final double CHECK_IN_DISTANCE = 70; //in meters
 
     public static final String SERVER_ERROR = "Something went wrong! Please try again.";
     public static final int NO_RESPONSE = 1000;

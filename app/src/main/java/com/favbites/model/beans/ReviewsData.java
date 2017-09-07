@@ -13,9 +13,9 @@ public class ReviewsData {
     @SerializedName("mesg")
     @Expose
     public String mesg;
-    @SerializedName("responce")
+    @SerializedName("response")
     @Expose
-    public String responce;
+    public String response;
     @SerializedName("data")
     @Expose
     public List<Datum> data = null;

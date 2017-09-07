@@ -1,18 +1,29 @@
 package com.favbites.view;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +39,9 @@ import com.favbites.model.Utils;
 import com.favbites.model.beans.RestaurantDetailsData;
 import com.favbites.view.adapters.PostsAdapter;
 import com.favbites.view.adapters.RestaurantDetailAdapter;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -44,9 +58,15 @@ import java.util.List;
 
 import static android.view.View.GONE;
 
-public class RestaurantDetailActivity extends BaseActivity implements View.OnClickListener, OnMapReadyCallback {
+public class RestaurantDetailActivity extends BaseActivity implements View.OnClickListener,
+        OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, View.OnTouchListener {
 
     private Context context = this;
+    private static final int PERMISSION_REQUEST_CODE = 10001;
+    GoogleApiClient mGoogleApiClient;
+    LocationManager manager;
+
     ImageView imgBack, imgRestaurant, imgBookmark;
     TextView tvRestaurant, tvAddress, tvPhone, tvOpen;
     RatingBar rbRatings;
@@ -64,16 +84,30 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
     GoogleMap googleMap;
     double latitude, longitude;
     ProgressBar progressBar;
+    boolean isChecked = false;
+    ImageView imgTransparent;
+    private ScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_detail);
 
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this).build();
+        }
+
+        if (!mGoogleApiClient.isConnected())
+            mGoogleApiClient.connect();
+
         initViews();
     }
 
     public void initViews() {
+        manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         pd = Utils.showDialog(this);
         user_id = FBPreferences.readString(this, "user_id");
@@ -99,6 +133,8 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
         tvNoPosts = (TextView) findViewById(R.id.tvNoPosts);
         tvNoMenus = (TextView) findViewById(R.id.tvNoMenu);
         tvViewMore = (TextView) findViewById(R.id.tvViewMore);
+        scrollView = (ScrollView) findViewById(R.id.scrollView);
+        imgTransparent = (ImageView) findViewById(R.id.imgTransparent);
 
         imgBack.setOnClickListener(this);
         tvShowMore.setOnClickListener(this);
@@ -106,6 +142,8 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
         tvUploadPhoto.setOnClickListener(this);
         tvCall.setOnClickListener(this);
         tvViewMore.setOnClickListener(this);
+        tvCheckIn.setOnClickListener(this);
+        imgTransparent.setOnTouchListener(this);
 
         RestaurantDetailsData.Data data = RestaurantDetailsManager.data;
         if (data == null)
@@ -182,12 +220,12 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onRestart() {
+        super.onRestart();
 
         RestaurantDetailsData.Data data = RestaurantDetailsManager.data;
         if (data != null && data.subitem != null) {
-            totalItems = 6;
+            totalItems = 6  ;
             data.subitem.clear();
             subItemList.clear();
             postsList.clear();
@@ -252,6 +290,14 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
             case R.id.tvViewMore:
                 startActivity(new Intent(this, PostsActivity.class
                 ));
+                break;
+
+            case R.id.tvCheckIn:
+                if (isChecked) {
+                    Toast.makeText(context, "You have already checked in the restaurant", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                enableLoc();
                 break;
         }
     }
@@ -324,6 +370,15 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
                 }
                 break;
 
+            case Constants.LOCATION_SUCCESS:
+                pd.dismiss();
+                setCheckIn();
+                break;
+
+            case Constants.LOCATION_EMPTY:
+                pd.dismiss();
+                break;
+
             case Constants.NO_RESPONSE:
                 pd.dismiss();
                 Toast.makeText(context, ""+event.getValue(), Toast.LENGTH_SHORT).show();
@@ -341,4 +396,135 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
     }
 
+    public void setCheckIn() {
+        double lat = FBPreferences.readDouble(this, "latitude");
+        double lng = FBPreferences.readDouble(this, "longitude");
+        Location restaurantLoc =new Location("A");
+        restaurantLoc.setLatitude(latitude);
+        restaurantLoc.setLongitude(longitude);
+
+        Location userLoc = new Location("B");
+        userLoc.setLatitude(lat);
+        userLoc.setLongitude(lng);
+
+        double distance=restaurantLoc.distanceTo(userLoc);
+        if (distance <= Constants.CHECK_IN_DISTANCE) {
+            isChecked = true;
+            Toast.makeText(context, "You have checked in the"+restaurant_name, Toast.LENGTH_SHORT).show();
+
+            tvCheckIn.setText(R.string.checked_in);
+            tvCheckIn.setTextColor(ContextCompat.getColor(context, R.color.colorBlack));
+            tvCheckIn.setBackgroundResource(R.color.colorPrimary);
+            tvCheckIn.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.tick_black, 0);
+        } else {
+            if (pd.isShowing())
+                pd.dismiss();
+            Toast.makeText(context, "You must be in the restaurant to check in", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+    private void enableLoc() {
+        if (!mGoogleApiClient.isConnected())
+            mGoogleApiClient.connect();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODE);
+            } else {
+                if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    getCurrentLocation();
+                    return;
+                }
+                ModelManager.getInstance().getLocationManager()
+                        .requestLocation(this, mGoogleApiClient);
+            }
+        } else {
+            ModelManager.getInstance().getLocationManager()
+                    .requestLocation(this, mGoogleApiClient);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                ModelManager.getInstance().getLocationManager()
+                        .requestLocation(this, mGoogleApiClient);
+            } else {
+                Toast.makeText(this, "Please grant all the permissions.", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, "Please grant all the permissions.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case com.favbites.controller.LocationManager.REQUEST_CHECK_SETTINGS:
+                switch (resultCode) {
+                    case Activity.RESULT_OK:
+                        getCurrentLocation();
+                        break;
+                    case Activity.RESULT_CANCELED:
+                        break;
+                }
+                break;
+        }
+    }
+
+    public void getCurrentLocation() {
+        pd.show();
+        ModelManager.getInstance().getLocationManager()
+                .startLocationUpdates(this, mGoogleApiClient);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (pd.isShowing()) {
+                    pd.dismiss();
+                    Toast.makeText(context, "Unable to check you in this time. Please try again.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, 10000);
+    }
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        int action = event.getAction();
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+                // Disallow ScrollView to intercept touch events.
+                scrollView.requestDisallowInterceptTouchEvent(true);
+                // Disable touch on transparent view
+                return false;
+
+            case MotionEvent.ACTION_UP:
+                // Allow ScrollView to intercept touch events.
+                scrollView.requestDisallowInterceptTouchEvent(false);
+                return true;
+
+            case MotionEvent.ACTION_MOVE:
+                scrollView.requestDisallowInterceptTouchEvent(true);
+                return false;
+
+            default:
+                return true;
+        }
+    }
 }

@@ -36,7 +36,7 @@ public class ReviewsManager {
             public void onResponse(Call<ReviewsData> call, Response<ReviewsData> response) {
                 try {
                     ReviewsData reviewsData = response.body();
-                    String status = reviewsData.responce;
+                    String status = reviewsData.response;
 
                     if (status.equals("0")) {
                         EventBus.getDefault().post(new Event(Constants.REVIEWS_EMPTY, ""));
@@ -73,7 +73,7 @@ public class ReviewsManager {
                 try {
                     String output = response.body().string();
                     JSONObject jsonObject = new JSONObject(output);
-                    String status = jsonObject.getString("responce");
+                    String status = jsonObject.getString("response");
                     String msg = jsonObject.getString("mesg");
 
                     if (status.equals("1"))

@@ -63,7 +63,7 @@ public class LoginManager {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                EventBus.getDefault().post(new Event(Constants.LOGIN_FAILED, Constants.SERVER_ERROR));
+                EventBus.getDefault().post(new Event(Constants.NO_RESPONSE, Constants.SERVER_ERROR));
             }
         });
     }

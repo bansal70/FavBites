@@ -14,14 +14,14 @@
 
     <ProgressBar
         android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/_25sdp"
+        android:layout_height="@dimen/_25sdp"
         android:layout_centerHorizontal="true"/>
 
     <ProgressBar
         android:id="@+id/progressPosts"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/_25sdp"
+        android:layout_height="@dimen/_25sdp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:visibility="gone"/>

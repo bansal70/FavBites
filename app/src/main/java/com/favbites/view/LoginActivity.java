@@ -167,6 +167,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 dialog.dismiss();
                 Toast.makeText(activity, ""+event.getValue(), Toast.LENGTH_SHORT).show();
                 break;
+
+            case Constants.NO_RESPONSE:
+                dialog.dismiss();
+                Toast.makeText(this, "" + event.getValue(), Toast.LENGTH_SHORT).show();
+                break;
         }
     }
 
@@ -184,15 +189,24 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         Log.i(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
             dialog.show();
-            Toast.makeText(this, "Successfully signed-in.", Toast.LENGTH_SHORT).show();
             GoogleSignInAccount acct = result.getSignInAccount();
             if (acct != null) {
-                Log.i(TAG, "Account name: "+acct.getDisplayName());
-                Log.i(TAG, "Account email: "+acct.getEmail());
-                Log.i(TAG, "Account id: "+acct.getId());
-                Log.i(TAG, "Account profile pic url: "+acct.getPhotoUrl());
-                startActivity(new Intent(activity, RestaurantsActivity.class));
-                finish();
+                String name = acct.getDisplayName();
+                String email = acct.getEmail();
+                String id = acct.getId();
+                String photo = "";
+                String firstName="", lastName="";
+                if (name != null) {
+                    String[] split = name.split(" ");
+                    firstName = split[0];
+                    lastName = split[1];
+                }
+                if (acct.getPhotoUrl() != null)
+                    photo = acct.getPhotoUrl().toString();
+
+                ModelManager.getInstance().getLoginManager()
+                        .loginUser(this, Operations.getSocialLoginParams(firstName, lastName, email,
+                                id, "token", "A", photo));
             }
         } else {
             Toast.makeText(this, "Google sign-in failed. Please try again.", Toast.LENGTH_SHORT).show();

@@ -18,6 +18,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.favbites.model.Constants.SERVER_ERROR;
+
 public class RestaurantDetailsManager {
     private final static String TAG = RestaurantDetailsManager.class.getSimpleName();
  //   public static List<RestaurantDetailsData.Data> dataList = new ArrayList<>();
@@ -33,18 +35,22 @@ public class RestaurantDetailsManager {
                     Log.e(TAG, "response code: "+response.code());
                     RestaurantDetailsData restaurantDetailsData = response.body();
                     //String status = restaurantData.response;
-                    data = restaurantDetailsData.data;
+                    if (response.body().response.equals("1")) {
+                        data = restaurantDetailsData.data;
+                        EventBus.getDefault().post(new Event(Constants.RESTAURANT_DETAILS_SUCCESS, ""));
+                    } else {
+                        EventBus.getDefault().post(new Event(Constants.NO_RESPONSE, SERVER_ERROR));
+                    }
 
-
-                    EventBus.getDefault().post(new Event(Constants.RESTAURANT_DETAILS_SUCCESS, ""));
                 } catch (Exception e) {
                     e.printStackTrace();
+                    EventBus.getDefault().post(new Event(Constants.NO_RESPONSE, SERVER_ERROR));
                 }
             }
 
             @Override
             public void onFailure(Call<RestaurantDetailsData> call, Throwable t) {
-                EventBus.getDefault().post(new Event(Constants.NO_RESPONSE, Constants.SERVER_ERROR));
+                EventBus.getDefault().post(new Event(Constants.NO_RESPONSE, SERVER_ERROR));
             }
         });
     }

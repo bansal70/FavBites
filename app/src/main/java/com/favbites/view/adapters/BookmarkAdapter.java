@@ -50,9 +50,11 @@ public class BookmarkAdapter extends RecyclerView.Adapter {
                 + restaurant.state + " "
                 + restaurant.zip;
         String logoUrl = restaurant.logoUrl;
+        String phone = "Phone: " + restaurant.phone;
 
         ((ItemsViewHolder) holder).tvName.setText(name);
         ((ItemsViewHolder) holder).tvAddress.setText(String.format("Address: %s", streetAddress));
+        ((ItemsViewHolder) holder).tvPhone.setText(phone);
         Glide.with(context)
                 .load(logoUrl)
                 .into(((ItemsViewHolder) holder).imgRestaurant);
@@ -66,7 +68,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter {
 
     private class ItemsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView imgRestaurant;
-        private TextView tvName, tvAddress;
+        private TextView tvName, tvAddress, tvPhone;
 
         private ItemsViewHolder(View itemView) {
             super(itemView);
@@ -74,6 +76,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter {
             imgRestaurant = itemView.findViewById(R.id.imgRestaurant);
             tvName = itemView.findViewById(R.id.tvName);
             tvAddress = itemView.findViewById(R.id.tvAddress);
+            tvPhone = itemView.findViewById(R.id.tvPhone);
 
             itemView.setOnClickListener(this);
         }

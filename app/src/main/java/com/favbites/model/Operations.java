@@ -23,13 +23,29 @@ public class Operations {
         return params;
     }
 
-    public static String getLoginParams(String email, String password, String deviceToken, String deviceType) {
+    public static String getLoginParams(String email, String password,
+                                        String deviceToken, String deviceType) {
         String params = Config.login_url+"?email=" + email
                 +"&pass=" + password
                 +"&token=" + deviceToken
                 +"&deviceType=" + deviceType;
 
         Log.i(TAG, "login params-- "+params);
+
+        return params;
+    }
+
+    public static String getSocialLoginParams(String firstName, String lastName, String email, String id,
+                                              String deviceToken, String deviceType, String image) {
+        String params = Config.social_login_url+"?fname=" + firstName
+                +"&lname=" + lastName
+                +"&email=" + email
+                +"&social_id=" + id
+                +"&token=" + deviceToken
+                +"&deviceType=" + deviceType
+                +"&image=" + image;;
+
+        Log.i(TAG, "social_login params-- "+params);
 
         return params;
     }
