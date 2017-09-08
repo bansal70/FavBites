@@ -182,6 +182,7 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
                 break;
 
             case Constants.ADD_REVIEWS_SUCCESS:
+                Utils.isReviewed = true;
                 dialogReview.dismiss();
                 reviewsList.clear();
                 tvNoReview.setVisibility(View.GONE);
@@ -195,8 +196,6 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
                 pd.dismiss();
                 Toast.makeText(activity, ""+event.getValue(), Toast.LENGTH_SHORT).show();
                 break;
-
-
 
             case Constants.NO_RESPONSE:
                 pd.dismiss();

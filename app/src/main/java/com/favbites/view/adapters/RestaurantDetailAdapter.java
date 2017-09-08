@@ -23,12 +23,9 @@ public class RestaurantDetailAdapter extends RecyclerView.Adapter<RestaurantDeta
 
     private Context context;
     private List<RestaurantDetailsData.Subitem> subItemList;
-    private int totalItems;
-
-    public RestaurantDetailAdapter(Context context, List<RestaurantDetailsData.Subitem> subItemList, int totalItems) {
+    public RestaurantDetailAdapter(Context context, List<RestaurantDetailsData.Subitem> subItemList) {
         this.context = context;
         this.subItemList = subItemList;
-        this.totalItems = totalItems;
     }
 
     @Override
@@ -54,10 +51,7 @@ public class RestaurantDetailAdapter extends RecyclerView.Adapter<RestaurantDeta
 
     @Override
     public int getItemCount() {
-        if (totalItems == 6)
-            return subItemList.size() > 6 ? 6 : subItemList.size();
-        else
-            return subItemList.size();
+        return subItemList.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

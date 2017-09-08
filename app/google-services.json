@@ -1,33 +1,27 @@
 {
   "project_info": {
-    "project_number": "643855060429",
-    "project_id": "favbites-53f9c"
+    "project_number": "207386865713",
+    "firebase_url": "https://favbites-179207.firebaseio.com",
+    "project_id": "favbites-179207",
+    "storage_bucket": "favbites-179207.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:643855060429:android:cf69babf233b6bc9",
+        "mobilesdk_app_id": "1:207386865713:android:cf69babf233b6bc9",
         "android_client_info": {
           "package_name": "com.favbites"
         }
       },
       "oauth_client": [
         {
-          "client_id": "643855060429-h46ouredhln59jkeb9rp762jngkm5frp.apps.googleusercontent.com",
+          "client_id": "207386865713-f7adim0cau0qbchkl8gt40emio9niccs.apps.googleusercontent.com",
           "client_type": 3
-        },
-        {
-          "client_id": "643855060429-6gl39dvvk0k9e4gdhtf56epanrvv91r8.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.favbites",
-            "certificate_hash": "60c590f8c47fa0d5252c27f60defd0caecb3924b"
-          }
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBRYwG-jeV4tlVZs25lwc04Q5vMzTnP4Xs"
+          "current_key": "AIzaSyBzaELEjfHE2pvxPL2wJYd3Yo0OXqypnxs"
         }
       ],
       "services": {
@@ -39,7 +33,7 @@
           "other_platform_oauth_client": []
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }

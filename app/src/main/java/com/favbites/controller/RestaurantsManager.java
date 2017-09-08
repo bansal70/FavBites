@@ -66,14 +66,17 @@ public class RestaurantsManager {
             public void onResponse(Call<RestaurantData> call, Response<RestaurantData> response) {
                 try {
                     Log.e(TAG, "response code: "+response.code());
-                    String output = response.body().response;
-                    if (output.equals("1")) {
-                        EventBus.getDefault().post(new Event(Constants.RESTAURANTS_SEARCH_SUCCESS, ""));
-                        RestaurantData restaurantData = response.body();
-                        datumList = restaurantData.data;
-                    }
-                    else
+                    datumList = new ArrayList<>();
+                    RestaurantData restaurantData = response.body();
+                    //String status = restaurantData.response;
+                    datumList = restaurantData.data;
+
+                    if (datumList ==null || datumList.isEmpty()) {
                         EventBus.getDefault().post(new Event(Constants.RESTAURANTS_SEARCH_FAILED, ""));
+                        return;
+                    }
+
+                    EventBus.getDefault().post(new Event(Constants.RESTAURANTS_SEARCH_SUCCESS, ""));
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -96,14 +99,17 @@ public class RestaurantsManager {
             public void onResponse(Call<RestaurantData> call, Response<RestaurantData> response) {
                 try {
                     Log.e(TAG, "response code: "+response.code());
-                    String output = response.body().response;
-                    if (output.equals("1")) {
-                        EventBus.getDefault().post(new Event(Constants.RESTAURANTS_SEARCH_SUCCESS, ""));
-                        RestaurantData restaurantData = response.body();
-                        datumList = restaurantData.data;
-                    }
-                    else
+                    datumList = new ArrayList<>();
+                    RestaurantData restaurantData = response.body();
+                    //String status = restaurantData.response;
+                    datumList = restaurantData.data;
+
+                    if (datumList ==null || datumList.isEmpty()) {
                         EventBus.getDefault().post(new Event(Constants.RESTAURANTS_SEARCH_FAILED, ""));
+                        return;
+                    }
+
+                    EventBus.getDefault().post(new Event(Constants.RESTAURANTS_SEARCH_SUCCESS, ""));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

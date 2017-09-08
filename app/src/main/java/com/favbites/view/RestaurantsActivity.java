@@ -201,6 +201,7 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
                     Toast.makeText(activity, "Please enter your location..", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                search = editLocation.getText().toString();
                 pd.show();
                 ModelManager.getInstance().getRestaurantsManager()
                         .searchRestaurant(Operations.getSearchRestaurantParams(search, 1));
@@ -239,9 +240,11 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
                     page = 1;
                     ModelManager.getInstance().getRestaurantsManager()
                             .searchRestaurant(Operations.getSearchRestaurantParams(search, page));
-                    RestaurantsManager.datumList.clear();
-                    restaurantsList.clear();
-                    recyclerView.scrollToPosition(0);
+                    if (RestaurantsManager.datumList != null) {
+                        RestaurantsManager.datumList.clear();
+                        restaurantsList.clear();
+                        recyclerView.scrollToPosition(0);
+                    }
                     isLoaded(true, false, false);
                 }
 
@@ -253,12 +256,15 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
                 if (!isFav) {
                     pd.show();
                     page = 1;
+                    if (RestaurantsManager.datumList != null) {
+                        RestaurantsManager.datumList.clear();
+                        restaurantsList.clear();
+                        recyclerView.scrollToPosition(0);
+                    }
+                    isLoaded(false, true, false);
+
                     ModelManager.getInstance().getRestaurantsManager()
                             .favRestaurants(Operations.getFavRestaurantsParams(search, page));
-                    RestaurantsManager.datumList.clear();
-                    restaurantsList.clear();
-                    recyclerView.scrollToPosition(0);
-                    isLoaded(false, true, false);
                 }
 
                 setBackground(R.color.colorHome, R.color.colorPrimary, R.color.colorHome);
@@ -271,9 +277,11 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
                     page = 1;
                     ModelManager.getInstance().getRestaurantsManager()
                             .checkInRestaurants(Operations.getCheckInRestaurantsParams(search, page));
-                    RestaurantsManager.datumList.clear();
-                    restaurantsList.clear();
-                    recyclerView.scrollToPosition(0);
+                    if (RestaurantsManager.datumList != null) {
+                        RestaurantsManager.datumList.clear();
+                        restaurantsList.clear();
+                        recyclerView.scrollToPosition(0);
+                    }
                     isLoaded(false, false, true);
                 }
 
@@ -489,6 +497,10 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
                         .requestLocation(this, mGoogleApiClient);
             }
         } else {
+            if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                getCurrentLocation();
+                return;
+            }
             ModelManager.getInstance().getLocationManager()
                     .requestLocation(this, mGoogleApiClient);
         }

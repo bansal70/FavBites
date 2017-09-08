@@ -23,6 +23,7 @@ import com.favbites.model.FBPreferences;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -55,6 +56,7 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
     }
 
     private void enableLoc() {
+        FirebaseInstanceId.getInstance().getToken();
         locationLayout = (LinearLayout) findViewById(R.id.locationLayout);
 
         FBPreferences.removeKey(this, "location");

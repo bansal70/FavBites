@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
 import com.favbites.R;
 import com.favbites.controller.ModelManager;
 import com.favbites.model.Constants;
@@ -24,6 +25,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
 import org.greenrobot.eventbus.EventBus;
@@ -35,12 +37,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private final String TAG = LoginActivity.class.getSimpleName();
     TextView tvSignIn, tvForgotPassword, tvSkipLogin, tvNewUser;
     EditText editEmail, editPassword;
-    ImageView imgGoogleLogin;
-    GoogleApiClient mGoogleApiClient;
-    GoogleSignInOptions gso;
     private final int RC_SIGN_IN = 1001;
     KProgressHUD dialog;
     Activity activity = this;
+
+    GoogleApiClient mGoogleApiClient;
+    GoogleSignInOptions gso;
+    ImageView imgGoogleLogin, imgFbLogin;
+    CallbackManager callbackManager;
+    String deviceToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,23 +68,28 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
     public void initViews() {
+        deviceToken = FirebaseInstanceId.getInstance().getToken();
+        callbackManager = CallbackManager.Factory.create();
+
         dialog = Utils.showDialog(this);
         tvSignIn = (TextView) findViewById(R.id.tvSignIn);
         tvForgotPassword = (TextView) findViewById(R.id.tvForgotPassword);
         tvNewUser = (TextView) findViewById(R.id.tvNewUser);
         tvSkipLogin = (TextView) findViewById(R.id.tvSkipLogin);
-        imgGoogleLogin = (ImageView) findViewById(R.id.imgGoogleLogin);
         editEmail = (EditText) findViewById(R.id.editEmail);
         editPassword = (EditText) findViewById(R.id.editPassword);
+        imgGoogleLogin = (ImageView) findViewById(R.id.imgGoogleLogin);
+        imgFbLogin = (ImageView) findViewById(R.id.imgFbLogin);
 
         tvForgotPassword.setPaintFlags(tvForgotPassword.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         tvSkipLogin.setPaintFlags(tvSkipLogin.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         tvSignIn.setOnClickListener(this);
         tvSkipLogin.setOnClickListener(this);
-        imgGoogleLogin.setOnClickListener(this);
         tvForgotPassword.setOnClickListener(this);
         tvNewUser.setOnClickListener(this);
+        imgGoogleLogin.setOnClickListener(this);
+        imgFbLogin.setOnClickListener(this);
     }
 
     @Override
@@ -96,17 +106,21 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                         .loginUser(Operations.getGuestUserParams("token", "A"));
                 break;
 
-            case R.id.imgGoogleLogin:
-                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-                startActivityForResult(signInIntent, RC_SIGN_IN);
-                break;
-
             case R.id.tvForgotPassword:
                 startActivity(new Intent(this, ForgotPasswordActivity.class));
                 break;
 
             case R.id.tvNewUser:
                 startActivity(new Intent(this, RegistrationActivity.class));
+                break;
+
+            case R.id.imgGoogleLogin:
+                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+                startActivityForResult(signInIntent, RC_SIGN_IN);
+                break;
+
+            case R.id.imgFbLogin:
+                ModelManager.getInstance().getFacebookLoginManager().doFacebookLogin(activity, callbackManager);
                 break;
         }
     }
@@ -122,7 +136,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         } else {
             dialog.show();
             ModelManager.getInstance().getLoginManager()
-                    .loginUser(this, Operations.getLoginParams(email, password, "token", "A"));
+                    .loginUser(this, Operations.getLoginParams(email, password, deviceToken, "A"));
         }
     }
 
@@ -178,10 +192,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
+        } else if (resultCode == RESULT_OK) {
+            dialog.show();
+            ModelManager.getInstance().getFacebookLoginManager().getFacebookData(activity);
         }
     }
 
@@ -206,7 +224,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
                 ModelManager.getInstance().getLoginManager()
                         .loginUser(this, Operations.getSocialLoginParams(firstName, lastName, email,
-                                id, "token", "A", photo));
+                                id, deviceToken, "A", photo));
             }
         } else {
             Toast.makeText(this, "Google sign-in failed. Please try again.", Toast.LENGTH_SHORT).show();

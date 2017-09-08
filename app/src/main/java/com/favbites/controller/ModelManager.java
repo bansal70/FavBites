@@ -24,6 +24,8 @@ public class ModelManager {
     private FollowingManager followingManager;
     private UserPostManager userPostManager;
     private UserReviewManager userReviewManager;
+    private FacebookLoginManager facebookLoginManager;
+    private CheckInManager checkInManager;
 
     public static ModelManager getInstance() {
         if (modelManager == null)
@@ -50,6 +52,8 @@ public class ModelManager {
         followingManager = new FollowingManager();
         userPostManager = new UserPostManager();
         userReviewManager = new UserReviewManager();
+        facebookLoginManager = new FacebookLoginManager();
+        checkInManager = new CheckInManager();
     }
 
     public RegistrationManager getRegistrationManager() {
@@ -118,5 +122,13 @@ public class ModelManager {
 
     public UserReviewManager getUserReviewManager() {
         return userReviewManager;
+    }
+
+    public FacebookLoginManager getFacebookLoginManager() {
+        return facebookLoginManager;
+    }
+
+    public CheckInManager getCheckInManager() {
+        return checkInManager;
     }
 }

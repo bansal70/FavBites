@@ -133,6 +133,15 @@ public class Operations {
         return params;
     }
 
+    public static String checkInParams(String user_id, String restaurant_id) {
+        String params = Config.check_in_url + "?user_id=" + user_id
+                +"&restaurant_id=" + restaurant_id;
+
+        Log.i(TAG, "check_in_restaurant params-- "+params);
+
+        return params;
+    }
+
     public static String getBookmarkRestaurantsParams(String user_id) {
         String params = Config.bookmark_restaurants_url + "?user_id=" + user_id;
 

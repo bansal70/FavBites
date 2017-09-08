@@ -81,7 +81,7 @@ public class AccountManager {
                     Log.e(TAG, "update_profile response-- "+result);
 
                     JSONObject jsonObject = new JSONObject(result);
-                    String status = jsonObject.getString("responce");
+                    String status = jsonObject.getString("response");
 
                     if (status.equals("1"))
                         EventBus.getDefault().post(new Event(Constants.UPDATE_PROFILE_SUCCESS, ""));

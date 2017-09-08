@@ -20,6 +20,7 @@ class Config {
     static final String dish_reviews_url = "fetchReview";
     static final String add_dish_reviews_url = "addReview";
     static final String bookmark_url = "bookmark";
+    static final String check_in_url = "checkIn";
     static final String upload_photo_url = "comment";
     static final String profile_url = "userProfile";
     static final String update_profile_url = "updateUser";

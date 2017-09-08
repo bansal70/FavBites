@@ -73,4 +73,7 @@ public class Constants {
     public static final int USER_REVIEWS_SUCCESS = 1039;
     public static final int USER_REVIEWS_EMPTY = 1040;
 
+    public static final int CHECK_IN_SUCCESS = 1041;
+    public static final int CHECK_IN_FAILED = 1042;
+
 }

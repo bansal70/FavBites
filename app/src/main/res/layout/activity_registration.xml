@@ -199,6 +199,7 @@
                     android:orientation="horizontal">
 
                     <ImageView
+                        android:id="@+id/imgFbLogin"
                         android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_60sdp"
                         android:contentDescription="@string/facebook"
@@ -206,6 +207,7 @@
                         android:src="@drawable/fb" />
 
                     <ImageView
+                        android:id="@+id/imgGoogleLogin"
                         android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_60sdp"
                         android:contentDescription="@string/google"

@@ -34,6 +34,8 @@ public class Utils {
 
     private static final String TAG = Utils.class.getSimpleName();
     public static List<RestaurantData.Datum> restaurantsList = new ArrayList<>();
+    public static boolean isPhotoUploaded = false;
+    public static boolean isReviewed = false;
 
     public static KProgressHUD showDialog(Context context) {
         KProgressHUD hud;

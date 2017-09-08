@@ -193,6 +193,7 @@
                 android:gravity="center">
 
                 <ImageView
+                    android:id="@+id/imgFbLogin"
                     android:layout_width="@dimen/_60sdp"
                     android:layout_height="@dimen/_60sdp"
                     android:src="@drawable/fb"

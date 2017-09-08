@@ -79,8 +79,6 @@
                     android:inputType="text"
                     android:layout_toLeftOf="@+id/tvFilter"
                     android:layout_toStartOf="@+id/tvFilter"
-                    android:layout_marginRight="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
                     android:drawableEnd="@drawable/search"
                     android:drawableRight="@drawable/search"
                     android:background="@drawable/round_custom_views"/>

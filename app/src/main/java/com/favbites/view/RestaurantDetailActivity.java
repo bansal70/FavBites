@@ -73,7 +73,7 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
     String isOpen;
     String restaurant_id, user_id, bookmark_status, restaurant_name, restaurant_phone;
     TextView tvShowMore, tvUploadPhoto, tvCall, tvCheckIn, tvNoPosts, tvNoMenus, tvViewMore;
-    int totalItems = 6;
+
     RecyclerView recyclerView, recyclerPosts;
     private RestaurantDetailAdapter restaurantDetailAdapter;
     private PostsAdapter postsAdapter;
@@ -145,8 +145,6 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
         tvCheckIn.setOnClickListener(this);
         imgTransparent.setOnTouchListener(this);
 
-        RestaurantDetailsData.Data data = RestaurantDetailsManager.data;
-        if (data == null)
         ModelManager.getInstance().getRestaurantDetailsManager()
                 .getRestaurantDetails(Operations.getRestaurantDetailsParams(restaurant_id, user_id));
 
@@ -155,15 +153,14 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
 
     public void initData() {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerMenus);
-        recyclerView.setNestedScrollingEnabled(false);
+        //recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        restaurantDetailAdapter = new RestaurantDetailAdapter(this, subItemList, totalItems);
+        restaurantDetailAdapter = new RestaurantDetailAdapter(this, subItemList);
         recyclerView.setAdapter(restaurantDetailAdapter);
 
         recyclerPosts = (RecyclerView) findViewById(R.id.recyclerPosts);
         recyclerPosts.setLayoutManager(new GridLayoutManager(this, 4));
-        //recyclerPosts.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));
         postsAdapter = new PostsAdapter(this, postsList, "Details");
         recyclerPosts.setAdapter(postsAdapter);
     }
@@ -223,20 +220,29 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
     protected void onRestart() {
         super.onRestart();
 
-        RestaurantDetailsData.Data data = RestaurantDetailsManager.data;
-        if (data != null && data.subitem != null) {
+        if (Utils.isPhotoUploaded) {
+            postsList.clear();
+            ModelManager.getInstance().getRestaurantDetailsManager()
+                    .getRestaurantDetails(Operations.getRestaurantDetailsParams(restaurant_id, user_id));
+            Utils.isPhotoUploaded = false;
+        }
+        if (Utils.isReviewed) {
+            subItemList.clear();
+            ModelManager.getInstance().getRestaurantDetailsManager()
+                    .getRestaurantDetails(Operations.getRestaurantDetailsParams(restaurant_id, user_id));
+            progressBar.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+            tvShowMore.setVisibility(View.GONE);
+            Utils.isReviewed = false;
+        }
+        /*if (Utils.i) {
             totalItems = 6  ;
             data.subitem.clear();
             subItemList.clear();
             postsList.clear();
             initData();
 
-            ModelManager.getInstance().getRestaurantDetailsManager()
-                    .getRestaurantDetails(Operations.getRestaurantDetailsParams(restaurant_id, user_id));
-            progressBar.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
-            tvShowMore.setVisibility(View.GONE);
-        }
+        }*/
     }
 
     @Override
@@ -247,9 +253,14 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
                 break;
 
             case R.id.tvShowMore:
-                totalItems = Utils.restaurantsList.size();
-                restaurantDetailAdapter = new RestaurantDetailAdapter(this, subItemList, totalItems);
-                recyclerView.setAdapter(restaurantDetailAdapter);
+                subItemList.clear();
+                RestaurantDetailsData.Data data = RestaurantDetailsManager.data;
+                subItemList.addAll(data.subitem);
+                restaurantDetailAdapter.notifyDataSetChanged();
+
+               /* totalItems = subItemList.size();
+                restaurantDetailAdapter = new RestaurantDetailAdapter(this, subItemList, subItemList.size());
+                recyclerView.setAdapter(restaurantDetailAdapter);*/
                 // recyclerView.scrollToPosition(6);
                 tvShowMore.setVisibility(GONE);
                 break;
@@ -297,6 +308,9 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
                     Toast.makeText(context, "You have already checked in the restaurant", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if (!mGoogleApiClient.isConnected())
+                    mGoogleApiClient.connect();
+
                 enableLoc();
                 break;
         }
@@ -329,12 +343,15 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
                 setData();
 
                 RestaurantDetailsData.Data data = RestaurantDetailsManager.data;
-                subItemList.addAll(data.subitem);
+                // subItemList.addAll(data.subitem);
+                for (int i=0; i<6; i++) {
+                    subItemList.add(data.subitem.get(i));
+                }
                 restaurantDetailAdapter.notifyDataSetChanged();
                 postsList.addAll(data.comment);
                 postsAdapter.notifyDataSetChanged();
 
-                if (subItemList.size() > 6)
+                if (data.subitem.size() > 6)
                     tvShowMore.setVisibility(View.VISIBLE);
 
                 if (subItemList.size() == 0) {
@@ -379,6 +396,22 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
                 pd.dismiss();
                 break;
 
+            case Constants.CHECK_IN_SUCCESS:
+                pd.dismiss();
+                isChecked = true;
+                Toast.makeText(context, "You have checked in the "+restaurant_name, Toast.LENGTH_SHORT).show();
+
+                tvCheckIn.setText(R.string.checked_in);
+                tvCheckIn.setTextColor(ContextCompat.getColor(context, R.color.colorBlack));
+                tvCheckIn.setBackgroundResource(R.color.colorPrimary);
+                tvCheckIn.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.tick_black, 0);
+                break;
+
+            case Constants.CHECK_IN_FAILED:
+                pd.dismiss();
+                Toast.makeText(context, "Failed to check in. Please try again.", Toast.LENGTH_SHORT).show();
+                break;
+
             case Constants.NO_RESPONSE:
                 pd.dismiss();
                 Toast.makeText(context, ""+event.getValue(), Toast.LENGTH_SHORT).show();
@@ -409,13 +442,12 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
 
         double distance=restaurantLoc.distanceTo(userLoc);
         if (distance <= Constants.CHECK_IN_DISTANCE) {
-            isChecked = true;
-            Toast.makeText(context, "You have checked in the"+restaurant_name, Toast.LENGTH_SHORT).show();
+            if (!pd.isShowing())
+                pd.show();
 
-            tvCheckIn.setText(R.string.checked_in);
-            tvCheckIn.setTextColor(ContextCompat.getColor(context, R.color.colorBlack));
-            tvCheckIn.setBackgroundResource(R.color.colorPrimary);
-            tvCheckIn.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.tick_black, 0);
+            ModelManager.getInstance().getCheckInManager().checkInUser(
+                    Operations.checkInParams(user_id, restaurant_id));
+
         } else {
             if (pd.isShowing())
                 pd.dismiss();
@@ -424,8 +456,7 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
 
     }
     private void enableLoc() {
-        if (!mGoogleApiClient.isConnected())
-            mGoogleApiClient.connect();
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -439,6 +470,10 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
                         .requestLocation(this, mGoogleApiClient);
             }
         } else {
+            if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                getCurrentLocation();
+                return;
+            }
             ModelManager.getInstance().getLocationManager()
                     .requestLocation(this, mGoogleApiClient);
         }

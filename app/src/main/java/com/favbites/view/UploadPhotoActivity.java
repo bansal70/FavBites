@@ -156,6 +156,7 @@ public class UploadPhotoActivity extends BaseActivity implements View.OnClickLis
         switch (event.getKey()) {
 
             case Constants.UPLOAD_PHOTO_SUCCESS:
+                Utils.isPhotoUploaded = true;
                 pd.dismiss();
                 Toast.makeText(this, "Your post has been submitted successfully.", Toast.LENGTH_SHORT).show();
                 finish();
