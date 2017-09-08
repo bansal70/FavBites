@@ -1,6 +1,7 @@
 package com.favbites.view;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -23,7 +24,6 @@ import com.favbites.model.FBPreferences;
 import com.favbites.model.ImagePicker;
 import com.favbites.model.Operations;
 import com.favbites.model.Utils;
-import com.kaopiz.kprogresshud.KProgressHUD;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -42,7 +42,7 @@ public class UploadPhotoActivity extends BaseActivity implements View.OnClickLis
     TextView tvUpload;
     EditText editComment;
     String user_id, restaurant_id;
-    KProgressHUD pd;
+    Dialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,7 @@ public class UploadPhotoActivity extends BaseActivity implements View.OnClickLis
     }
 
     public void initViews() {
-        pd = Utils.showMessageDialog(this, "Uploading post...");
+        pd = Utils.showDialog(this);
         user_id = FBPreferences.readString(this, "user_id");
         restaurant_id = FBPreferences.readString(this, "restaurant_id");
 

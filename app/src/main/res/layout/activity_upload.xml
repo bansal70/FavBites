@@ -68,6 +68,7 @@
         android:layout_height="@dimen/_50sdp"
         android:hint="Say something about this photo..."
         android:background="#fff"
+        android:inputType="text"
         android:padding="@dimen/_10sdp"
         android:textSize="@dimen/_18sdp"/>
 

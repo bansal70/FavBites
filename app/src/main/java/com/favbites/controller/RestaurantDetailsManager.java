@@ -50,6 +50,7 @@ public class RestaurantDetailsManager {
 
             @Override
             public void onFailure(Call<RestaurantDetailsData> call, Throwable t) {
+                t.printStackTrace();
                 EventBus.getDefault().post(new Event(Constants.NO_RESPONSE, SERVER_ERROR));
             }
         });

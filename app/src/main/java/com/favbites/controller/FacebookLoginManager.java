@@ -16,9 +16,12 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.login.LoginResult;
+import com.favbites.model.Constants;
+import com.favbites.model.Event;
 import com.favbites.model.Operations;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -52,6 +55,7 @@ public class FacebookLoginManager {
                     @Override
                     public void onError(FacebookException exception) {
                         exception.printStackTrace();
+                        EventBus.getDefault().post(new Event(Constants.NO_RESPONSE, Constants.SERVER_ERROR));
                     }
                 });
     }
@@ -94,6 +98,7 @@ public class FacebookLoginManager {
 
                     } catch (Exception e) {
                         e.printStackTrace();
+                        EventBus.getDefault().post(new Event(Constants.NO_RESPONSE, Constants.SERVER_ERROR));
                     }
                 }
             }

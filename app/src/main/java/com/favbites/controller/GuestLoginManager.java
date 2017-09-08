@@ -43,6 +43,7 @@ public class GuestLoginManager {
                         EventBus.getDefault().post(new Event(Constants.GUEST_LOGIN_FAILED, msg));
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
+                    EventBus.getDefault().post(new Event(Constants.NO_RESPONSE, Constants.SERVER_ERROR));
                 }
             }
 

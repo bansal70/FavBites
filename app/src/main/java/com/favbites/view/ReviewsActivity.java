@@ -24,7 +24,6 @@ import com.favbites.model.Operations;
 import com.favbites.model.Utils;
 import com.favbites.model.beans.ReviewsData;
 import com.favbites.view.adapters.ReviewsAdapter;
-import com.kaopiz.kprogresshud.KProgressHUD;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -43,7 +42,7 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
     RatingBar rbItemRating;
     int dish_key, restaurant_id;
     String dish_name, user_id;
-    KProgressHUD pd;
+    Dialog pd;
     RecyclerView recyclerView;
     ReviewsAdapter reviewsAdapter;
     List<ReviewsData.Datum> reviewsList;

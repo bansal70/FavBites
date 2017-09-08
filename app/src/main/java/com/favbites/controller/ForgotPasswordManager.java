@@ -43,6 +43,7 @@ public class ForgotPasswordManager {
                         EventBus.getDefault().post(new Event(Constants.FORGOT_PASSWORD_FAILED, msg));
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
+                    EventBus.getDefault().post(new Event(Constants.NO_RESPONSE, Constants.SERVER_ERROR));
                 }
 
             }

@@ -43,6 +43,7 @@ public class FollowUserManager {
                         EventBus.getDefault().post(new Event(Constants.UNFOLLOW_SUCCESS, ""));
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
+                    EventBus.getDefault().post(new Event(Constants.NO_RESPONSE, Constants.SERVER_ERROR));
                 }
             }
 

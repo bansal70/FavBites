@@ -1,6 +1,7 @@
 package com.favbites.view;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -26,7 +27,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.kaopiz.kprogresshud.KProgressHUD;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -38,7 +38,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     TextView tvSignIn, tvForgotPassword, tvSkipLogin, tvNewUser;
     EditText editEmail, editPassword;
     private final int RC_SIGN_IN = 1001;
-    KProgressHUD dialog;
+    Dialog dialog;
     Activity activity = this;
 
     GoogleApiClient mGoogleApiClient;
@@ -103,7 +103,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             case R.id.tvSkipLogin:
                 dialog.show();
                 ModelManager.getInstance().getGuestLoginManager()
-                        .loginUser(Operations.getGuestUserParams("token", "A"));
+                        .loginUser(Operations.getGuestUserParams(deviceToken, "A"));
                 break;
 
             case R.id.tvForgotPassword:

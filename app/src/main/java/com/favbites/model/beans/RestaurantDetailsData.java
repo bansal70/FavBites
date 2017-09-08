@@ -32,9 +32,9 @@ public class RestaurantDetailsData {
         @SerializedName("Comment")
         @Expose
         public List<Comment> comment = null;
-        @SerializedName("Review")
+        /*@SerializedName("Review")
         @Expose
-        public List<Review> review = null;
+        public List<Review> review = null;*/
         @SerializedName("Item")
         @Expose
         public List<Item> item = null;
@@ -179,7 +179,7 @@ public class RestaurantDetailsData {
         public String item_rating;
     }
 
-    public class Review {
+    /*public class Review {
 
         @SerializedName("id")
         @Expose
@@ -208,7 +208,7 @@ public class RestaurantDetailsData {
         @SerializedName("Subitem")
         @Expose
         public Subitem subitem;
-    }
+    }*/
 
     public class Subitem {
 

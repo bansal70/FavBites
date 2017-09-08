@@ -1,5 +1,6 @@
 package com.favbites.view;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -13,7 +14,6 @@ import com.favbites.model.Constants;
 import com.favbites.model.Event;
 import com.favbites.model.Operations;
 import com.favbites.model.Utils;
-import com.kaopiz.kprogresshud.KProgressHUD;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -22,7 +22,7 @@ public class ForgotPasswordActivity extends BaseActivity implements View.OnClick
 
     private EditText editEmail;
     TextView tvSubmit;
-    KProgressHUD pd;
+    Dialog pd;
     ImageView imgBack;
 
     @Override

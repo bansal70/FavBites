@@ -1,5 +1,6 @@
 package com.favbites.view;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,7 +19,6 @@ import com.favbites.model.Operations;
 import com.favbites.model.Utils;
 import com.favbites.model.beans.BookmarkData;
 import com.favbites.view.adapters.BookmarkAdapter;
-import com.kaopiz.kprogresshud.KProgressHUD;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -31,7 +31,7 @@ public class BookmarkRestaurantsActivity extends BaseActivity implements View.On
     private List<BookmarkData.Data> dataList;
     RecyclerView recyclerView;
     BookmarkAdapter bookmarkAdapter;
-    KProgressHUD pd;
+    Dialog pd;
     String user_id;
     TextView tvNoBookmarks;
     ImageView imgBack;

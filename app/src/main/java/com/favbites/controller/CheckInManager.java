@@ -42,6 +42,7 @@ public class CheckInManager {
                         EventBus.getDefault().post(new Event(Constants.CHECK_IN_FAILED, ""));
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
+                    EventBus.getDefault().post(new Event(Constants.NO_RESPONSE, Constants.SERVER_ERROR));
                 }
             }
 

@@ -29,7 +29,6 @@ import com.favbites.model.FilePath;
 import com.favbites.model.Operations;
 import com.favbites.model.Utils;
 import com.favbites.model.beans.AccountData;
-import com.kaopiz.kprogresshud.KProgressHUD;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -48,7 +47,7 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
     ImageView imgBack, imgEdit, imgBackground;
     CircleImageView imgProfilePic;
     String user_id;
-    KProgressHUD pd;
+    Dialog pd;
     boolean isEditing = true;
     Dialog dialogEdit, dialogImage;
     TextView tvCancel, tvConfirm, tvCamera, tvGallery;

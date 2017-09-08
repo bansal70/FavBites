@@ -36,6 +36,7 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
     private Handler handler;
     private Runnable runnable;
     private LinearLayout locationLayout;
+    private String user_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,7 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
     private void enableLoc() {
         FirebaseInstanceId.getInstance().getToken();
         locationLayout = (LinearLayout) findViewById(R.id.locationLayout);
+        user_id = FBPreferences.readString(this, "user_id");
 
         FBPreferences.removeKey(this, "location");
         if (!mGoogleApiClient.isConnected())
@@ -189,7 +191,7 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
                 if (handler != null)
                     handler.removeCallbacks(runnable);
 
-                if (FBPreferences.readString(SplashActivity.this, "user_id").isEmpty())
+                if (user_id == null || user_id.isEmpty())
                     startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                 else
                     startActivity(new Intent(SplashActivity.this, RestaurantsActivity.class));
@@ -200,7 +202,7 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
                 if (handler != null)
                     handler.removeCallbacks(runnable);
 
-                if (FBPreferences.readString(SplashActivity.this, "user_id").isEmpty())
+                if (user_id == null || user_id.isEmpty())
                     startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                 else
                     startActivity(new Intent(SplashActivity.this, RestaurantsActivity.class));

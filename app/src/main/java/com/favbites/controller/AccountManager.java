@@ -122,6 +122,7 @@ public class AccountManager {
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                    EventBus.getDefault().post(new Event(Constants.NO_RESPONSE, Constants.SERVER_ERROR));
                 }
             }
 

@@ -48,6 +48,7 @@ public class LogoutManager {
 
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
+                    EventBus.getDefault().post(new Event(Constants.NO_RESPONSE, Constants.SERVER_ERROR));
                 }
             }
 

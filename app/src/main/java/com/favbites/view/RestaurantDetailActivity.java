@@ -2,6 +2,7 @@ package com.favbites.view;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -48,7 +49,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.kaopiz.kprogresshud.KProgressHUD;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -79,7 +79,7 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
     private PostsAdapter postsAdapter;
     private List<RestaurantDetailsData.Subitem> subItemList;
     private List<RestaurantDetailsData.Comment> postsList;
-    KProgressHUD pd;
+    Dialog pd;
     String bookmark;
     GoogleMap googleMap;
     double latitude, longitude;
@@ -217,23 +217,19 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
+    protected void onResume() {
+        super.onResume();
 
-        if (Utils.isPhotoUploaded) {
-            postsList.clear();
-            ModelManager.getInstance().getRestaurantDetailsManager()
-                    .getRestaurantDetails(Operations.getRestaurantDetailsParams(restaurant_id, user_id));
-            Utils.isPhotoUploaded = false;
-        }
-        if (Utils.isReviewed) {
+        if (Utils.isReviewed || Utils.isPhotoUploaded) {
             subItemList.clear();
+            postsList.clear();
             ModelManager.getInstance().getRestaurantDetailsManager()
                     .getRestaurantDetails(Operations.getRestaurantDetailsParams(restaurant_id, user_id));
             progressBar.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
             tvShowMore.setVisibility(View.GONE);
             Utils.isReviewed = false;
+            Utils.isPhotoUploaded = false;
         }
         /*if (Utils.i) {
             totalItems = 6  ;
@@ -304,6 +300,10 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
                 break;
 
             case R.id.tvCheckIn:
+                if (user_id.isEmpty()) {
+                    Toast.makeText(context, "Please login to check in the restaurant", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (isChecked) {
                     Toast.makeText(context, "You have already checked in the restaurant", Toast.LENGTH_SHORT).show();
                     return;

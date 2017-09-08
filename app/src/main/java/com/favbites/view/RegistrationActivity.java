@@ -1,5 +1,6 @@
 package com.favbites.view;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -26,7 +27,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.kaopiz.kprogresshud.KProgressHUD;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -37,7 +37,7 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
     EditText editFirstName, editLastName, editEmail, editPassword, editConfirmPassword;
     TextView tvSignUp;
     CheckBox cbTerms;
-    KProgressHUD pd;
+    Dialog pd;
     private CoordinatorLayout coordinatorLayout;
     ImageView imgBack;
 

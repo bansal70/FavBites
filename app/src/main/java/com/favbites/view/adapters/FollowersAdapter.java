@@ -38,7 +38,6 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.View
     private List<FollowersData.Follower> followerList;
     private String user_name;
     private String user_id;
-    private String follower_id;
 
     public FollowersAdapter(Context context, List<FollowersData.Follower> followerList) {
         this.context = context;
@@ -70,7 +69,7 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.View
 
         user_id = FBPreferences.readString(context, "user_id");
 
-        if (follower.id.equals(user_id))
+        if (follower.id.equals(user_id) || user_id.isEmpty())
             holder.tvFollow.setVisibility(View.GONE);
         else
             holder.tvFollow.setVisibility(View.VISIBLE);
@@ -116,6 +115,7 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.View
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.tvFollow:
+
                     FollowersData.Follower follower = followerList.get(getAdapterPosition());
                     user_name = follower.fname;
 
@@ -134,7 +134,7 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.View
 
                 case R.id.profileLayout:
                     FollowersData.Follower follower_data = followerList.get(getAdapterPosition());
-                    follower_id = follower_data.id;
+                    String follower_id = follower_data.id;
                     FBPreferences.putString(context, "to_user_id", follower_id);
                     context.startActivity(new Intent(context, UserProfileActivity.class)
                                 .putExtra("user_id", follower_id));

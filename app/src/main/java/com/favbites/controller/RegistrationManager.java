@@ -43,6 +43,7 @@ public class RegistrationManager {
                         EventBus.getDefault().post(new Event(Constants.REGISTRATION_FAILED, msg));
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
+                    EventBus.getDefault().post(new Event(Constants.NO_RESPONSE, Constants.SERVER_ERROR));
                 }
 
             }

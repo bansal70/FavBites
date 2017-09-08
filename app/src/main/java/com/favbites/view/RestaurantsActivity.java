@@ -36,7 +36,6 @@ import com.favbites.view.adapters.RestaurantsAdapter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
-import com.kaopiz.kprogresshud.KProgressHUD;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
@@ -53,7 +52,7 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
     LocationManager manager;
 
     private Activity activity = this;
-    KProgressHUD pd;
+    Dialog pd;
     private int page = 1;
     RecyclerView recyclerView;
     RestaurantsAdapter restaurantsAdapter;

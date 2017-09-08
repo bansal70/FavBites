@@ -4,6 +4,7 @@ package com.favbites.view.adapters;
  * Created by rishav on 8/21/2017.
  */
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
@@ -26,7 +27,6 @@ import com.favbites.model.Operations;
 import com.favbites.model.Utils;
 import com.favbites.model.beans.ReviewsData;
 import com.favbites.view.UserProfileActivity;
-import com.kaopiz.kprogresshud.KProgressHUD;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
@@ -38,7 +38,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHold
     private Context context;
     private List<ReviewsData.Datum> reviewsList;
     private String user_id;
-    private KProgressHUD pd;
+    private Dialog pd;
     private String user_name;
 
     public ReviewsAdapter(Context context, List<ReviewsData.Datum> reviewsList) {
@@ -67,7 +67,8 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHold
         ReviewsData.User user = reviews.user;
 
         user_id = FBPreferences.readString(context, "user_id");
-        if (user_id.equals(user.id))
+
+        if (user_id.equals(user.id) || user_id.isEmpty())
             holder.tvFollow.setVisibility(View.INVISIBLE);
         else
             holder.tvFollow.setVisibility(View.VISIBLE);

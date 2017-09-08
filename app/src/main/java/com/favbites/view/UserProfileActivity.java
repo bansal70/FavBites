@@ -1,5 +1,6 @@
 package com.favbites.view;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -21,7 +22,6 @@ import com.favbites.model.beans.AccountData;
 import com.favbites.view.adapters.ViewPagerAdapter;
 import com.favbites.view.fragments.PostsFragment;
 import com.favbites.view.fragments.ReviewsFragment;
-import com.kaopiz.kprogresshud.KProgressHUD;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
@@ -34,7 +34,7 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
     TabLayout tabLayout;
     ViewPager viewPager;
     String user_id;
-    KProgressHUD pd;
+    Dialog pd;
     TextView tvFollowers,tvFollowing, tvUser;
     ImageView imgUser, imgBack;
 

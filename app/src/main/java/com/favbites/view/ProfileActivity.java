@@ -28,7 +28,6 @@ import com.favbites.model.ImagePicker;
 import com.favbites.model.Operations;
 import com.favbites.model.Utils;
 import com.favbites.model.beans.AccountData;
-import com.kaopiz.kprogresshud.KProgressHUD;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
@@ -45,7 +44,7 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
     TextView tvChangePassword, tvFollowers, tvFollowings;
     ImageView imgBack, imgEdit, imgBackground, imgProfilePic;
     String user_id;
-    KProgressHUD pd;
+    Dialog pd;
     boolean isEditing = true;
     Dialog dialogEdit, dialogPassword;
     TextView tvCancel, tvConfirm;

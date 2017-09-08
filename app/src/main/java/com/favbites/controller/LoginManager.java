@@ -58,6 +58,7 @@ public class LoginManager {
                         EventBus.getDefault().post(new Event(Constants.LOGIN_FAILED, msg));
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
+                    EventBus.getDefault().post(new Event(Constants.NO_RESPONSE, Constants.SERVER_ERROR));
                 }
             }
 

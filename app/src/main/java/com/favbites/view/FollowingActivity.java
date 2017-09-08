@@ -1,5 +1,6 @@
 package com.favbites.view;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,7 +19,6 @@ import com.favbites.model.Operations;
 import com.favbites.model.Utils;
 import com.favbites.model.beans.FollowingData;
 import com.favbites.view.adapters.FollowingAdapter;
-import com.kaopiz.kprogresshud.KProgressHUD;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -31,7 +31,7 @@ public class FollowingActivity extends BaseActivity implements View.OnClickListe
     RecyclerView recyclerFollowing;
     FollowingAdapter followingAdapter;
     private List<FollowingData.FollowingTo> followingList;
-    KProgressHUD pd;
+    Dialog pd;
     String user_id;
     TextView tvNoFollowing;
     ImageView imgBack;

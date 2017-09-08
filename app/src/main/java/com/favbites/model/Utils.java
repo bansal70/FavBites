@@ -15,8 +15,8 @@ import android.util.Log;
 import android.view.Window;
 import android.widget.LinearLayout;
 
+import com.favbites.R;
 import com.favbites.model.beans.RestaurantData;
-import com.kaopiz.kprogresshud.KProgressHUD;
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Transformation;
 
@@ -37,7 +37,18 @@ public class Utils {
     public static boolean isPhotoUploaded = false;
     public static boolean isReviewed = false;
 
-    public static KProgressHUD showDialog(Context context) {
+    @SuppressWarnings("ConstantConditions")
+    public static Dialog showDialog(Context context) {
+        Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.progress_dialog);
+        dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        return dialog;
+    }
+
+    /*public static KProgressHUD showDialog(Context context) {
         KProgressHUD hud;
         hud = KProgressHUD.create(context)
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
@@ -46,19 +57,7 @@ public class Utils {
                 .setDimAmount(0.5f);
 
         return hud;
-    }
-
-    public static KProgressHUD showMessageDialog(Context context, String message) {
-        KProgressHUD hud;
-        hud = KProgressHUD.create(context)
-                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                .setCancellable(false)
-                .setLabel(message)
-                .setAnimationSpeed(1)
-                .setDimAmount(0.5f);
-
-        return hud;
-    }
+    }*/
 
     public static boolean emailValidator(String email) {
         Pattern pattern;

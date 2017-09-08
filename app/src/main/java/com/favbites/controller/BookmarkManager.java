@@ -48,6 +48,7 @@ public class BookmarkManager {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 EventBus.getDefault().post(new Event(Constants.NO_RESPONSE, Constants.SERVER_ERROR));
+                EventBus.getDefault().post(new Event(Constants.NO_RESPONSE, Constants.SERVER_ERROR));
             }
         });
     }
