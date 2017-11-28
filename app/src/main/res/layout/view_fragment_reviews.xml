@@ -33,7 +33,6 @@
                     android:id="@+id/tvRestaurant"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/anonymous"
                     android:textColor="#000"
                     android:ellipsize="end"
                     android:maxLines="1"
@@ -43,7 +42,6 @@
                     android:id="@+id/tvAddress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Queens, US"
                     android:layout_marginTop="@dimen/_3sdp"
                     android:textSize="@dimen/_12ssp"/>
 
@@ -75,21 +73,19 @@
                 android:paddingLeft="@dimen/_10sdp"
                 android:paddingRight="@dimen/_10sdp">
 
-                <TextView
-                    android:id="@+id/tvReview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/reviews"
-                    android:textSize="@dimen/_14ssp"/>
-
                 <RatingBar
                     android:id="@+id/rbRatings"
                     style="@style/Widget.AppCompat.RatingBar.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:isIndicator="true"
-                    android:layout_marginTop="@dimen/_3sdp"
                     android:numStars="5"/>
+
+                <TextView
+                    android:id="@+id/tvReview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_12ssp"/>
 
             </LinearLayout>
 

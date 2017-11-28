@@ -20,23 +20,23 @@
             android:layout_height="wrap_content"
             android:background="@color/colorHome"
             android:textColor="#fff"
-            android:text="Add Review"
+            android:text="Add Ratings"
             android:textAllCaps="false"
             android:gravity="start"
             android:textSize="@dimen/_18ssp"
             android:padding="@dimen/_10sdp"
+            android:textAppearance="@style/TextAppearance.FontPath"
             style="?borderlessButtonStyle"/>
 
         <RatingBar
             android:id="@+id/rbItemRating"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:numStars="5"
-            android:stepSize="1"
+            style="?android:ratingBarStyleIndicator"
             android:isIndicator="false"
             android:paddingTop="@dimen/_5sdp"
-            android:paddingBottom="@dimen/_5sdp"
-            style="@style/RatingBar2"/>
+            android:paddingBottom="@dimen/_5sdp" />
 
         <EditText
             android:id="@+id/editComment"

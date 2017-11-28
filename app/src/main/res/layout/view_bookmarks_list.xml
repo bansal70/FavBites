@@ -43,10 +43,12 @@
                     android:layout_height="wrap_content"
                     android:text="Capriotti's Sandwich Shop - Regent St."
                     android:textColor="#000"
+                    android:textAppearance="@style/TextAppearance.FontPath"
                     android:textSize="@dimen/_15ssp"
                     android:textStyle="bold" />
 
                 <RatingBar
+                    android:id="@+id/rbRestaurants"
                     style="@style/Base.Widget.AppCompat.RatingBar.Indicator"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

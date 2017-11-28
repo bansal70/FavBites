@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:207386865713:android:cf69babf233b6bc9",
+        "mobilesdk_app_id": "1:207386865713:android:bab7380d8aede2ea",
         "android_client_info": {
-          "package_name": "com.favbites"
+          "package_name": "co.fav.bites"
         }
       },
       "oauth_client": [
@@ -22,6 +22,9 @@
       "api_key": [
         {
           "current_key": "AIzaSyBzaELEjfHE2pvxPL2wJYd3Yo0OXqypnxs"
+        },
+        {
+          "current_key": "AIzaSyClOiPW5bGabcXaXcV-ykEq3efz39L9LFE"
         }
       ],
       "services": {

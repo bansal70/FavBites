@@ -30,6 +30,7 @@
             android:textAllCaps="false"
             android:textColor="#fff"
             android:textStyle="bold"
+            android:textAppearance="@style/TextAppearance.FontPath"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/imgBack"
             android:layout_toEndOf="@+id/imgBack"

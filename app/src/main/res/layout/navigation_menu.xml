@@ -81,6 +81,21 @@
             android:textColor="#fff"/>
 
         <TextView
+            android:id="@+id/tvTerms"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Terms &amp; Conditions"
+            android:drawableLeft="@drawable/about"
+            android:drawableStart="@drawable/about"
+            android:drawablePadding="@dimen/_10sdp"
+            android:foreground="@drawable/selectable_item_background"
+            android:textAllCaps="false"
+            android:padding="@dimen/_10sdp"
+            android:textSize="@dimen/_18ssp"
+            android:textColor="#fff"/>
+
+        <TextView
+            android:id="@+id/tvAbout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="About"

@@ -49,6 +49,7 @@
                     android:layout_height="wrap_content"
                     android:text="Capriotti's Sandwich Shop - Regent St."
                     android:textColor="#000"
+                    android:textAppearance="@style/TextAppearance.FontPath"
                     android:textSize="@dimen/_15ssp"
                     android:textStyle="bold" />
 

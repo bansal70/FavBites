@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.favbites">
+    package="co.fav.bites">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -16,15 +16,15 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
-        android:name=".model.Application"
+        android:name="co.fav.bites.models.Application"
         android:allowBackup="false"
+        android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:fullBackupContent="false"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
-        <activity android:name=".view.SplashActivity">
+        <activity android:name="co.fav.bites.views.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,55 +32,61 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.WelcomeActivity"
+            android:name="co.fav.bites.views.WelcomeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.LoginActivity"
+            android:name="co.fav.bites.views.LoginActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".view.RegistrationActivity"
+            android:name="co.fav.bites.views.RegistrationActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".view.RestaurantsActivity"
+            android:name="co.fav.bites.views.RestaurantsActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".view.RestaurantDetailActivity"
+            android:name="co.fav.bites.views.RestaurantDetailActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.ReviewsActivity"
+            android:name="co.fav.bites.views.ReviewsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.ForgotPasswordActivity"
+            android:name="co.fav.bites.views.ForgotPasswordActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.UploadPhotoActivity"
+            android:name="co.fav.bites.views.UploadPhotoActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.MyAccountActivity"
+            android:name="co.fav.bites.views.MyAccountActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.ProfileActivity"
+            android:name="co.fav.bites.views.ProfileActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.PostsViewActivity"
+            android:name="co.fav.bites.views.PostsViewActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.PostsActivity"
+            android:name="co.fav.bites.views.PostsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.BookmarkRestaurantsActivity"
+            android:name="co.fav.bites.views.BookmarkRestaurantsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="co.fav.bites.views.FollowersActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="co.fav.bites.views.FollowingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="co.fav.bites.views.UserProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="co.fav.bites.views.AboutActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".view.FollowersActivity"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".view.FollowingActivity"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".view.UserProfileActivity"
+            android:name="co.fav.bites.views.TermsConditionsActivity"
             android:screenOrientation="portrait"/>
 
         <meta-data
@@ -89,21 +95,23 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
-
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
@@ -111,16 +119,13 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@mipmap/ic_launcher" />
-        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more. -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
 
-        <service
-            android:name=".controller.MyFirebaseMessagingService">
+        <service android:name="co.fav.bites.controller.MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
@@ -133,6 +138,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
     </application>
 
 </manifest>
