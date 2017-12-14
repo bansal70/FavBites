@@ -2,19 +2,19 @@ package co.fav.bites.controller;
 
 import android.content.Context;
 
-import co.fav.bites.models.APIClient;
-import co.fav.bites.models.APIInterface;
-import co.fav.bites.models.Constants;
-import co.fav.bites.models.Event;
-import co.fav.bites.models.FBPreferences;
-import co.fav.bites.models.beans.ReviewsData;
-
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import co.fav.bites.models.APIClient;
+import co.fav.bites.models.APIInterface;
+import co.fav.bites.models.Constants;
+import co.fav.bites.models.Event;
+import co.fav.bites.models.FBPreferences;
+import co.fav.bites.models.Utils;
+import co.fav.bites.models.beans.ReviewsData;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,6 +29,12 @@ public class ReviewsManager {
     public static List<ReviewsData.Datum> reviewsList = new ArrayList<>();
 
     public void dishReviews(final Context context, final String params) {
+
+        if (!Utils.isInternetActive(context)) {
+            EventBus.getDefault().postSticky(new Event(Constants.NO_INTERNET, Constants.INTERNET_ERROR));
+            return;
+        }
+
         final APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
         Call<ReviewsData> call = apiInterface.reviewsData(params);
         call.enqueue(new Callback<ReviewsData>() {

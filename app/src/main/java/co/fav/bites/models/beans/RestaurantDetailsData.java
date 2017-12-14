@@ -7,6 +7,8 @@ package co.fav.bites.models.beans;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
 import java.util.List;
 
 public class RestaurantDetailsData {
@@ -177,6 +179,14 @@ public class RestaurantDetailsData {
         @SerializedName("item_rating")
         @Expose
         public String item_rating;
+
+        public String getItem_rating() {
+            return item_rating;
+        }
+
+        public void setItem_rating(String item_rating) {
+            this.item_rating = item_rating;
+        }
     }
 
     /*public class Review {
@@ -210,7 +220,8 @@ public class RestaurantDetailsData {
         public Subitem subitem;
     }*/
 
-    public class Subitem {
+    @Parcel
+    public static class Subitem {
 
         @SerializedName("id")
         @Expose
@@ -245,9 +256,25 @@ public class RestaurantDetailsData {
         @SerializedName("reviewCount")
         @Expose
         public int reviewCount;
+
+        public String getRating() {
+            return rating;
+        }
+
+        public void setRating(String rating) {
+            this.rating = rating;
+        }
+
+        public int getReviewCount() {
+            return reviewCount;
+        }
+
+        public void setReviewCount(int reviewCount) {
+            this.reviewCount = reviewCount;
+        }
     }
 
-    public class Comment {
+    public static class Comment {
 
         @SerializedName("id")
         @Expose
@@ -273,6 +300,18 @@ public class RestaurantDetailsData {
         @SerializedName("User")
         @Expose
         public User user;
+
+        public Comment(String image) {
+            this.image = image;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
+        }
     }
 
     public class User {

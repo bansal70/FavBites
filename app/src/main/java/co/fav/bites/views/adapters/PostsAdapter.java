@@ -45,7 +45,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder>{
     public void onBindViewHolder(PostsAdapter.ViewHolder holder, int position) {
         RestaurantDetailsData.Comment comment = postsList.get(position);
         Glide.with(context)
-                .load(comment.image)
+                .load(comment.getImage())
                 .crossFade()
                 .into(holder.imgPosts);
     }

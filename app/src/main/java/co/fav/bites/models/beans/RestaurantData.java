@@ -126,6 +126,61 @@ public class RestaurantData {
         @Expose
         public int reviewCount;
 
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getKey() {
+            return key;
+        }
+
+        public void setKey(String key) {
+            this.key = key;
+        }
+
+        public String getRestaurantId() {
+            return restaurantId;
+        }
+
+        public void setRestaurantId(String restaurantId) {
+            this.restaurantId = restaurantId;
+        }
+
+        public String getRating() {
+            return rating;
+        }
+
+        public void setRating(String rating) {
+            this.rating = rating;
+        }
+
+        public int getReviewCount() {
+            return reviewCount;
+        }
+
+        public void setReviewCount(int reviewCount) {
+            this.reviewCount = reviewCount;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getBasePrice() {
+            return basePrice;
+        }
+
+        public void setBasePrice(String basePrice) {
+            this.basePrice = basePrice;
+        }
     }
 
     public class Restaurant {
@@ -217,6 +272,14 @@ public class RestaurantData {
         @SerializedName("item_rating")
         @Expose
         public String item_rating;
+
+        public String getItem_rating() {
+            return item_rating;
+        }
+
+        public void setItem_rating(String item_rating) {
+            this.item_rating = item_rating;
+        }
     }
 
     public class Review {

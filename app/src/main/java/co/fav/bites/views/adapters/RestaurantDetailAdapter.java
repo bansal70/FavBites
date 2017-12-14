@@ -1,5 +1,6 @@
 package co.fav.bites.views.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import co.fav.bites.R;
+import co.fav.bites.models.Constants;
 import co.fav.bites.models.beans.RestaurantDetailsData;
 import co.fav.bites.views.ReviewsActivity;
 
@@ -46,7 +48,8 @@ public class RestaurantDetailAdapter extends RecyclerView.Adapter<RestaurantDeta
             float ratings = Float.parseFloat(subItems.rating);
             holder.rbItemRatings.setRating(ratings);
         }
-        holder.tvReviewCount.setText("(" + subItems.reviewCount + ")");
+
+        holder.tvReviewCount.setText(String.format("(%s)", String.valueOf(subItems.reviewCount)));
     }
 
     @Override
@@ -72,10 +75,10 @@ public class RestaurantDetailAdapter extends RecyclerView.Adapter<RestaurantDeta
 
         @Override
         public void onClick(View view) {
-            context.startActivity(new Intent(context, ReviewsActivity.class)
+            ((Activity)context).startActivityForResult(new Intent(context, ReviewsActivity.class)
                     .putExtra("dish_key", subItemList.get(getAdapterPosition()).key)
                     .putExtra("dish_name", subItemList.get(getAdapterPosition()).name)
-                    .putExtra("restaurant_id", subItemList.get(getAdapterPosition()).restaurantId));
+                    .putExtra("restaurant_id", subItemList.get(getAdapterPosition()).restaurantId), Constants.MENU_REQUEST_CODE);
         }
     }
 }

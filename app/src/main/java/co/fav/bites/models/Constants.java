@@ -10,7 +10,10 @@ public class Constants {
     public static final double CHECK_IN_DISTANCE = 70; //in meters
 
     public static final String SERVER_ERROR = "Something went wrong! Please try again.";
+    public static final String INTERNET_ERROR = "Please check your internet connection and try again.";
     public static final int NO_RESPONSE = 1000;
+    public static final int NO_INTERNET = 10000;
+
 
     public static final int REGISTRATION_SUCCESS = 1001;
     public static final int REGISTRATION_FAILED = 1002;
@@ -76,4 +79,7 @@ public class Constants {
     public static final int CHECK_IN_SUCCESS = 1041;
     public static final int CHECK_IN_FAILED = 1042;
 
+    public static final int MENU_REQUEST_CODE = 10001;
+    public static final int DETAILS_REQUEST_CODE = 10002;
+    public static final int PHOTO_REQUEST_CODE = 10002;
 }

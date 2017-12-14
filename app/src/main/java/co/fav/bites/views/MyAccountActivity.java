@@ -68,10 +68,8 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
 
     public void initViews() {
         pd = Utils.showDialog(this);
-        pd.show();
 
         user_id = FBPreferences.readString(this, "user_id");
-        ModelManager.getInstance().getAccountManager().userAccount(Operations.profileParams(user_id));
 
         editFirstName = (EditText) findViewById(R.id.editFirstName);
         editLastName = (EditText) findViewById(R.id.editLastName);
@@ -86,6 +84,9 @@ public class MyAccountActivity extends BaseActivity implements View.OnClickListe
         imgBack.setOnClickListener(this);
         imgEdit.setOnClickListener(this);
         imgProfilePic.setOnClickListener(this);
+
+        pd.show();
+        ModelManager.getInstance().getAccountManager().userAccount(this, Operations.profileParams(user_id));
     }
 
     public void initDialog() {

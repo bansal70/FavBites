@@ -4,6 +4,7 @@ package co.fav.bites.views.adapters;
  * Created by win 10 on 8/23/2017.
  */
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -16,12 +17,16 @@ import android.widget.TextView;
 import java.util.List;
 
 import co.fav.bites.R;
+import co.fav.bites.models.Constants;
 import co.fav.bites.models.beans.RestaurantData;
 import co.fav.bites.views.ReviewsActivity;
 
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> {
     private Context context;
     private List<RestaurantData.Subitem> subItemList;
+
+    public ItemsAdapter() {
+    }
 
     public ItemsAdapter(Context context, List<RestaurantData.Subitem> subItemList) {
         this.context = context;
@@ -46,7 +51,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
             float ratings = Float.parseFloat(subItems.rating);
             holder.rbItemRatings.setRating(ratings);
         }
-        holder.tvReviewCount.setText("(" + subItems.reviewCount + ")");
+        holder.tvReviewCount.setText(String.format("(%s)", String.valueOf(subItems.reviewCount)));
     }
 
     @Override
@@ -71,10 +76,14 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
 
         @Override
         public void onClick(View view) {
-            context.startActivity(new Intent(context, ReviewsActivity.class)
+            ((Activity)context).startActivityForResult(new Intent(context, ReviewsActivity.class)
                     .putExtra("dish_key", subItemList.get(getAdapterPosition()).key)
                     .putExtra("dish_name", subItemList.get(getAdapterPosition()).name)
-                    .putExtra("restaurant_id", subItemList.get(getAdapterPosition()).restaurantId));
+                    .putExtra("restaurant_id", subItemList.get(getAdapterPosition()).restaurantId), Constants.MENU_REQUEST_CODE);
         }
+    }
+
+    public List<RestaurantData.Subitem> getSubItemList() {
+        return subItemList;
     }
 }

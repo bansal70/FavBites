@@ -31,6 +31,10 @@ import com.squareup.picasso.Picasso;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.parceler.Parcels;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import co.fav.bites.R;
 import co.fav.bites.controller.ModelManager;
@@ -40,6 +44,8 @@ import co.fav.bites.models.Event;
 import co.fav.bites.models.FBPreferences;
 import co.fav.bites.models.Operations;
 import co.fav.bites.models.Utils;
+import co.fav.bites.models.beans.RestaurantData;
+import co.fav.bites.models.beans.RestaurantDetailsData;
 import co.fav.bites.views.adapters.RestaurantsAdapter;
 
 import static co.fav.bites.models.Utils.restaurantsList;
@@ -49,6 +55,7 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
         GoogleApiClient.OnConnectionFailedListener {
 
     private static final int PERMISSION_REQUEST_CODE = 10001;
+
     GoogleApiClient mGoogleApiClient;
     LocationManager manager;
 
@@ -115,27 +122,27 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
 
     public void initViews() {
         // resultLayout = (LinearLayout) findViewById(R.id.resultLayout);
-        tvRestaurants = (TextView) findViewById(R.id.tvRestaurants);
-        tvFavRestaurants = (TextView) findViewById(R.id.tvFavRestaurants);
-        tvCheckInRestaurants = (TextView) findViewById(R.id.tvCheckInRestaurants);
+        tvRestaurants = findViewById(R.id.tvRestaurants);
+        tvFavRestaurants = findViewById(R.id.tvFavRestaurants);
+        tvCheckInRestaurants = findViewById(R.id.tvCheckInRestaurants);
 
         user_id = FBPreferences.readString(this, "user_id");
-        navigationDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        imgHome = (ImageView) findViewById(R.id.imgHome);
-        editSearch = (EditText) findViewById(R.id.editSearch);
+        navigationDrawer = findViewById(R.id.drawer_layout);
+        imgHome = findViewById(R.id.imgHome);
+        editSearch = findViewById(R.id.editSearch);
         editSearch.setOnTouchListener(this);
 
         if (!search.isEmpty())
             editSearch.setText(search);
         // tvResults = (TextView) findViewById(R.id.tvResults);
-        tvNoRestaurant = (TextView) findViewById(R.id.tvNoRestaurant);
-        imgLocation = (ImageView) findViewById(R.id.imgLocation);
-        imgProfilePic = (ImageView) findViewById(R.id.imgProfilePic);
+        tvNoRestaurant = findViewById(R.id.tvNoRestaurant);
+        imgLocation = findViewById(R.id.imgLocation);
+        imgProfilePic = findViewById(R.id.imgProfilePic);
 
         imgHome.setOnClickListener(this);
         imgLocation.setOnClickListener(this);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerRestaurants);
+        recyclerView = findViewById(R.id.recyclerRestaurants);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
 
@@ -329,12 +336,12 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
     }
 
     public void setDrawer() {
-        TextView tvUsername = (TextView) findViewById(R.id.tvUsername);
-        TextView tvLogout = (TextView) findViewById(R.id.tvLogout);
-        TextView tvAccount = (TextView) findViewById(R.id.tvAccount);
-        TextView tvBookmarks = (TextView) findViewById(R.id.tvBookmarks);
-        TextView tvTerms = (TextView) findViewById(R.id.tvTerms);
-        TextView tvAbout = (TextView) findViewById(R.id.tvAbout);
+        TextView tvUsername = findViewById(R.id.tvUsername);
+        TextView tvLogout = findViewById(R.id.tvLogout);
+        TextView tvAccount = findViewById(R.id.tvAccount);
+        TextView tvBookmarks = findViewById(R.id.tvBookmarks);
+        TextView tvTerms = findViewById(R.id.tvTerms);
+        TextView tvAbout = findViewById(R.id.tvAbout);
 
         String first_name = FBPreferences.readString(this, "first_name");
         String last_name = FBPreferences.readString(this, "last_name");
@@ -369,12 +376,17 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
     protected void onResume() {
         super.onResume();
 
-        if (Utils.isRestaurantRated) {
-            RestaurantsManager.datumList.clear();
-            restaurantsList.clear();
+        /*if (Utils.isRestaurantRated) {
+           *//* ModelManager.getInstance().getRestaurantDetailsManager()
+                    .getRestaurantDetails(this, Operations.getRestaurantDetailsParams(restaurant_id, user_id));*//*
+
+            // RestaurantsManager.datumList.clear();
+            // restaurantsList.clear();
             Utils.isRestaurantRated = false;
-            page = 1;
+            // page = 1;
             pd.show();
+
+            restaurantsList.removeAll(RestaurantsManager.datumList);
 
             if (isRes)
                 ModelManager.getInstance().getRestaurantsManager()
@@ -386,7 +398,7 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
                 ModelManager.getInstance().getRestaurantsManager()
                         .checkInRestaurants(Operations.getCheckInRestaurantsParams(search, page));
 
-        }
+        }*/
 
         setDrawer();
     }
@@ -586,6 +598,86 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
                         break;
                 }
                 break;
+
+            case Constants.DETAILS_REQUEST_CODE:
+              //  if (Utils.isReviewed) {
+                    if (data != null) {
+                        float item_rating = 0.0f;
+                        List<String> ratingList = new ArrayList<>();
+                        for (RestaurantData.Datum datum : restaurantsList) {
+                            List<RestaurantDetailsData.Subitem> subItemsList = Parcels.unwrap(data.getParcelableExtra("subItems_list"));
+                            String restaurant_id = data.getStringExtra("restaurant_id");
+
+                            RestaurantData.Restaurant restaurant = datum.restaurant;
+                            if (restaurant_id.equals(restaurant.id)) {
+                                int j = 0;
+                                for (RestaurantDetailsData.Subitem subItem : subItemsList) {
+                                    List<RestaurantData.Subitem> homeItems = datum.subitem;
+
+                                    homeItems.get(j).setRating(subItem.rating);
+                                    homeItems.get(j).setReviewCount(subItem.reviewCount);
+                                    homeItems.get(j).setBasePrice(subItem.basePrice);
+                                    homeItems.get(j).setName(subItem.name);
+
+                                    for (int i = 0; i < subItemsList.size(); i++) {
+                                        if (!subItemsList.get(i).rating.isEmpty()) {
+                                            float rating = Float.parseFloat(subItemsList.get(i).rating);
+                                            if (rating > 0) {
+                                                item_rating += rating;
+                                                ratingList.add(String.valueOf(item_rating));
+                                            }
+                                        }
+                                    }
+                                    float avg = item_rating / ratingList.size();
+                                    restaurant.setItem_rating(String.valueOf(avg));
+
+                                    restaurantsAdapter.notifyDataSetChanged();
+                                    j++;
+                                }
+
+                                return;
+                            }
+                        }
+                    }
+               // }
+                break;
+
+            case Constants.MENU_REQUEST_CODE:
+                if (Utils.isReviewed) {
+                    if (data != null && !data.getStringExtra("dish_key").isEmpty()) {
+                        float item_rating = 0.0f;
+                        List<String> ratingList = new ArrayList<>();
+                        for (RestaurantData.Datum datum : restaurantsList) {
+                            List<RestaurantData.Subitem> subItemsList = datum.subitem;
+                            for (RestaurantData.Subitem subItem : subItemsList) {
+
+                                if (subItem.key.equals(data.getStringExtra("dish_key"))) {
+
+                                    subItem.setRating(data.getStringExtra("rating"));
+                                    subItem.setReviewCount(data.getIntExtra("reviews_count", 0));
+
+                                    for (int i = 0; i < subItemsList.size(); i++) {
+                                        if (!subItemsList.get(i).rating.isEmpty()) {
+                                            float rating = Float.parseFloat(subItemsList.get(i).rating);
+                                            if (rating > 0) {
+                                                item_rating += rating;
+                                                ratingList.add(String.valueOf(item_rating));
+                                            }
+                                        }
+                                    }
+
+                                    RestaurantData.Restaurant restaurant = datum.restaurant;
+                                    float avg = item_rating / ratingList.size();
+                                    restaurant.setItem_rating(String.valueOf(avg));
+
+                                    restaurantsAdapter.notifyDataSetChanged();
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+
         }
     }
 

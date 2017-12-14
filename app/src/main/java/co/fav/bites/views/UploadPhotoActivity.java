@@ -57,7 +57,7 @@ public class UploadPhotoActivity extends BaseActivity implements View.OnClickLis
     public void initViews() {
         pd = Utils.showDialog(this);
         user_id = FBPreferences.readString(this, "user_id");
-        restaurant_id = FBPreferences.readString(this, "restaurant_id");
+        restaurant_id = getIntent().getStringExtra("restaurant_id");
 
         tvUpload = (TextView) findViewById(R.id.tvUpload);
         editComment = (EditText) findViewById(R.id.editComment);
@@ -118,6 +118,8 @@ public class UploadPhotoActivity extends BaseActivity implements View.OnClickLis
             filePath = finalFile.getAbsolutePath();
 
             imgPhoto.setImageBitmap(photo);
+        } else {
+            finish();
         }
     }
 
@@ -161,6 +163,11 @@ public class UploadPhotoActivity extends BaseActivity implements View.OnClickLis
                 Utils.isPhotoUploaded = true;
                 pd.dismiss();
                 Toast.makeText(this, "Your post has been submitted successfully.", Toast.LENGTH_SHORT).show();
+
+                Intent i = new Intent();
+                i.putExtra("file_path", filePath);
+                setResult(RESULT_OK, i);
+
                 finish();
                 break;
 

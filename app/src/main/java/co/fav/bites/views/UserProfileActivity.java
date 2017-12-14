@@ -49,10 +49,11 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
     }
 
     public void initViews() {
+        EventBus.getDefault().register(this);
         pd = Utils.showDialog(this);
         pd.show();
         user_id = getIntent().getStringExtra("user_id");
-        ModelManager.getInstance().getAccountManager().userAccount(Operations.profileParams(user_id));
+        ModelManager.getInstance().getAccountManager().userAccount(this, Operations.profileParams(user_id));
 
         tvFollowers = (TextView) findViewById(R.id.tvFollowers);
         tvFollowing = (TextView) findViewById(R.id.tvFollowing);
@@ -124,7 +125,8 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
     protected void onStart() {
         super.onStart();
 
-        EventBus.getDefault().register(this);
+        if (!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
     }
 
     @Override
@@ -153,6 +155,12 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
             case Constants.NO_RESPONSE:
                 pd.dismiss();
                 Toast.makeText(this, ""+event.getValue(), Toast.LENGTH_SHORT).show();
+                break;
+
+            case Constants.NO_INTERNET:
+                pd.dismiss();
+                Toast.makeText(this, ""+event.getValue(), Toast.LENGTH_SHORT).show();
+                finish();
                 break;
         }
     }

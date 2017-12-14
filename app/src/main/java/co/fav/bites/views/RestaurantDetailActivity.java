@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DividerItemDecoration;
@@ -32,6 +33,10 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -39,12 +44,15 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import co.fav.bites.R;
@@ -68,7 +76,6 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
     private Context context = this;
     private static final int PERMISSION_REQUEST_CODE = 10001;
     GoogleApiClient mGoogleApiClient;
-    LocationManager manager;
 
     ImageView imgBack, imgRestaurant, imgBookmark;
     TextView tvRestaurant, tvAddress, tvPhone, tvOpen;
@@ -92,6 +99,10 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
     private ScrollView scrollView;
     CardView imgDirections;
     double lat, lng;
+    LocationRequest mLocationRequest;
+    LocationCallback mLocationCallback;
+    FusedLocationProviderClient mFusedLocationClient;
+    LocationManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,10 +123,12 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
     }
 
     public void initViews() {
-        manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        EventBus.getDefault().register(this);
+
+        progressBar = findViewById(R.id.progressBar);
         pd = Utils.showDialog(this);
         user_id = FBPreferences.readString(this, "user_id");
+
         pd.show();
         lat = FBPreferences.readDouble(this, "latitude");
         lng = FBPreferences.readDouble(this, "longitude");
@@ -124,25 +137,25 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
 
         subItemList = new ArrayList<>();
         postsList = new ArrayList<>();
-        imgBack = (ImageView) findViewById(R.id.imgBack);
-        imgRestaurant = (ImageView) findViewById(R.id.imgRestaurant);
-        imgBookmark = (ImageView) findViewById(R.id.imgBookmark);
+        imgBack = findViewById(R.id.imgBack);
+        imgRestaurant = findViewById(R.id.imgRestaurant);
+        imgBookmark = findViewById(R.id.imgBookmark);
 
-        rbRatings = (RatingBar) findViewById(R.id.rbRatings);
-        tvRestaurant = (TextView) findViewById(R.id.tvRestaurant);
-        tvAddress = (TextView) findViewById(R.id.tvAddress);
-        tvPhone = (TextView) findViewById(R.id.tvPhone);
-        tvOpen = (TextView) findViewById(R.id.tvOpen);
-        tvShowMore = (TextView) findViewById(R.id.tvShowMore);
-        tvUploadPhoto = (TextView) findViewById(R.id.tvUploadPhoto);
-        tvCall = (TextView) findViewById(R.id.tvCall);
-        tvCheckIn = (TextView) findViewById(R.id.tvCheckIn);
-        tvNoPosts = (TextView) findViewById(R.id.tvNoPosts);
-        tvNoMenus = (TextView) findViewById(R.id.tvNoMenu);
-        tvViewMore = (TextView) findViewById(R.id.tvViewMore);
-        scrollView = (ScrollView) findViewById(R.id.scrollView);
-        imgTransparent = (ImageView) findViewById(R.id.imgTransparent);
-        imgDirections = (CardView) findViewById(R.id.imgDirections);
+        rbRatings = findViewById(R.id.rbRatings);
+        tvRestaurant = findViewById(R.id.tvRestaurant);
+        tvAddress = findViewById(R.id.tvAddress);
+        tvPhone = findViewById(R.id.tvPhone);
+        tvOpen = findViewById(R.id.tvOpen);
+        tvShowMore = findViewById(R.id.tvShowMore);
+        tvUploadPhoto = findViewById(R.id.tvUploadPhoto);
+        tvCall = findViewById(R.id.tvCall);
+        tvCheckIn = findViewById(R.id.tvCheckIn);
+        tvNoPosts = findViewById(R.id.tvNoPosts);
+        tvNoMenus = findViewById(R.id.tvNoMenu);
+        tvViewMore = findViewById(R.id.tvViewMore);
+        scrollView = findViewById(R.id.scrollView);
+        imgTransparent = findViewById(R.id.imgTransparent);
+        imgDirections = findViewById(R.id.imgDirections);
 
         imgBack.setOnClickListener(this);
         tvShowMore.setOnClickListener(this);
@@ -155,20 +168,39 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
         imgDirections.setOnClickListener(this);
 
         ModelManager.getInstance().getRestaurantDetailsManager()
-                .getRestaurantDetails(Operations.getRestaurantDetailsParams(restaurant_id, user_id));
+                .getRestaurantDetails(this, Operations.getRestaurantDetailsParams(restaurant_id, user_id));
 
         initData();
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        mLocationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                for (Location location : locationResult.getLocations()) {
+                    lat = location.getLatitude();
+                    lng = location.getLongitude();
+                }
+            }
+        };
+
+        currentLocation();
     }
 
     public void initData() {
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerMenus);
+        recyclerView = findViewById(R.id.recyclerMenus);
         //recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         restaurantDetailAdapter = new RestaurantDetailAdapter(this, subItemList);
         recyclerView.setAdapter(restaurantDetailAdapter);
 
-        recyclerPosts = (RecyclerView) findViewById(R.id.recyclerPosts);
+        recyclerPosts = findViewById(R.id.recyclerPosts);
         recyclerPosts.setLayoutManager(new GridLayoutManager(this, 4));
         postsAdapter = new PostsAdapter(this, postsList, "Details");
         recyclerPosts.setAdapter(postsAdapter);
@@ -229,24 +261,17 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
     protected void onResume() {
         super.onResume();
 
-        if (Utils.isReviewed || Utils.isPhotoUploaded) {
-            subItemList.clear();
+        /*if (Utils.isPhotoUploaded) {
+            //subItemList.clear();
+
             postsList.clear();
             ModelManager.getInstance().getRestaurantDetailsManager()
-                    .getRestaurantDetails(Operations.getRestaurantDetailsParams(restaurant_id, user_id));
+                    .getRestaurantDetails(this, Operations.getRestaurantDetailsParams(restaurant_id, user_id));
             progressBar.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
             tvShowMore.setVisibility(View.GONE);
             Utils.isReviewed = false;
             Utils.isPhotoUploaded = false;
-        }
-        /*if (Utils.i) {
-            totalItems = 6  ;
-            data.subitem.clear();
-            subItemList.clear();
-            postsList.clear();
-            initData();
-
         }*/
     }
 
@@ -254,7 +279,7 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.imgBack:
-                finish();
+                ratingUpdate();
                 break;
 
             case R.id.tvShowMore:
@@ -290,7 +315,8 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
                     Toast.makeText(context, "Please login to post something...", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                startActivity(new Intent(this, UploadPhotoActivity.class));
+                startActivityForResult(new Intent(this, UploadPhotoActivity.class)
+                        .putExtra("restaurant_id", restaurant_id), Constants.PHOTO_REQUEST_CODE);
                 break;
 
             case R.id.tvCall:
@@ -340,7 +366,8 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
     protected void onStart() {
         super.onStart();
 
-        EventBus.getDefault().register(this);
+        if (!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
     }
 
     @Override
@@ -358,6 +385,7 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
                 pd.dismiss();
                 subItemList.clear();
                 postsList.clear();
+                scrollView.setVisibility(View.VISIBLE);
 
                 progressBar.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
@@ -437,6 +465,12 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
             case Constants.NO_RESPONSE:
                 pd.dismiss();
                 Toast.makeText(context, ""+event.getValue(), Toast.LENGTH_SHORT).show();
+                break;
+
+            case Constants.NO_INTERNET:
+                pd.dismiss();
+                Toast.makeText(context, ""+event.getValue(), Toast.LENGTH_SHORT).show();
+                finish();
                 break;
 
         }
@@ -529,6 +563,64 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
                         break;
                 }
                 break;
+
+            case Constants.PHOTO_REQUEST_CODE:
+                if (data != null && Utils.isPhotoUploaded) {
+                    tvNoPosts.setVisibility(View.GONE);
+                    recyclerPosts.setVisibility(View.VISIBLE);
+                    RestaurantDetailsData.Comment comment = new RestaurantDetailsData.Comment(data.getStringExtra("file_path"));
+                    postsList.add(comment);
+                    postsAdapter.notifyDataSetChanged();
+                    Utils.isPhotoUploaded = false;
+                }
+                break;
+
+            case Constants.MENU_REQUEST_CODE:
+                if (Utils.isReviewed && subItemList.size() != 0) {
+                    if (data != null && !data.getStringExtra("dish_key").isEmpty()) {
+                        float item_rating = 0.0f;
+                        List<String> ratingList = new ArrayList<>();
+                        RestaurantDetailsData.Data restaurantData = RestaurantDetailsManager.data;
+
+                        List<RestaurantDetailsData.Subitem> subItemsList = restaurantData.subitem;
+
+                        for (RestaurantDetailsData.Subitem subItem : subItemsList) {
+
+                            if (subItem.key.equals(data.getStringExtra("dish_key"))) {
+
+                                subItem.setRating(data.getStringExtra("rating"));
+                                subItem.setReviewCount(data.getIntExtra("reviews_count", 0));
+
+                                for (int i = 0; i < subItemsList.size(); i++) {
+                                    if (!subItemsList.get(i).rating.isEmpty()) {
+                                        float rating = Float.parseFloat(subItemsList.get(i).rating);
+                                        if (rating > 0) {
+                                            item_rating += rating;
+                                            ratingList.add(String.valueOf(item_rating));
+                                        }
+                                    }
+                                }
+
+                                float avg = item_rating / ratingList.size();
+                                rbRatings.setRating(avg);
+
+                                Collections.sort(subItemList, (item1, item2) -> {
+                                    float menu1 = 0.0f, menu2 = 0.0f;
+                                    if (!item1.getRating().isEmpty())
+                                        menu1 = Float.parseFloat(item1.getRating());
+                                    if (!item2.getRating().isEmpty())
+                                        menu2 = Float.parseFloat(item2.getRating());
+                                    return menu2 < menu1 ? -1 : menu1 == menu2 ? 0 : 1;
+                                });
+
+                                restaurantDetailAdapter.notifyDataSetChanged();
+                                recyclerView.scrollToPosition(0);
+                            }
+                        }
+                    }
+                }
+
+                break;
         }
     }
 
@@ -537,16 +629,14 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
         ModelManager.getInstance().getLocationManager()
                 .startLocationUpdates(this, mGoogleApiClient);
         Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (pd.isShowing()) {
-                    pd.dismiss();
-                    Toast.makeText(context, "Unable to check you in this time. Please try again.", Toast.LENGTH_SHORT).show();
-                }
+        handler.postDelayed(() -> {
+            if (pd.isShowing()) {
+                pd.dismiss();
+                Toast.makeText(context, "Unable to check you in this time. Please try again.", Toast.LENGTH_SHORT).show();
             }
         }, 10000);
     }
+
     @Override
     public void onConnected(@Nullable Bundle bundle) {
 
@@ -585,4 +675,50 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
                 return true;
         }
     }
+
+    public void currentLocation() {
+        if (manager != null && !manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            return;
+        }
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
+        mFusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
+            if (location != null) {
+                lat = location.getLatitude();
+                lng = location.getLongitude();
+
+                mFusedLocationClient.requestLocationUpdates(mLocationRequest,
+                        mLocationCallback, null /* Looper */);
+
+            } else {
+                mFusedLocationClient.requestLocationUpdates(mLocationRequest,
+                        mLocationCallback, null /* Looper */);
+            }
+        });
+    }
+
+
+    private void ratingUpdate() {
+        String json = new Gson().toJson(subItemList);
+        Intent i = new Intent();
+      /*  i.putExtra("restaurant_id", restaurant_id);
+        i.putExtra("dish_key", dish_key);
+        i.putExtra("rating", menu_ratings);
+        i.putExtra("reviews_count", reviewCount); */
+        if (json != null && !json.isEmpty())
+            i.putExtra("subItems_list", Parcels.wrap(subItemList));
+        i.putExtra("restaurant_id", restaurant_id);
+
+        setResult(RESULT_OK, i);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        ratingUpdate();
+    }
+
 }

@@ -4,6 +4,7 @@ package co.fav.bites.controller;
  * Created by rishav on 8/30/2017.
  */
 
+import android.content.Context;
 import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
@@ -15,6 +16,7 @@ import co.fav.bites.models.APIClient;
 import co.fav.bites.models.APIInterface;
 import co.fav.bites.models.Constants;
 import co.fav.bites.models.Event;
+import co.fav.bites.models.Utils;
 import co.fav.bites.models.beans.AccountData;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -28,7 +30,13 @@ public class AccountManager {
     private final String TAG = AccountManager.class.getSimpleName();
     public static AccountData.Data data;
 
-    public void userAccount(String params) {
+    public void userAccount(Context mContext, String params) {
+
+        if (!Utils.isInternetActive(mContext)) {
+            EventBus.getDefault().postSticky(new Event(Constants.NO_INTERNET, Constants.INTERNET_ERROR));
+            return;
+        }
+
         APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
         Call<AccountData> call = apiInterface.userProfile(params);
         call.enqueue(new Callback<AccountData>() {

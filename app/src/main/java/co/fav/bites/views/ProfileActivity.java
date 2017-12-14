@@ -67,11 +67,10 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
     }
 
     public void initViews() {
+        EventBus.getDefault().register(this);
         pd = Utils.showDialog(this);
-        pd.show();
 
         user_id = FBPreferences.readString(this, "user_id");
-        ModelManager.getInstance().getAccountManager().userAccount(Operations.profileParams(user_id));
 
         editFirstName = (EditText) findViewById(R.id.editFirstName);
         editLastName = (EditText) findViewById(R.id.editLastName);
@@ -92,6 +91,9 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
         tvChangePassword.setOnClickListener(this);
         tvFollowers.setOnClickListener(this);
         tvFollowings.setOnClickListener(this);
+
+        pd.show();
+        ModelManager.getInstance().getAccountManager().userAccount(this, Operations.profileParams(user_id));
     }
 
     public void initDialog() {
@@ -268,7 +270,8 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
     protected void onStart() {
         super.onStart();
 
-        EventBus.getDefault().register(this);
+        if (!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
     }
 
     @Override
@@ -295,7 +298,7 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
 
             case Constants.UPDATE_PROFILE_SUCCESS:
                 pd.dismiss();
-                ModelManager.getInstance().getAccountManager().userAccount(Operations.profileParams(user_id));
+                ModelManager.getInstance().getAccountManager().userAccount(this, Operations.profileParams(user_id));
                 imgEdit.setImageResource(R.drawable.edit);
                 isEditing = true;
                 editFields(false);
@@ -321,6 +324,12 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
             case Constants.NO_RESPONSE:
                 pd.dismiss();
                 Toast.makeText(this, ""+event.getValue(), Toast.LENGTH_SHORT).show();
+                break;
+
+            case Constants.NO_INTERNET:
+                pd.dismiss();
+                Toast.makeText(this, ""+event.getValue(), Toast.LENGTH_SHORT).show();
+                finish();
                 break;
         }
     }

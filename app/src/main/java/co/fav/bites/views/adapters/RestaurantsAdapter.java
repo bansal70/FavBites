@@ -4,6 +4,7 @@ package co.fav.bites.views.adapters;
  * Created by rishav on 8/18/2017.
  */
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
@@ -16,13 +17,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.util.Collections;
 import java.util.List;
 
 import co.fav.bites.R;
+import co.fav.bites.models.Constants;
 import co.fav.bites.models.beans.RestaurantData;
 import co.fav.bites.views.RestaurantDetailActivity;
 
@@ -73,10 +75,19 @@ public class RestaurantsAdapter extends RecyclerView.Adapter {
             ((ItemsViewHolder) holder).tvOpenToday.setTextColor(ContextCompat.getColor(context, R.color.green_color));
         }
 
-        List<RestaurantData.Subitem> subItemList = datum.subitem;
-        ItemsAdapter itemsAdapter = new ItemsAdapter(context, subItemList);
-        ((ItemsViewHolder) holder).recyclerItems.setAdapter(itemsAdapter);
+        List<RestaurantData.Subitem> subItemsList = datum.subitem;
 
+        Collections.sort(subItemsList, (item1, item2) -> {
+            float menu1 = 0.0f, menu2 = 0.0f;
+            if (!item1.getRating().isEmpty())
+                menu1 = Float.parseFloat(item1.getRating());
+            if (!item2.getRating().isEmpty())
+                menu2 = Float.parseFloat(item2.getRating());
+            return menu2 < menu1 ? -1 : menu1 == menu2 ? 0 : 1;
+        });
+
+        ItemsAdapter itemsAdapter = new ItemsAdapter(context, subItemsList);
+        ((ItemsViewHolder) holder).recyclerItems.setAdapter(itemsAdapter);
     }
 
     @Override
@@ -105,21 +116,14 @@ public class RestaurantsAdapter extends RecyclerView.Adapter {
             recyclerItems.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
 
             itemView.setOnClickListener(this);
-            recyclerItems.setOnClickListener(this);
+           // recyclerItems.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            switch (view.getId()) {
-                case R.id.recyclerItems:
-                    Toast.makeText(context, "dff", Toast.LENGTH_SHORT).show();
-                    break;
-                default:
-                    context.startActivity(new Intent(context, RestaurantDetailActivity.class)
-                            .putExtra("position", String.valueOf(getAdapterPosition()))
-                            .putExtra("restaurant_id", restaurantsList.get(getAdapterPosition()).restaurant.id));
-            }
-
+            ((Activity)context).startActivityForResult(new Intent(context, RestaurantDetailActivity.class)
+                    .putExtra("position", String.valueOf(getAdapterPosition()))
+                    .putExtra("restaurant_id", restaurantsList.get(getAdapterPosition()).restaurant.id), Constants.DETAILS_REQUEST_CODE);
         }
     }
 }

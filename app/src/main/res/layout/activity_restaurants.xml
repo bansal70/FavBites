@@ -80,8 +80,8 @@
                     android:inputType="text"
                     android:layout_toLeftOf="@+id/tvFilter"
                     android:layout_toStartOf="@+id/tvFilter"
-                    android:drawableEnd="@drawable/search"
-                    android:drawableRight="@drawable/search"
+                    android:drawableEnd="@drawable/ic_search"
+                    android:drawableRight="@drawable/ic_search"
                     android:background="@drawable/round_custom_views"/>
 
                 <TextView

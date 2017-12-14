@@ -2,6 +2,7 @@ package co.fav.bites.views;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -60,6 +61,7 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
     }
 
     public void initViews() {
+        EventBus.getDefault().register(this);
         pd = Utils.showDialog(this);
         pd.show();
 
@@ -108,7 +110,7 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
         switch (view.getId()) {
 
             case R.id.imgBack:
-                finish();
+                ratingUpdate();
                 break;
 
             case R.id.tvAddReview:
@@ -147,7 +149,8 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
     protected void onStart() {
         super.onStart();
 
-        EventBus.getDefault().register(this);
+        if (!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
     }
 
     @Override
@@ -202,6 +205,12 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
                 pd.dismiss();
                 Toast.makeText(activity, ""+event.getValue(), Toast.LENGTH_SHORT).show();
                 break;
+
+            case Constants.NO_INTERNET:
+                pd.dismiss();
+                Toast.makeText(activity, ""+event.getValue(), Toast.LENGTH_SHORT).show();
+                finish();
+                break;
         }
     }
 
@@ -221,4 +230,18 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
         }
     }
 
+    private void ratingUpdate() {
+        Intent i = new Intent();
+        i.putExtra("restaurant_id", restaurant_id);
+        i.putExtra("dish_key", String.valueOf(dish_key));
+        i.putExtra("rating", String.valueOf(rbItemRating.getRating()));
+        i.putExtra("reviews_count", reviewsList.size());
+        setResult(RESULT_OK, i);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        ratingUpdate();
+    }
 }

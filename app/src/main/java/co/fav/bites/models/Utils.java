@@ -10,6 +10,8 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Environment;
 import android.util.Log;
 import android.view.Window;
@@ -129,5 +131,15 @@ public class Utils {
 
         return transformation;
     }
+
+    public static boolean isInternetActive(Context ctx) {
+        ConnectivityManager conMgr = (ConnectivityManager) ctx
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        assert conMgr != null;
+        NetworkInfo info = conMgr.getActiveNetworkInfo();
+
+        return info != null && info.isConnected() && info.isAvailable();
+    }
+
 
 }
