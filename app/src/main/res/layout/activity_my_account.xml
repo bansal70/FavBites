@@ -61,34 +61,35 @@
             android:id="@+id/imgBackground"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_150sdp"
-            android:src="@drawable/demo_img"
+            android:contentDescription="@null"
             android:scaleType="centerCrop"
-            android:contentDescription="@null"/>
+            android:adjustViewBounds="true"
+            android:src="@drawable/demo_img" />
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_centerInParent="true"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="20dp"
+            android:gravity="center">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imgProfilePic"
                 android:layout_width="@dimen/_80sdp"
                 android:layout_height="@dimen/_80sdp"
                 android:layout_centerInParent="true"
+                android:src="@drawable/demo_img"
                 app:civ_border_color="@color/colorPrimaryDark"
-                app:civ_border_width="@dimen/_2sdp"
-                android:src="@drawable/demo_img" />
+                app:civ_border_width="@dimen/_2sdp" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_icon_edit_profile"
                 android:layout_alignBottom="@+id/imgProfilePic"
-                android:layout_alignRight="@+id/imgProfilePic"
                 android:layout_alignEnd="@+id/imgProfilePic"
-                android:contentDescription="@null"/>
+                android:layout_alignRight="@+id/imgProfilePic"
+                android:contentDescription="@null"
+                app:srcCompat="@drawable/ic_icon_edit_profile" />
 
         </RelativeLayout>
 

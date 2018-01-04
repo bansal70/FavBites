@@ -4,9 +4,9 @@ package co.fav.bites.models;
  * Created by rishav on 8/21/2017.
  */
 
-class Config {
+public class Config {
 
-    static final String BASE_URL = "http://nimbyisttechnologies.com/himanshu/favbite/api/apis/";
+    static final String BASE_URL = "http://175.176.184.119/~apis~/favbite/api/apis/";
     static final String registration_url = "registerUser";
     static final String login_url = "login";
     static final String social_login_url = "socialLogin";
@@ -31,4 +31,6 @@ class Config {
     static final String following_url = "followingList";
     static final String user_posts_url = "gettingComment";
     static final String user_reviews_url = "gettingReview";
+    public static final String about_url = "http://175.176.184.119/~apis~/favbite/app/webroot/about.html";
+    public static final String terms_conditions_url = "http://175.176.184.119/~apis~/favbite/app/webroot/terms.html";
 }

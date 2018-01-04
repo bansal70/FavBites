@@ -5,16 +5,17 @@ package co.fav.bites.controller;
  */
 
 import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -61,22 +62,18 @@ public class LocationManager implements com.google.android.gms.location.Location
 
         PendingResult<LocationSettingsResult> result =
                 LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, builder.build());
-        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-
-            @Override
-            public void onResult(@NonNull LocationSettingsResult result) {
-                final Status status = result.getStatus();
-                switch (status.getStatusCode()) {
-                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                        try {
-                            status.startResolutionForResult(context, REQUEST_CHECK_SETTINGS);
-                        } catch (Exception e) {
-                            // Ignore the error.
-                            e.printStackTrace();
-                            Log.e("TAG", "Message: " + e.getMessage());
-                        }
-                        break;
-                }
+        result.setResultCallback(result1 -> {
+            final Status status = result1.getStatus();
+            switch (status.getStatusCode()) {
+                case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                    try {
+                        status.startResolutionForResult(context, REQUEST_CHECK_SETTINGS);
+                    } catch (Exception e) {
+                        // Ignore the error.
+                        e.printStackTrace();
+                        Log.e("TAG", "Message: " + e.getMessage());
+                    }
+                    break;
             }
         });
     }
@@ -94,15 +91,17 @@ public class LocationManager implements com.google.android.gms.location.Location
         if (!mGoogleApiClient.isConnected())
             mGoogleApiClient.connect();
         else {
+
+            if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
             LocationServices.FusedLocationApi.requestLocationUpdates(
                     mGoogleApiClient,
                     mLocationRequest,
-                    this).setResultCallback(new ResultCallback<Status>() {
-                @Override
-                public void onResult(@NonNull Status status) {
+                    this).setResultCallback(status -> {
 
-                }
-            });
+                    });
         }
     }
 

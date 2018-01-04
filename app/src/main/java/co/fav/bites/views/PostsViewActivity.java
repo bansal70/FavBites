@@ -32,11 +32,11 @@ public class PostsViewActivity extends BaseActivity implements View.OnClickListe
     public void initViews() {
         position = getIntent().getIntExtra("position", 0);
         postsList = new ArrayList<>();
-        imgPost = (ImageView) findViewById(R.id.imgPost);
+        imgPost = findViewById(R.id.imgPost);
 
-        tvAboutPhoto = (TextView) findViewById(R.id.tvAboutPhoto);
-        tvUser = (TextView) findViewById(R.id.tvUser);
-        tvCreated = (TextView) findViewById(R.id.tvCreated);
+        tvAboutPhoto = findViewById(R.id.tvAboutPhoto);
+        tvUser = findViewById(R.id.tvUser);
+        tvCreated = findViewById(R.id.tvCreated);
 
         RestaurantDetailsData.Data data = RestaurantDetailsManager.data;
         postsList.addAll(data.comment);
@@ -52,7 +52,7 @@ public class PostsViewActivity extends BaseActivity implements View.OnClickListe
         RestaurantDetailsData.User user = comment.user;
         tvUser.setText(user.fname + " " + user.lname);
 
-        imgBack = (ImageView) findViewById(R.id.imgBack);
+        imgBack = findViewById(R.id.imgBack);
         imgBack.setOnClickListener(this);
     }
 

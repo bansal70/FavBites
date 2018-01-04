@@ -74,15 +74,15 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
         ModelManager.getInstance().getReviewsManager().dishReviews(this,
                 Operations.getItemReviews(restaurant_id, dish_key, user_id));
 
-        tvItem = (TextView) findViewById(R.id.tvItem);
-        tvAddReview = (TextView) findViewById(R.id.tvAddReview);
-        imgBack = (ImageView) findViewById(R.id.imgBack);
-        rbRatings = (RatingBar) findViewById(R.id.rbRatings);
-        tvNoReview = (TextView) findViewById(R.id.tvNoReview);
+        tvItem = findViewById(R.id.tvItem);
+        tvAddReview = findViewById(R.id.tvAddReview);
+        imgBack = findViewById(R.id.imgBack);
+        rbRatings = findViewById(R.id.rbRatings);
+        tvNoReview = findViewById(R.id.tvNoReview);
 
         tvItem.setText(dish_name);
         reviewsList = new ArrayList<>();
-        recyclerView  = (RecyclerView) findViewById(R.id.recyclerReviews);
+        recyclerView  = findViewById(R.id.recyclerReviews);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
         recyclerView.addItemDecoration(new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL));
 
@@ -234,7 +234,7 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
         Intent i = new Intent();
         i.putExtra("restaurant_id", restaurant_id);
         i.putExtra("dish_key", String.valueOf(dish_key));
-        i.putExtra("rating", String.valueOf(rbItemRating.getRating()));
+        i.putExtra("rating", String.valueOf(rbRatings.getRating()));
         i.putExtra("reviews_count", reviewsList.size());
         setResult(RESULT_OK, i);
         finish();

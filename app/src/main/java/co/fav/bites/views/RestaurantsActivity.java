@@ -675,6 +675,8 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
                             }
                         }
                     }
+
+                    Utils.isReviewed = false;
                 }
                 break;
 

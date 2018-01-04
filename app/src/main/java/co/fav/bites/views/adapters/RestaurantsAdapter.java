@@ -57,8 +57,14 @@ public class RestaurantsAdapter extends RecyclerView.Adapter {
                 + restaurant.state + " "
                 + restaurant.zip;
         String logoUrl = restaurant.logoUrl;
-        String isOpen = restaurant.isOpen;
-        float rating = Float.parseFloat(restaurant.item_rating);
+
+        String isOpen = "0";
+        if (restaurant.isOpen != null)
+            isOpen = restaurant.isOpen;
+
+        float rating = 0.0f;
+        if (restaurant.item_rating != null && !restaurant.item_rating.equals(""))
+            rating = Float.parseFloat(restaurant.item_rating);
 
         ((ItemsViewHolder) holder).tvName.setText(name);
         ((ItemsViewHolder) holder).tvAddress.setText(String.format("Address: %s", streetAddress));

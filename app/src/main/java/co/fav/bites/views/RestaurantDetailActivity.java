@@ -566,18 +566,22 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
 
             case Constants.PHOTO_REQUEST_CODE:
                 if (data != null && Utils.isPhotoUploaded) {
-                    tvNoPosts.setVisibility(View.GONE);
+                    /*tvNoPosts.setVisibility(View.GONE);
                     recyclerPosts.setVisibility(View.VISIBLE);
                     RestaurantDetailsData.Comment comment = new RestaurantDetailsData.Comment(data.getStringExtra("file_path"));
                     postsList.add(comment);
-                    postsAdapter.notifyDataSetChanged();
+                    postsAdapter.notifyDataSetChanged();*/
+                    tvNoPosts.setVisibility(View.GONE);
+                    pd.show();
+                    ModelManager.getInstance().getRestaurantDetailsManager()
+                            .getRestaurantDetails(this, Operations.getRestaurantDetailsParams(restaurant_id, user_id));
                     Utils.isPhotoUploaded = false;
                 }
                 break;
 
             case Constants.MENU_REQUEST_CODE:
                 if (Utils.isReviewed && subItemList.size() != 0) {
-                    if (data != null && !data.getStringExtra("dish_key").isEmpty()) {
+                    if (data != null && ! data.getStringExtra("dish_key").isEmpty()) {
                         float item_rating = 0.0f;
                         List<String> ratingList = new ArrayList<>();
                         RestaurantDetailsData.Data restaurantData = RestaurantDetailsManager.data;
@@ -588,10 +592,16 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
 
                             if (subItem.key.equals(data.getStringExtra("dish_key"))) {
 
+                                /*float itemAvg = (Float.parseFloat(subItem.rating) +
+                                        Float.parseFloat(data.getStringExtra("rating"))) / 2;*/
+
                                 subItem.setRating(data.getStringExtra("rating"));
                                 subItem.setReviewCount(data.getIntExtra("reviews_count", 0));
 
-                                for (int i = 0; i < subItemsList.size(); i++) {
+                                item_rating += Float.parseFloat(data.getStringExtra("rating"));
+                                ratingList.add(String.valueOf(item_rating));
+
+                                /*for (int i = 0; i < subItemsList.size(); i++) {
                                     if (!subItemsList.get(i).rating.isEmpty()) {
                                         float rating = Float.parseFloat(subItemsList.get(i).rating);
                                         if (rating > 0) {
@@ -599,7 +609,7 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
                                             ratingList.add(String.valueOf(item_rating));
                                         }
                                     }
-                                }
+                                }*/
 
                                 float avg = item_rating / ratingList.size();
                                 rbRatings.setRating(avg);
@@ -613,11 +623,20 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
                                     return menu2 < menu1 ? -1 : menu1 == menu2 ? 0 : 1;
                                 });
 
-                                restaurantDetailAdapter.notifyDataSetChanged();
-                                recyclerView.scrollToPosition(0);
+                            } else if (!subItem.rating.isEmpty()) {
+                                item_rating += Float.parseFloat(subItem.rating);
+                                ratingList.add(String.valueOf(item_rating));
                             }
+
                         }
+                        float avg = item_rating/ratingList.size();
+                        rbRatings.setRating(avg);
+
+                        restaurantDetailAdapter.notifyDataSetChanged();
+                        recyclerView.scrollToPosition(0);
                     }
+
+                    Utils.isReviewed = false;
                 }
 
                 break;

@@ -8,10 +8,11 @@
 
     <ImageView
         android:id="@+id/imgPosts"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/_80sdp"
         android:layout_height="@dimen/_80sdp"
         android:padding="@dimen/_2sdp"
-        android:scaleType="fitXY"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
         android:foreground="?android:attr/selectableItemBackground"
         android:contentDescription="@null"/>
 

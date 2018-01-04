@@ -38,11 +38,17 @@
 
     </RelativeLayout>
 
+    <WebView
+        android:id="@+id/wvTerms"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
     <TextView
         android:id="@+id/tvAbout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/_15ssp"
+        android:visibility="gone"
         android:text="@string/about"
         android:padding="@dimen/_5sdp"/>
 
