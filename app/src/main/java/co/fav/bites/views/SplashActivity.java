@@ -29,6 +29,7 @@ import co.fav.bites.controller.ModelManager;
 import co.fav.bites.models.Constants;
 import co.fav.bites.models.Event;
 import co.fav.bites.models.FBPreferences;
+import co.fav.bites.views.activities.RestaurantsHomeActivity;
 
 import static co.fav.bites.controller.LocationManager.REQUEST_CHECK_SETTINGS;
 
@@ -131,20 +132,14 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
     public void handleSleep() {
         handler = new Handler();
 
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (ContextCompat.checkSelfPermission(SplashActivity.this,
-                            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                        ModelManager.getInstance().getLocationManager()
-                                .startLocationUpdates(SplashActivity.this, mGoogleApiClient);
-                    }
-                }*/
-
-                getCurrentLocation();
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(SplashActivity.this,
+                    Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                ModelManager.getInstance().getLocationManager()
+                        .startLocationUpdates(SplashActivity.this, mGoogleApiClient);
             }
-        };
+        }*/
+        runnable = this::getCurrentLocation;
         handler.postDelayed(runnable, Constants.SPLASH_TIMEOUT);
     }
 
@@ -205,7 +200,7 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
                 if (user_id == null || user_id.isEmpty())
                     startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                 else
-                    startActivity(new Intent(SplashActivity.this, RestaurantsActivity.class));
+                    startActivity(new Intent(SplashActivity.this, RestaurantsHomeActivity.class));
                 finish();
                 break;
 
@@ -216,7 +211,7 @@ public class SplashActivity extends BaseActivity implements GoogleApiClient.Conn
                 if (user_id == null || user_id.isEmpty())
                     startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                 else
-                    startActivity(new Intent(SplashActivity.this, RestaurantsActivity.class));
+                    startActivity(new Intent(SplashActivity.this, RestaurantsHomeActivity.class));
                 finish();
                 break;
         }

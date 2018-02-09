@@ -74,11 +74,16 @@
     <string name="no_following">Sorry, there is no data about the following.</string>
     <string name="followers">Followers</string>
     <string name="user_profile">User Profile</string>
+    <string name="error_server">Something went wrong! Please try again.</string>
+    <string name="error_internet_connection">No internet connection</string>
+    <string name="error_permissions_denied">Please grant all the permissions</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="checked_in">Checked in</string>
     <string name="about">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</string>
+    <string name="prompt_check_login_bookmarks">Please login to check your bookmark restaurants</string>
+    <string name="error_empty_location">Please enter the location</string>
 
 
 </resources>

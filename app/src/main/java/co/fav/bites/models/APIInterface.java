@@ -1,5 +1,7 @@
 package co.fav.bites.models;
 
+import java.util.HashMap;
+
 import co.fav.bites.models.beans.AccountData;
 import co.fav.bites.models.beans.BookmarkData;
 import co.fav.bites.models.beans.FollowersData;
@@ -10,7 +12,8 @@ import co.fav.bites.models.beans.RestaurantDetailsData;
 import co.fav.bites.models.beans.ReviewsData;
 import co.fav.bites.models.beans.UserPostsData;
 import co.fav.bites.models.beans.UserReviewsData;
-
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -18,6 +21,7 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 import retrofit2.http.Url;
 
 /*
@@ -66,4 +70,10 @@ public interface APIInterface {
 
     @POST
     Call<UserReviewsData> userReviews(@Url String string);
+
+    @POST
+    Flowable<RestaurantData> getRestaurants(@Url String string, @QueryMap HashMap<String, String> mapParams);
+
+    @POST("getRestaurantData")
+    Observable<RestaurantDetailsData> getRestaurantDetails(@QueryMap HashMap<String, String> mapParams);
 }

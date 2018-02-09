@@ -7,8 +7,6 @@ package co.fav.bites.models.beans;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import org.parceler.Parcel;
-
 import java.util.List;
 
 public class RestaurantDetailsData {
@@ -27,10 +25,10 @@ public class RestaurantDetailsData {
 
         @SerializedName("Restaurant")
         @Expose
-        public Restaurant restaurant;
+        public RestaurantData.Restaurant restaurant;
         @SerializedName("Food")
         @Expose
-        public List<Food> food = null;
+        public List<RestaurantData.Food> food = null;
         @SerializedName("Comment")
         @Expose
         public List<Comment> comment = null;
@@ -39,14 +37,54 @@ public class RestaurantDetailsData {
         public List<Review> review = null;*/
         @SerializedName("Item")
         @Expose
-        public List<Item> item = null;
+        public List<RestaurantData.Item> item = null;
         @SerializedName("Subitem")
         @Expose
-        public List<Subitem> subitem = null;
+        public List<RestaurantData.Subitem> subitem = null;
 
     }
 
-    public class Food {
+    public static class Comment {
+
+        @SerializedName("id")
+        @Expose
+        public String id;
+        @SerializedName("user_id")
+        @Expose
+        public String userId;
+        @SerializedName("restaurant_id")
+        @Expose
+        public String restaurantId;
+        @SerializedName("comment")
+        @Expose
+        public String comment;
+        @SerializedName("image")
+        @Expose
+        public String image;
+        @SerializedName("created")
+        @Expose
+        public String created;
+        @SerializedName("modified")
+        @Expose
+        public String modified;
+        @SerializedName("User")
+        @Expose
+        public AccountData.User user;
+
+        public Comment(String image) {
+            this.image = image;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
+        }
+    }
+
+    /*public class Food {
 
         @SerializedName("id")
         @Expose
@@ -189,7 +227,7 @@ public class RestaurantDetailsData {
         }
     }
 
-    /*public class Review {
+    *//*public class Review {
 
         @SerializedName("id")
         @Expose
@@ -218,7 +256,7 @@ public class RestaurantDetailsData {
         @SerializedName("Subitem")
         @Expose
         public Subitem subitem;
-    }*/
+    }*//*
 
     @Parcel
     public static class Subitem {
@@ -274,45 +312,7 @@ public class RestaurantDetailsData {
         }
     }
 
-    public static class Comment {
 
-        @SerializedName("id")
-        @Expose
-        public String id;
-        @SerializedName("user_id")
-        @Expose
-        public String userId;
-        @SerializedName("restaurant_id")
-        @Expose
-        public String restaurantId;
-        @SerializedName("comment")
-        @Expose
-        public String comment;
-        @SerializedName("image")
-        @Expose
-        public String image;
-        @SerializedName("created")
-        @Expose
-        public String created;
-        @SerializedName("modified")
-        @Expose
-        public String modified;
-        @SerializedName("User")
-        @Expose
-        public User user;
-
-        public Comment(String image) {
-            this.image = image;
-        }
-
-        public String getImage() {
-            return image;
-        }
-
-        public void setImage(String image) {
-            this.image = image;
-        }
-    }
 
     public class User {
         @SerializedName("id")
@@ -367,5 +367,5 @@ public class RestaurantDetailsData {
         @Expose
         public String socialId;
 
-    }
+    }*/
 }

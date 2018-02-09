@@ -14,7 +14,7 @@ import java.util.List;
 
 import co.fav.bites.R;
 import co.fav.bites.models.Constants;
-import co.fav.bites.models.beans.RestaurantDetailsData;
+import co.fav.bites.models.beans.RestaurantData;
 import co.fav.bites.views.ReviewsActivity;
 
 /*
@@ -24,8 +24,8 @@ import co.fav.bites.views.ReviewsActivity;
 public class RestaurantDetailAdapter extends RecyclerView.Adapter<RestaurantDetailAdapter.ViewHolder> {
 
     private Context context;
-    private List<RestaurantDetailsData.Subitem> subItemList;
-    public RestaurantDetailAdapter(Context context, List<RestaurantDetailsData.Subitem> subItemList) {
+    private List<RestaurantData.Subitem> subItemList;
+    public RestaurantDetailAdapter(Context context, List<RestaurantData.Subitem> subItemList) {
         this.context = context;
         this.subItemList = subItemList;
     }
@@ -38,7 +38,7 @@ public class RestaurantDetailAdapter extends RecyclerView.Adapter<RestaurantDeta
 
     @Override
     public void onBindViewHolder(RestaurantDetailAdapter.ViewHolder holder, int position) {
-        RestaurantDetailsData.Subitem subItems = subItemList.get(position);
+        RestaurantData.Subitem subItems = subItemList.get(position);
 
         holder.tvItemName.setText(subItems.name);
         holder.tvItemPrice.setText(String.format("$%s", subItems.basePrice));

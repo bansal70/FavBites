@@ -52,7 +52,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import co.fav.bites.R;
@@ -63,6 +62,7 @@ import co.fav.bites.models.Event;
 import co.fav.bites.models.FBPreferences;
 import co.fav.bites.models.Operations;
 import co.fav.bites.models.Utils;
+import co.fav.bites.models.beans.RestaurantData;
 import co.fav.bites.models.beans.RestaurantDetailsData;
 import co.fav.bites.views.adapters.PostsAdapter;
 import co.fav.bites.views.adapters.RestaurantDetailAdapter;
@@ -87,7 +87,7 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
     RecyclerView recyclerView, recyclerPosts;
     private RestaurantDetailAdapter restaurantDetailAdapter;
     private PostsAdapter postsAdapter;
-    private List<RestaurantDetailsData.Subitem> subItemList;
+    private List<RestaurantData.Subitem> subItemList;
     private List<RestaurantDetailsData.Comment> postsList;
     Dialog pd;
     String bookmark;
@@ -103,6 +103,7 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
     LocationCallback mLocationCallback;
     FusedLocationProviderClient mFusedLocationClient;
     LocationManager manager;
+    String locationAccess = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -208,7 +209,7 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
 
     public void setData() {
         RestaurantDetailsData.Data data = RestaurantDetailsManager.data;
-        RestaurantDetailsData.Restaurant restaurant = data.restaurant;
+        RestaurantData.Restaurant restaurant = data.restaurant;
 
         restaurant_name = restaurant.name;
         String streetAddress = "Address: " + restaurant.streetAddress + ", "
@@ -347,6 +348,7 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
                     Toast.makeText(context, "You have already checked in the restaurant", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                locationAccess = "checkin";
                 if (!mGoogleApiClient.isConnected())
                     mGoogleApiClient.connect();
 
@@ -354,10 +356,18 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
                 break;
 
             case R.id.imgDirections:
-                Intent i = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
-                        "http://maps.google.com/maps?saddr="+lat+ ", "+ lng+
-                                "&daddr="+latitude + ", "+longitude));
-                startActivity(i);
+
+                if (!mGoogleApiClient.isConnected())
+                    mGoogleApiClient.connect();
+                enableLoc();
+                locationAccess = "directions";
+
+                if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    Intent i = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
+                            "http://maps.google.com/maps?saddr=" + lat + ", " + lng +
+                                    "&daddr=" + latitude + ", " + longitude));
+                    startActivity(i);
+                }
                 break;
         }
     }
@@ -439,7 +449,9 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
 
             case Constants.LOCATION_SUCCESS:
                 pd.dismiss();
-                setCheckIn();
+                if (!locationAccess.equals("directions"))
+                    setCheckIn();
+
                 break;
 
             case Constants.LOCATION_EMPTY:
@@ -520,7 +532,8 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODE);
             } else {
                 if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    getCurrentLocation();
+                    if (locationAccess.equals("checkin"))
+                        getCurrentLocation();
                     return;
                 }
                 ModelManager.getInstance().getLocationManager()
@@ -528,7 +541,8 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
             }
         } else {
             if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                getCurrentLocation();
+                if (locationAccess.equals("checkin"))
+                    getCurrentLocation();
                 return;
             }
             ModelManager.getInstance().getLocationManager()
@@ -557,7 +571,8 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
             case co.fav.bites.controller.LocationManager.REQUEST_CHECK_SETTINGS:
                 switch (resultCode) {
                     case Activity.RESULT_OK:
-                        getCurrentLocation();
+                        if (locationAccess.equals("checkin"))
+                            getCurrentLocation();
                         break;
                     case Activity.RESULT_CANCELED:
                         break;
@@ -582,9 +597,10 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
             case Constants.MENU_REQUEST_CODE:
                 if (Utils.isReviewed && subItemList.size() != 0) {
                     if (data != null && ! data.getStringExtra("dish_key").isEmpty()) {
-                        float item_rating = 0.0f;
+                        /*float item_rating = 0.0f;
                         List<String> ratingList = new ArrayList<>();
                         RestaurantDetailsData.Data restaurantData = RestaurantDetailsManager.data;
+                        RestaurantDetailsData.Restaurant restaurant = restaurantData.restaurant;
 
                         List<RestaurantDetailsData.Subitem> subItemsList = restaurantData.subitem;
 
@@ -592,8 +608,8 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
 
                             if (subItem.key.equals(data.getStringExtra("dish_key"))) {
 
-                                /*float itemAvg = (Float.parseFloat(subItem.rating) +
-                                        Float.parseFloat(data.getStringExtra("rating"))) / 2;*/
+                                *//*float itemAvg = (Float.parseFloat(subItem.rating) +
+                                        Float.parseFloat(data.getStringExtra("rating"))) / 2;*//*
 
                                 subItem.setRating(data.getStringExtra("rating"));
                                 subItem.setReviewCount(data.getIntExtra("reviews_count", 0));
@@ -601,7 +617,7 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
                                 item_rating += Float.parseFloat(data.getStringExtra("rating"));
                                 ratingList.add(String.valueOf(item_rating));
 
-                                /*for (int i = 0; i < subItemsList.size(); i++) {
+                                *//*for (int i = 0; i < subItemsList.size(); i++) {
                                     if (!subItemsList.get(i).rating.isEmpty()) {
                                         float rating = Float.parseFloat(subItemsList.get(i).rating);
                                         if (rating > 0) {
@@ -609,7 +625,7 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
                                             ratingList.add(String.valueOf(item_rating));
                                         }
                                     }
-                                }*/
+                                }*//*
 
                                 float avg = item_rating / ratingList.size();
                                 rbRatings.setRating(avg);
@@ -633,7 +649,10 @@ public class RestaurantDetailActivity extends BaseActivity implements View.OnCli
                         rbRatings.setRating(avg);
 
                         restaurantDetailAdapter.notifyDataSetChanged();
-                        recyclerView.scrollToPosition(0);
+                        recyclerView.scrollToPosition(0);*/
+                        pd.show();
+                        ModelManager.getInstance().getRestaurantDetailsManager()
+                                .getRestaurantDetails(this, Operations.getRestaurantDetailsParams(restaurant_id, user_id));
                     }
 
                     Utils.isReviewed = false;

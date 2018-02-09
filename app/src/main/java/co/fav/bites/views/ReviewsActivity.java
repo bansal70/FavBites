@@ -50,6 +50,7 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
     List<ReviewsData.Datum> reviewsList;
     RatingBar rbRatings;
     String userComment = "", userRating = "";
+    boolean isReviewed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +128,7 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
 
             case R.id.tvSubmit:
                 if (rbItemRating.getRating() == 0.0) {
-                    Toast.makeText(activity, "Please give the rating...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "Please add the rating...", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 pd.show();
@@ -187,6 +188,7 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
             case Constants.ADD_REVIEWS_SUCCESS:
                 Utils.isReviewed = true;
                 Utils.isRestaurantRated = true;
+                isReviewed = true;
                 dialogReview.dismiss();
                 reviewsList.clear();
                 tvNoReview.setVisibility(View.GONE);
@@ -232,10 +234,12 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
 
     private void ratingUpdate() {
         Intent i = new Intent();
-        i.putExtra("restaurant_id", restaurant_id);
-        i.putExtra("dish_key", String.valueOf(dish_key));
-        i.putExtra("rating", String.valueOf(rbRatings.getRating()));
-        i.putExtra("reviews_count", reviewsList.size());
+        if (isReviewed) {
+            i.putExtra("restaurant_id", String.valueOf(restaurant_id));
+            i.putExtra("dish_key", String.valueOf(dish_key));
+            i.putExtra("rating", String.valueOf(rbRatings.getRating()));
+            i.putExtra("reviews_count", reviewsList.size());
+        }
         setResult(RESULT_OK, i);
         finish();
     }

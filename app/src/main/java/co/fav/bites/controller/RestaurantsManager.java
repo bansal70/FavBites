@@ -4,19 +4,19 @@ package co.fav.bites.controller;
  * Created by rishav on 8/22/2017.
  */
 
+import android.support.annotation.NonNull;
 import android.util.Log;
-
-import co.fav.bites.models.APIClient;
-import co.fav.bites.models.APIInterface;
-import co.fav.bites.models.Constants;
-import co.fav.bites.models.Event;
-import co.fav.bites.models.beans.RestaurantData;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import co.fav.bites.models.APIClient;
+import co.fav.bites.models.APIInterface;
+import co.fav.bites.models.Constants;
+import co.fav.bites.models.Event;
+import co.fav.bites.models.beans.RestaurantData;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,7 +30,7 @@ public class RestaurantsManager {
         Call<RestaurantData> call = apiInterface.restaurantData(params);
         call.enqueue(new Callback<RestaurantData>() {
             @Override
-            public void onResponse(Call<RestaurantData> call, Response<RestaurantData> response) {
+            public void onResponse(@NonNull Call<RestaurantData> call, @NonNull Response<RestaurantData> response) {
                 try {
                     Log.e(TAG, "response code: "+response.code());
                     RestaurantData restaurantData = response.body();
@@ -50,7 +50,7 @@ public class RestaurantsManager {
             }
 
             @Override
-            public void onFailure(Call<RestaurantData> call, Throwable t) {
+            public void onFailure(@NonNull Call<RestaurantData> call, @NonNull Throwable t) {
                 Log.e(TAG, "Error in operation");
                 EventBus.getDefault().postSticky(new Event(Constants.NO_RESPONSE, Constants.SERVER_ERROR));
             }

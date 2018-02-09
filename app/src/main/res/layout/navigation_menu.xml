@@ -3,6 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="250dp"
+    android:clickable="true"
+    android:focusable="true"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:paddingTop="@dimen/_10sdp">

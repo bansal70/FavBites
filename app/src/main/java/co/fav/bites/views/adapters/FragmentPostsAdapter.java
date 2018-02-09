@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -62,17 +61,8 @@ public class FragmentPostsAdapter extends RecyclerView.Adapter<FragmentPostsAdap
                 .placeholder(R.color.colorHome)
                 .into(holder.imgUser);
 
-        Glide.with(context)
-                .load(comment.image)
-                .crossFade()
-                .fitCenter() // resizes the image to these dimensions (in pixel)
-                .centerCrop()
-                .into(holder.imgPost);
-
-        Glide.with(context)
-                .load(restaurant.logoUrl)
-                .crossFade()
-                .into(holder.imgRestaurant);
+        Utils.loadImage(context, comment.image, holder.imgPost, R.drawable.demo_img);
+        Utils.loadImage(context, restaurant.logoUrl, holder.imgRestaurant, R.drawable.demo_img);
     }
 
     @Override

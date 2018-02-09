@@ -16,10 +16,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.squareup.picasso.Picasso;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -344,7 +340,7 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
             editEmail.setText(user.email);
 
         if (!user.image.isEmpty()) {
-            decodeImage(user.image);
+            setImage(user.image);
             FBPreferences.putString(this, "profile_pic", user.image);
         }
 
@@ -358,22 +354,9 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
         tvFollowings.setText(followings);
     }
 
-    public void decodeImage(String path) {
-        Glide.with(this)
-                .load(path)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .placeholder(R.drawable.demo_img)
-                .crossFade()
-                .centerCrop()
-                .into(imgBackground);
-
-        if (!path.isEmpty())
-            Picasso.with(this)
-                    .load(path)
-                    .fit()
-                    .transform(Utils.imageTransformation())
-                    .placeholder(R.drawable.demo_img)
-                    .into(imgProfilePic);
+    public void setImage(String path) {
+        Utils.loadImage(this, path, imgBackground, R.drawable.demo_img);
+        Utils.loadCircularImage(this, path, imgProfilePic, R.drawable.demo_img);
     }
 
 }

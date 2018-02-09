@@ -5,13 +5,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import co.fav.bites.R;
 import co.fav.bites.controller.RestaurantDetailsManager;
+import co.fav.bites.models.Utils;
+import co.fav.bites.models.beans.AccountData;
 import co.fav.bites.models.beans.RestaurantDetailsData;
 
 public class PostsViewActivity extends BaseActivity implements View.OnClickListener{
@@ -44,12 +44,10 @@ public class PostsViewActivity extends BaseActivity implements View.OnClickListe
         RestaurantDetailsData.Comment comment = postsList.get(position);
         tvAboutPhoto.setText(comment.comment);
         tvCreated.setText(comment.created);
-        Glide.with(this)
-                .load(comment.image)
-                .crossFade()
-                .into(imgPost);
 
-        RestaurantDetailsData.User user = comment.user;
+        Utils.loadImage(this, comment.image, imgPost, R.drawable.demo_img);
+
+        AccountData.User user = comment.user;
         tvUser.setText(user.fname + " " + user.lname);
 
         imgBack = findViewById(R.id.imgBack);

@@ -6,16 +6,16 @@ package co.fav.bites.models;
 
 public class Config {
 
-    static final String BASE_URL = "http://175.176.184.119/~apis~/favbite/api/apis/";
+    static final String BASE_URL = "http://18.218.11.228/api/apis/";
     static final String registration_url = "registerUser";
     static final String login_url = "login";
     static final String social_login_url = "socialLogin";
     static final String logout_url = "logout";
     static final String forgot_password = "forgetPassword";
     static final String guest_login_url = "guestLogin";
-    static final String search_restaurant_url = "search";
-    static final String fav_restaurant_url = "reviewRestaurant";
-    static final String check_restaurant_url = "checkinsRestaurant";
+    public static final String search_restaurant_url = "search";
+    public static final String fav_restaurant_url = "reviewRestaurant";
+    public static final String check_restaurant_url = "checkinsRestaurant";
     static final String restaurant_details_url = "getRestaurantData";
     static final String dish_reviews_url = "fetchReview";
     static final String add_dish_reviews_url = "addReview";
@@ -31,6 +31,6 @@ public class Config {
     static final String following_url = "followingList";
     static final String user_posts_url = "gettingComment";
     static final String user_reviews_url = "gettingReview";
-    public static final String about_url = "http://175.176.184.119/~apis~/favbite/app/webroot/about.html";
-    public static final String terms_conditions_url = "http://175.176.184.119/~apis~/favbite/app/webroot/terms.html";
+    public static final String about_url = "http://18.218.11.228/app/webroot/about.html";
+    public static final String terms_conditions_url = "http://18.218.11.228/app/webroot/terms.html";
 }

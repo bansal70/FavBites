@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import co.fav.bites.R;
+import co.fav.bites.models.Utils;
 import co.fav.bites.models.beans.UserReviewsData;
 
 public class FragmentReviewsAdapter extends RecyclerView.Adapter<FragmentReviewsAdapter.ViewHolder>{
@@ -59,14 +60,10 @@ public class FragmentReviewsAdapter extends RecyclerView.Adapter<FragmentReviews
         if (!restaurant.logoUrl.isEmpty())
         Glide.with(context)
                 .load(restaurant.logoUrl)
-                .crossFade()
                 .into(holder.imgRestaurant);
 
         if (!user.image.isEmpty())
-        Glide.with(context)
-                .load(user.image)
-                .crossFade()
-                .into(holder.imgUser);
+            Utils.loadImage(context, user.image, holder.imgUser, R.drawable.demo_img);
 
     }
 

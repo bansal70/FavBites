@@ -12,11 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-
 import java.util.List;
 
 import co.fav.bites.R;
+import co.fav.bites.models.Utils;
 import co.fav.bites.models.beans.RestaurantDetailsData;
 import co.fav.bites.views.PostsViewActivity;
 
@@ -44,10 +43,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(PostsAdapter.ViewHolder holder, int position) {
         RestaurantDetailsData.Comment comment = postsList.get(position);
-        Glide.with(context)
-                .load(comment.getImage())
-                .crossFade()
-                .into(holder.imgPosts);
+        Utils.loadImage(context, comment.getImage(), holder.imgPosts, R.drawable.demo_img);
     }
 
     @Override

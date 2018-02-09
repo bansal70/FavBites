@@ -45,7 +45,6 @@ import co.fav.bites.models.FBPreferences;
 import co.fav.bites.models.Operations;
 import co.fav.bites.models.Utils;
 import co.fav.bites.models.beans.RestaurantData;
-import co.fav.bites.models.beans.RestaurantDetailsData;
 import co.fav.bites.views.adapters.RestaurantsAdapter;
 
 import static co.fav.bites.models.Utils.restaurantsList;
@@ -605,19 +604,20 @@ public class RestaurantsActivity extends BaseActivity implements View.OnTouchLis
                         float item_rating = 0.0f;
                         List<String> ratingList = new ArrayList<>();
                         for (RestaurantData.Datum datum : restaurantsList) {
-                            List<RestaurantDetailsData.Subitem> subItemsList = Parcels.unwrap(data.getParcelableExtra("subItems_list"));
+                            List<RestaurantData.Subitem> subItemsList = Parcels.unwrap(data.getParcelableExtra("subItems_list"));
                             String restaurant_id = data.getStringExtra("restaurant_id");
 
                             RestaurantData.Restaurant restaurant = datum.restaurant;
                             if (restaurant_id.equals(restaurant.id)) {
                                 int j = 0;
-                                for (RestaurantDetailsData.Subitem subItem : subItemsList) {
+                                for (RestaurantData.Subitem subItem : subItemsList) {
                                     List<RestaurantData.Subitem> homeItems = datum.subitem;
 
                                     homeItems.get(j).setRating(subItem.rating);
                                     homeItems.get(j).setReviewCount(subItem.reviewCount);
                                     homeItems.get(j).setBasePrice(subItem.basePrice);
                                     homeItems.get(j).setName(subItem.name);
+                                    homeItems.get(j).setKey(subItem.key);
 
                                     for (int i = 0; i < subItemsList.size(); i++) {
                                         if (!subItemsList.get(i).rating.isEmpty()) {

@@ -4,8 +4,10 @@ package co.fav.bites.models;
  * Created by rishav on 8/18/2017.
  */
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
@@ -13,10 +15,14 @@ import android.location.Geocoder;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Transformation;
 
@@ -86,7 +92,7 @@ public class Utils {
 
     public static File createImageFile() throws IOException {
         // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_DCIM), "Camera");
@@ -141,5 +147,35 @@ public class Utils {
         return info != null && info.isConnected() && info.isAvailable();
     }
 
+    public static void gotoPreviousActivityAnimation(Context mContext) {
+        ((Activity) mContext).overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
+    }
+
+    public static void gotoNextActivityAnimation(Context mContext) {
+        ((Activity) mContext).overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
+    }
+
+    public static void loadCircularImage(Context mContext, String path, ImageView imageView, int placeHolder) {
+        Glide.with(mContext)
+                .load(path)
+                .apply(new RequestOptions().circleCrop().placeholder(placeHolder))
+                .into(imageView);
+    }
+
+    public static void loadImage(Context mContext, String path, ImageView imageView, int placeHolder) {
+        Glide.with(mContext)
+                .load(path)
+                .apply(new RequestOptions().centerCrop().placeholder(placeHolder))
+                .into(imageView);
+    }
+
+    public static boolean hasAllPermissionsGranted(@NonNull int[] grantResults) {
+        for (int grantResult : grantResults) {
+            if (grantResult == PackageManager.PERMISSION_DENIED) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 }

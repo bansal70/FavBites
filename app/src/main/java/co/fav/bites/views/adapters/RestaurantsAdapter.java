@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.Collections;
 import java.util.List;
 
 import co.fav.bites.R;
@@ -83,14 +82,14 @@ public class RestaurantsAdapter extends RecyclerView.Adapter {
 
         List<RestaurantData.Subitem> subItemsList = datum.subitem;
 
-        Collections.sort(subItemsList, (item1, item2) -> {
+       /* Collections.sort(subItemsList, (item1, item2) -> {
             float menu1 = 0.0f, menu2 = 0.0f;
             if (!item1.getRating().isEmpty())
                 menu1 = Float.parseFloat(item1.getRating());
             if (!item2.getRating().isEmpty())
                 menu2 = Float.parseFloat(item2.getRating());
             return menu2 < menu1 ? -1 : menu1 == menu2 ? 0 : 1;
-        });
+        });*/
 
         ItemsAdapter itemsAdapter = new ItemsAdapter(context, subItemsList);
         ((ItemsViewHolder) holder).recyclerItems.setAdapter(itemsAdapter);
