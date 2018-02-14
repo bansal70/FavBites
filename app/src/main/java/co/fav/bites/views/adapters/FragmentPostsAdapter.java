@@ -5,20 +5,21 @@ package co.fav.bites.views.adapters;
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import co.fav.bites.R;
 import co.fav.bites.models.Utils;
 import co.fav.bites.models.beans.UserPostsData;
+import co.fav.bites.views.RestaurantDetailActivity;
 
 public class FragmentPostsAdapter extends RecyclerView.Adapter<FragmentPostsAdapter.ViewHolder>{
     private Context context;
@@ -53,16 +54,9 @@ public class FragmentPostsAdapter extends RecyclerView.Adapter<FragmentPostsAdap
         holder.tvRestaurant.setText(restaurant.name);
         holder.tvAddress.setText(restaurant.streetAddress);
 
-        if (!user.image.isEmpty())
-        Picasso.with(context)
-                .load(user.image)
-                .fit()
-                .transform(Utils.imageTransformation())
-                .placeholder(R.color.colorHome)
-                .into(holder.imgUser);
-
-        Utils.loadImage(context, comment.image, holder.imgPost, R.drawable.demo_img);
-        Utils.loadImage(context, restaurant.logoUrl, holder.imgRestaurant, R.drawable.demo_img);
+        Utils.loadCircularImage(context, user.image, holder.imgUser, R.drawable.demo_img);
+        Utils.loadImage(context, comment.image, holder.imgPost, R.mipmap.ic_launcher);
+        Utils.loadImage(context, restaurant.logoUrl, holder.imgRestaurant, R.mipmap.ic_launcher);
     }
 
     @Override
@@ -73,6 +67,8 @@ public class FragmentPostsAdapter extends RecyclerView.Adapter<FragmentPostsAdap
     class ViewHolder extends RecyclerView.ViewHolder{
         private ImageView imgUser, imgPost, imgRestaurant;
         private TextView tvUser, tvCreated, tvComment, tvRestaurant, tvAddress;
+        private LinearLayout restaurantLL;
+
         private ViewHolder(View itemView) {
             super(itemView);
 
@@ -85,6 +81,13 @@ public class FragmentPostsAdapter extends RecyclerView.Adapter<FragmentPostsAdap
             imgRestaurant = itemView.findViewById(R.id.imgRestaurant);
             tvRestaurant = itemView.findViewById(R.id.tvRestaurant);
             tvAddress = itemView.findViewById(R.id.tvAddress);
+            restaurantLL = itemView.findViewById(R.id.restaurantLL);
+
+            restaurantLL.setOnClickListener(view -> {
+                UserPostsData.Data data = postsList.get(getAdapterPosition());
+                context.startActivity(new Intent(context, RestaurantDetailActivity.class)
+                .putExtra("restaurant_id", data.restaurant.id));
+            });
         }
     }
 }

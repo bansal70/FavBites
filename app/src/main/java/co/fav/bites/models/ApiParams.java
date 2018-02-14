@@ -8,10 +8,12 @@ import java.util.HashMap;
 
 public class ApiParams {
 
-    public static HashMap<String, String> getSearchRestaurantParams(String search, int page) {
+    public static HashMap<String, String> getSearchRestaurantParams(String search, int page, double lat, double lng) {
         HashMap<String, String> mapParams = new HashMap<>();
         mapParams.put("search", search);
         mapParams.put("page", String.valueOf(page));
+        mapParams.put("lat", String.valueOf(lat));
+        mapParams.put("lng", String.valueOf(lng));
 
         return mapParams;
     }

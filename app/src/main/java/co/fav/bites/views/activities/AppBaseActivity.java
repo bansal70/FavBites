@@ -56,7 +56,8 @@ public abstract class AppBaseActivity extends AppCompatActivity {
     }
 
     public void showDialog() {
-        dialog.show();
+        if (!dialog.isShowing())
+            dialog.show();
     }
 
     public void dismissDialog() {

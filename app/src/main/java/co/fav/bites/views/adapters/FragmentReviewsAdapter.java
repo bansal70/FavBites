@@ -5,21 +5,22 @@ package co.fav.bites.views.adapters;
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
 
 import java.util.List;
 
 import co.fav.bites.R;
 import co.fav.bites.models.Utils;
 import co.fav.bites.models.beans.UserReviewsData;
+import co.fav.bites.views.RestaurantDetailActivity;
 
 public class FragmentReviewsAdapter extends RecyclerView.Adapter<FragmentReviewsAdapter.ViewHolder>{
 
@@ -45,7 +46,7 @@ public class FragmentReviewsAdapter extends RecyclerView.Adapter<FragmentReviews
         UserReviewsData.Restaurant restaurant = data.restaurant;
         UserReviewsData.Subitem subItem = data.subitem;
 
-        holder.tvRestaurant.setText(restaurant.name + "(" + subItem.name + ")");
+        holder.tvRestaurant.setText(String.format("%s(%s)", restaurant.name, subItem.name));
         holder.tvAddress.setText(restaurant.streetAddress);
 
         if (reviews.message.isEmpty())
@@ -57,14 +58,8 @@ public class FragmentReviewsAdapter extends RecyclerView.Adapter<FragmentReviews
         float rating = Float.parseFloat(reviews.rating);
         holder.rbRatings.setRating(rating);
 
-        if (!restaurant.logoUrl.isEmpty())
-        Glide.with(context)
-                .load(restaurant.logoUrl)
-                .into(holder.imgRestaurant);
-
-        if (!user.image.isEmpty())
-            Utils.loadImage(context, user.image, holder.imgUser, R.drawable.demo_img);
-
+        Utils.loadImage(context, restaurant.logoUrl, holder.imgRestaurant, R.mipmap.ic_launcher);
+        Utils.loadCircularImage(context, user.image, holder.imgUser, R.drawable.demo_img);
     }
 
     @Override
@@ -76,6 +71,7 @@ public class FragmentReviewsAdapter extends RecyclerView.Adapter<FragmentReviews
         private TextView tvRestaurant, tvAddress, tvReview;
         private ImageView imgRestaurant, imgUser;
         private RatingBar rbRatings;
+        private LinearLayout restaurantLL;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -86,6 +82,14 @@ public class FragmentReviewsAdapter extends RecyclerView.Adapter<FragmentReviews
             imgRestaurant = itemView.findViewById(R.id.imgRestaurant);
             imgUser = itemView.findViewById(R.id.imgUser);
             rbRatings = itemView.findViewById(R.id.rbRatings);
+
+            restaurantLL = itemView.findViewById(R.id.restaurantLL);
+
+            restaurantLL.setOnClickListener(view -> {
+                UserReviewsData.Data data = reviewsList.get(getAdapterPosition());
+                context.startActivity(new Intent(context, RestaurantDetailActivity.class)
+                        .putExtra("restaurant_id", data.restaurant.id));
+            });
         }
     }
 }

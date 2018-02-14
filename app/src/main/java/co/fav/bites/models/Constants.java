@@ -5,7 +5,7 @@ package co.fav.bites.models;
  */
 
 public class Constants {
-
+    public static final int SETTINGS_REQUEST_CODE = 10213;
     public static final int SPLASH_TIMEOUT = 3000;
     public static final double CHECK_IN_DISTANCE = 70; //in meters
 
@@ -82,4 +82,9 @@ public class Constants {
     public static final int MENU_REQUEST_CODE = 10001;
     public static final int DETAILS_REQUEST_CODE = 10002;
     public static final int PHOTO_REQUEST_CODE = 10002;
+
+    public static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 10101;
+    public static final String DEFAULT_LOCATION = "default_location";
+    public static final String DEFUALT_LAT = "lat";
+    public static final String DEFUALT_LNG = "lng";
 }

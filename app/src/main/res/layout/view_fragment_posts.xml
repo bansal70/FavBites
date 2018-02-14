@@ -60,15 +60,18 @@
             android:id="@+id/imgPost"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_180sdp"
+            android:scaleType="centerCrop"
             android:background="?selectableItemBackground"
             android:contentDescription="@string/menu"
             android:src="@color/colorHome" />
 
         <LinearLayout
+            android:id="@+id/restaurantLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:background="#eee"
+            android:foreground="?android:attr/selectableItemBackground"
             android:padding="@dimen/_10sdp">
 
             <ImageView

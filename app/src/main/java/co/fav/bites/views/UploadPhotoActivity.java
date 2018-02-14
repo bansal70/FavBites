@@ -3,7 +3,6 @@ package co.fav.bites.views;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -59,11 +58,11 @@ public class UploadPhotoActivity extends BaseActivity implements View.OnClickLis
         user_id = FBPreferences.readString(this, "user_id");
         restaurant_id = getIntent().getStringExtra("restaurant_id");
 
-        tvUpload = (TextView) findViewById(R.id.tvUpload);
-        editComment = (EditText) findViewById(R.id.editComment);
+        tvUpload = findViewById(R.id.tvUpload);
+        editComment = findViewById(R.id.editComment);
 
-        imgPhoto = (ImageView) findViewById(R.id.imgPhoto);
-        imgBack = (ImageView) findViewById(R.id.imgBack);
+        imgPhoto = findViewById(R.id.imgPhoto);
+        imgBack = findViewById(R.id.imgBack);
 
         tvUpload.setOnClickListener(this);
         imgBack.setOnClickListener(this);
@@ -91,20 +90,9 @@ public class UploadPhotoActivity extends BaseActivity implements View.OnClickLis
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (requestCode == PERMISSION_REQUEST_CODE && hasAllPermissionsGranted(grantResults)) {
+        if (requestCode == PERMISSION_REQUEST_CODE && Utils.hasAllPermissionsGranted(this, grantResults)) {
             chooseImage();
-        } else {
-            Toast.makeText(this, "Please grant all the permissions...", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private boolean hasAllPermissionsGranted(@NonNull int[] grantResults) {
-        for (int grantResult : grantResults) {
-            if (grantResult == PackageManager.PERMISSION_DENIED) {
-                return false;
-            }
-        }
-        return true;
     }
 
     @Override
@@ -160,7 +148,6 @@ public class UploadPhotoActivity extends BaseActivity implements View.OnClickLis
         switch (event.getKey()) {
 
             case Constants.UPLOAD_PHOTO_SUCCESS:
-                Utils.isPhotoUploaded = true;
                 pd.dismiss();
                 Toast.makeText(this, "Your post has been submitted successfully.", Toast.LENGTH_SHORT).show();
 
@@ -169,6 +156,7 @@ public class UploadPhotoActivity extends BaseActivity implements View.OnClickLis
                 setResult(RESULT_OK, i);
 
                 finish();
+                Utils.gotoPreviousActivityAnimation(this);
                 break;
 
             case Constants.UPLOAD_PHOTO_FAILED:

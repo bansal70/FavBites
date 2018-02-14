@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="#eee"
     tools:ignore="MissingPrefix">
@@ -36,16 +37,22 @@
                     android:src="@drawable/menu" />
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/tvLocation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
                     android:layout_gravity="center"
+                    android:layout_centerInParent="true"
                     android:text="@string/home"
+                    android:maxLength="15"
+                    android:foreground="@drawable/selectable_item_background"
+                    android:maxLines="1"
+                    android:gravity="center"
+                    android:drawableRight="@drawable/ic_keyboard_arrow_down"
+                    android:drawableEnd="@drawable/ic_keyboard_arrow_down"
                     android:textAppearance="@style/TextAppearance.FontPath"
                     android:textAllCaps="true"
                     android:textColor="#fff"
-                    android:textSize="@dimen/_20ssp" />
+                    android:textSize="@dimen/_16ssp" />
 
                 <ImageView
                     android:id="@+id/imgLocation"

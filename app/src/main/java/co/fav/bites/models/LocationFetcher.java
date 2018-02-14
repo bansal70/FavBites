@@ -4,12 +4,14 @@ package co.fav.bites.models;
  * Created by rishav on 2/9/2018.
  */
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 
 import com.google.android.gms.common.api.ApiException;
@@ -28,10 +30,13 @@ import com.google.android.gms.tasks.Task;
 
 import timber.log.Timber;
 
+import static co.fav.bites.models.Constants.SETTINGS_REQUEST_CODE;
+
 public class LocationFetcher {
-    private static final int SETTINGS_REQUEST_CODE = 10213;
+
     private static final int TIME_INTERVAL = 10 * 1000;
     private static final int FASTEST_TIME_INTERVAL = 5 * 1000;
+    private final int PERMISSION_REQUEST_CODE = 1001;
     private Location mLastLocation;
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationCallback mLocationCallback;
@@ -82,21 +87,27 @@ public class LocationFetcher {
         LocationManager manager = (LocationManager) mActivity.getSystemService(Context.LOCATION_SERVICE);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(mActivity);
 
-        if (manager == null)
+        if (manager == null) {
+            if (onLocationFetchListener != null) {
+                onLocationFetchListener.onLocationFetch(null);
+            }
             return;
+        }
 
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             settingRequest(mActivity);
             return;
         }
-        if (ActivityCompat.checkSelfPermission(mActivity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(mActivity, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Timber.e("Permissions not granted");
-            return;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ActivityCompat.checkSelfPermission(mActivity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(mActivity, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                mActivity.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODE);
+                return;
+            }
         }
 
         /*Getting the location after acquiring location service*/
-        mFusedLocationClient.getLastLocation().addOnSuccessListener(mActivity, location -> {
+        mFusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
             // Got last known location. In some rare situations this can be null.
             if (location != null) {
                 mLastLocation = location;
@@ -111,9 +122,14 @@ public class LocationFetcher {
                 //mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
             }
         });
+
+        mFusedLocationClient.getLastLocation().addOnFailureListener(e -> requestLocationUpdates(mActivity));
     }
 
     public void requestLocationUpdates(Activity mActivity) {
+        LocationManager manager = (LocationManager) mActivity.getSystemService(Context.LOCATION_SERVICE);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(mActivity);
+
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(TIME_INTERVAL);    // 10 seconds, in milliseconds
         mLocationRequest.setFastestInterval(FASTEST_TIME_INTERVAL);   // 5 second, in milliseconds
@@ -134,6 +150,18 @@ public class LocationFetcher {
                 }
             };
         };
+
+        if (manager != null && !manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            settingRequest(mActivity);
+            return;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ActivityCompat.checkSelfPermission(mActivity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(mActivity, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                mActivity.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODE);
+                return;
+            }
+        }
 
         if (ActivityCompat.checkSelfPermission(mActivity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(mActivity, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

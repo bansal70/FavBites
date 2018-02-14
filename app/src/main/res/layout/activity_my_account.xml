@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.favbites.view.MyAccountActivity">
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -53,161 +51,228 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/imgBackground"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_150sdp"
-            android:contentDescription="@null"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="true"
-            android:src="@drawable/demo_img" />
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="20dp"
-            android:gravity="center">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imgProfilePic"
-                android:layout_width="@dimen/_80sdp"
-                android:layout_height="@dimen/_80sdp"
-                android:layout_centerInParent="true"
-                android:src="@drawable/demo_img"
-                app:civ_border_color="@color/colorPrimaryDark"
-                app:civ_border_width="@dimen/_2sdp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/imgProfilePic"
-                android:layout_alignEnd="@+id/imgProfilePic"
-                android:layout_alignRight="@+id/imgProfilePic"
-                android:contentDescription="@null"
-                app:srcCompat="@drawable/ic_icon_edit_profile" />
-
-        </RelativeLayout>
-
-    </RelativeLayout>
-
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/colorHome">
-
-        <TextView
-            android:id="@+id/tvFollowers"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Followers"
-            android:textColor="#fff"
-            android:foreground="@drawable/selectable_item_background"
-            android:gravity="center"
-            android:padding="@dimen/_10sdp"
-            android:textSize="@dimen/_18ssp"
-            android:layout_weight="1"/>
-
-        <View
-            android:layout_width="@dimen/_1sdp"
-            android:layout_height="match_parent"
-            android:background="#fff"/>
-
-        <TextView
-            android:id="@+id/tvFollowing"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Following"
-            android:textColor="#fff"
-            android:foreground="@drawable/selectable_item_background"
-            android:gravity="center"
-            android:padding="@dimen/_10sdp"
-            android:textSize="@dimen/_18ssp"
-            android:layout_weight="1"/>
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_1sdp"
-        android:background="@color/colorHome"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Account Info"
-        android:padding="@dimen/_10sdp"
-        android:textAppearance="@style/TextAppearance.FontPath"
-        android:textColor="#000"
-        android:textSize="@dimen/_18ssp"/>
-
-    <LinearLayout
-        android:id="@+id/editProfileLayout"
+        android:id="@+id/accountLL"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorHome"
+        android:visibility="gone"
         android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imgBackground"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_150sdp"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:src="@drawable/demo_img" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="20dp"
+                android:gravity="center">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/imgProfilePic"
+                    android:layout_width="@dimen/_80sdp"
+                    android:layout_height="@dimen/_80sdp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/demo_img"
+                    app:civ_border_color="@color/colorPrimaryDark"
+                    app:civ_border_width="@dimen/_2sdp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/imgProfilePic"
+                    android:layout_alignEnd="@+id/imgProfilePic"
+                    android:layout_alignRight="@+id/imgProfilePic"
+                    android:contentDescription="@null"
+                    app:srcCompat="@drawable/ic_icon_edit_profile" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:background="@color/colorHome">
 
-            <EditText
-                android:id="@+id/editFirstName"
+            <TextView
+                android:id="@+id/tvFollowers"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="First Name"
-                android:textColorHint="#fff"
-                android:padding="@dimen/_10sdp"
-                android:background="@android:color/transparent"
+                android:text="Followers"
                 android:textColor="#fff"
-                android:inputType="text"
+                android:foreground="@drawable/selectable_item_background"
+                android:gravity="center"
+                android:padding="@dimen/_10sdp"
                 android:textSize="@dimen/_18ssp"
                 android:layout_weight="1"/>
 
-            <EditText
-                android:id="@+id/editLastName"
+            <View
+                android:layout_width="@dimen/_1sdp"
+                android:layout_height="match_parent"
+                android:background="#fff"/>
+
+            <TextView
+                android:id="@+id/tvFollowing"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Last Name"
-                android:padding="@dimen/_10sdp"
-                android:background="@android:color/transparent"
-                android:textColorHint="#fff"
-                android:inputType="text"
-                android:textSize="@dimen/_18ssp"
+                android:text="Following"
                 android:textColor="#fff"
+                android:foreground="@drawable/selectable_item_background"
+                android:gravity="center"
+                android:padding="@dimen/_10sdp"
+                android:textSize="@dimen/_18ssp"
                 android:layout_weight="1"/>
 
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/editEmail"
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Email"
-            android:textColorHint="#fff"
-            android:padding="@dimen/_10sdp"
-            android:inputType="textEmailAddress"
-            android:background="@android:color/transparent"
-            android:textSize="@dimen/_18ssp"
-            android:textColor="#fff" />
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/colorHome"/>
 
         <TextView
-            android:id="@+id/tvChangePass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/change_password"
-            android:foreground="@drawable/selectable_item_background"
-            android:textSize="@dimen/_18ssp"
+            android:text="Account Info"
             android:padding="@dimen/_10sdp"
-            android:clickable="true"
-            android:textColorHint="#fff" />
+            android:textAppearance="@style/TextAppearance.FontPath"
+            android:textColor="#000"
+            android:textSize="@dimen/_18ssp"/>
+
+        <LinearLayout
+            android:id="@+id/editProfileLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorHome"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:padding="@dimen/_10sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="First Name"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/_15ssp"/>
+
+                    <EditText
+                        android:id="@+id/editFirstName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="First Name"
+                        android:textColorHint="#fff"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@android:color/transparent"
+                        android:textColor="#fff"
+                        android:inputType="text"
+                        android:textSize="@dimen/_18ssp"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/colorWhite"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:padding="@dimen/_10sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Last Name"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/_15ssp"/>
+
+                    <EditText
+                        android:id="@+id/editLastName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Last Name"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@android:color/transparent"
+                        android:textColorHint="#fff"
+                        android:inputType="text"
+                        android:textSize="@dimen/_18ssp"
+                        android:textColor="#fff"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/colorWhite"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email"
+                android:padding="@dimen/_5sdp"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/_15ssp"/>
+
+            <EditText
+                android:id="@+id/editEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:paddingRight="@dimen/_10sdp"
+                android:paddingLeft="@dimen/_10sdp"
+                android:textColorHint="#fff"
+                android:inputType="textEmailAddress"
+                android:background="@android:color/transparent"
+                android:textSize="@dimen/_18ssp"
+                android:textColor="#fff" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:background="@color/colorWhite"/>
+
+            <TextView
+                android:id="@+id/tvChangePass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/change_password"
+                android:foreground="@drawable/selectable_item_background"
+                android:textSize="@dimen/_18ssp"
+                android:padding="@dimen/_10sdp"
+                android:clickable="true"
+                android:textColorHint="#fff" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

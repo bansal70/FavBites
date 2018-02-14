@@ -172,7 +172,7 @@
                     android:textColor="#fff"
                     android:textSize="@dimen/_15ssp" />
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/tvCheckIn"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -181,6 +181,11 @@
                     android:background="#2A2736"
                     android:foreground="@drawable/selectable_item_background"
                     android:gravity="center"
+                    android:maxLines="1"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMaxTextSize="@dimen/_15ssp"
+                    android:paddingLeft="@dimen/_10sdp"
+                    android:paddingRight="@dimen/_10sdp"
                     android:text="@string/check_in"
                     android:textColor="#fff"
                     android:textSize="@dimen/_15ssp" />
@@ -328,7 +333,7 @@
 
                     <fragment
                         android:id="@+id/map"
-                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:name="co.fav.bites.models.MySupportMapFragment"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
 

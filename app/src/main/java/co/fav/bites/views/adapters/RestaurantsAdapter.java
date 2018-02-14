@@ -128,7 +128,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter {
         public void onClick(View view) {
             ((Activity)context).startActivityForResult(new Intent(context, RestaurantDetailActivity.class)
                     .putExtra("position", String.valueOf(getAdapterPosition()))
-                    .putExtra("restaurant_id", restaurantsList.get(getAdapterPosition()).restaurant.id), Constants.DETAILS_REQUEST_CODE);
+                    .putExtra("restaurant_id", restaurantsList.get(getAdapterPosition()).restaurant.id), Constants.MENU_REQUEST_CODE);
         }
     }
 }

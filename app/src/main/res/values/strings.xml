@@ -28,7 +28,7 @@
     <string name="fb_login_protocol_scheme">fb470430176676573</string>
     <string name="home">Home</string>
     <string name="location">Location</string>
-    <string name="search_restaurant">Search restaurants by name, street address, zip code or city..</string>
+    <string name="search_restaurant">Search restaurants by name or dish name</string>
     <string name="filter">Filters</string>
     <string name="restaurant">Restaurants</string>
     <string name="favbites">FavBites</string>
@@ -84,6 +84,19 @@
     <string name="about">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</string>
     <string name="prompt_check_login_bookmarks">Please login to check your bookmark restaurants</string>
     <string name="error_empty_location">Please enter the location</string>
-
+    <string name="success_bookmarked">Restaurant has been bookmarked successfully.</string>
+    <string name="success_bookmark_removed">Restaurant has been removed from your bookmarks.</string>
+    <string name="success_checked_in">You have checked in the</string>
+    <string name="error_check_in_failed">Failed to check in. Please try again.</string>
+    <string name="error_already_checked_in">You have already checked in the restaurant</string>
+    <string name="error_guest_check_in">Please login to check in the restaurant</string>
+    <string name="error_restaurant_closed">Sorry, restaurant is closed now.</string>
+    <string name="error_contact_information_empty">Sorry, this restaurant doesn\'t have any contact information</string>
+    <string name="error_guest_post">Please login to post something</string>
+    <string name="prompt_login_for_bookmark">Please login to bookmark any restaurant</string>
+    <string name="success_logged_out">You have been logged out successfully</string>
+    <string name="alert_logout">Are you sure you want to logout?</string>
+    <string name="error_current_location_unavailable">Unable to get your current location</string>
+    <string name="prompt_my_reviews">My Reviews</string>
 
 </resources>

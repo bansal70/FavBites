@@ -66,7 +66,6 @@ public class ReviewsFragment extends BaseFragment {
                     Operations.userReviewsParams(to_user_id, page));
             isLoaded = false;
         }
-
     }
 
     @Override

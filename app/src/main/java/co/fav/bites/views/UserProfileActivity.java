@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
     Dialog pd;
     TextView tvFollowers,tvFollowing, tvUser;
     ImageView imgUser, imgBack;
+    LinearLayout profileLL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,20 +57,21 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
         user_id = getIntent().getStringExtra("user_id");
         ModelManager.getInstance().getAccountManager().userAccount(this, Operations.profileParams(user_id));
 
-        tvFollowers = (TextView) findViewById(R.id.tvFollowers);
-        tvFollowing = (TextView) findViewById(R.id.tvFollowing);
-        imgUser = (ImageView) findViewById(R.id.imgUser);
-        imgBack = (ImageView) findViewById(R.id.imgBack);
-        tvUser = (TextView) findViewById(R.id.tvUser);
+        tvFollowers = findViewById(R.id.tvFollowers);
+        tvFollowing = findViewById(R.id.tvFollowing);
+        imgUser = findViewById(R.id.imgUser);
+        imgBack = findViewById(R.id.imgBack);
+        tvUser = findViewById(R.id.tvUser);
+        profileLL = findViewById(R.id.profileLL);
 
         tvFollowers.setOnClickListener(this);
         tvFollowing.setOnClickListener(this);
         imgBack.setOnClickListener(this);
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager = findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
         setUpTexts();
@@ -145,6 +148,7 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
                         Operations.userPostsParams(user_id, 1));
                 pd.dismiss();
                 setUserData();
+                profileLL.setVisibility(View.VISIBLE);
                 break;
 
             case Constants.PROFILE_EMPTY:

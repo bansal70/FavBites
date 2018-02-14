@@ -13,6 +13,7 @@ import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +42,7 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
     EditText editFirstName, editLastName, editEmail;
     TextView tvChangePassword, tvFollowers, tvFollowings;
     ImageView imgBack, imgEdit, imgBackground, imgProfilePic;
+    LinearLayout accountLL;
     String user_id;
     Dialog pd;
     boolean isEditing = true;
@@ -68,17 +70,18 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
 
         user_id = FBPreferences.readString(this, "user_id");
 
-        editFirstName = (EditText) findViewById(R.id.editFirstName);
-        editLastName = (EditText) findViewById(R.id.editLastName);
-        editEmail = (EditText) findViewById(R.id.editEmail);
-        tvChangePassword = (TextView) findViewById(R.id.tvChangePass);
-        tvFollowers = (TextView) findViewById(R.id.tvFollowers);
-        tvFollowings = (TextView) findViewById(R.id.tvFollowing);
+        editFirstName = findViewById(R.id.editFirstName);
+        editLastName = findViewById(R.id.editLastName);
+        editEmail = findViewById(R.id.editEmail);
+        tvChangePassword = findViewById(R.id.tvChangePass);
+        tvFollowers = findViewById(R.id.tvFollowers);
+        tvFollowings = findViewById(R.id.tvFollowing);
 
-        imgBack = (ImageView) findViewById(R.id.imgBack);
-        imgEdit = (ImageView) findViewById(R.id.imgEdit);
-        imgProfilePic = (ImageView) findViewById(R.id.imgProfilePic);
-        imgBackground = (ImageView) findViewById(R.id.imgBackground);
+        imgBack = findViewById(R.id.imgBack);
+        imgEdit = findViewById(R.id.imgEdit);
+        imgProfilePic = findViewById(R.id.imgProfilePic);
+        imgBackground = findViewById(R.id.imgBackground);
+        accountLL = findViewById(R.id.accountLL);
         editFields(false);
 
         imgBack.setOnClickListener(this);
@@ -285,6 +288,7 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
                 if (pd.isShowing())
                 pd.dismiss();
                 setData();
+                accountLL.setVisibility(View.VISIBLE);
                 break;
 
             case Constants.PROFILE_EMPTY:

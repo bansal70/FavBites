@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -217,12 +216,10 @@ public class ReviewsActivity extends BaseActivity implements View.OnClickListene
     }
 
     public void checkUserRating() {
-        Log.e("ReviewsActivity", "size of list: "+reviewsList.size());
         for (int i=0; i<ReviewsManager.reviewsList.size(); i++) {
             ReviewsData.Datum data = ReviewsManager.reviewsList.get(i);
             ReviewsData.User user = data.user;
             ReviewsData.Review subItem = data.review;
-            Log.e("ReviewsActivity", "user_id: "+user.id+ "\nprofile_id: "+user_id);
             if (user.id.equals(user_id)) {
                 tvAddReview.setText(R.string.edit_review);
                 userComment = subItem.message;

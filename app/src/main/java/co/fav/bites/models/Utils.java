@@ -7,19 +7,23 @@ package co.fav.bites.models;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -38,6 +42,8 @@ import java.util.regex.Pattern;
 
 import co.fav.bites.R;
 import co.fav.bites.models.beans.RestaurantData;
+import co.fav.bites.views.LoginActivity;
+import timber.log.Timber;
 
 public class Utils {
 
@@ -57,17 +63,6 @@ public class Utils {
 
         return dialog;
     }
-
-    /*public static KProgressHUD showDialog(Context context) {
-        KProgressHUD hud;
-        hud = KProgressHUD.create(context)
-                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                .setCancellable(false)
-                .setAnimationSpeed(1)
-                .setDimAmount(0.5f);
-
-        return hud;
-    }*/
 
     public static boolean emailValidator(String email) {
         Pattern pattern;
@@ -118,7 +113,7 @@ public class Utils {
                     strAdd = returnedAddress.getPostalCode(); //postal code
 
             } else {
-                Log.e(TAG, "No address returned");
+                Timber.e("No address returned");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -132,8 +127,6 @@ public class Utils {
                 .cornerRadiusDp(30)
                 .oval(false)
                 .build();
-
-        Log.e(TAG, "Circular image transformation");
 
         return transformation;
     }
@@ -169,13 +162,45 @@ public class Utils {
                 .into(imageView);
     }
 
-    public static boolean hasAllPermissionsGranted(@NonNull int[] grantResults) {
+    public static void showToast(Context mContext, String message) {
+        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+    }
+
+    public static boolean hasAllPermissionsGranted(Context mContext, @NonNull int[] grantResults) {
         for (int grantResult : grantResults) {
             if (grantResult == PackageManager.PERMISSION_DENIED) {
+                showToast(mContext, mContext.getString(R.string.error_permissions_denied));
                 return false;
             }
         }
         return true;
     }
+
+    public static boolean isGPS(Activity mActivity) {
+        LocationManager manager = (LocationManager) mActivity.getSystemService(Context.LOCATION_SERVICE);
+        return manager != null && manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
+
+    public static void logoutAlert(final Activity mActivity) {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mActivity);
+        alertBuilder.setMessage(R.string.alert_logout);
+
+        alertBuilder
+                .setPositiveButton(android.R.string.yes, (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+
+                    FBPreferences.clearPref(mActivity);
+                    mActivity.startActivity(new Intent(mActivity, LoginActivity.class));
+                    mActivity.finish();
+
+                    Utils.showToast(mActivity, mActivity.getString(R.string.success_logged_out));
+                })
+                .setNegativeButton(android.R.string.no, (dialogInterface, i) -> dialogInterface.dismiss());
+
+        AlertDialog alertDialog = alertBuilder.create();
+        alertDialog.show();
+    }
+
 
 }
